@@ -1,4 +1,4 @@
-package apricot;
+package part2;
 
 public class Point {
  int x;
