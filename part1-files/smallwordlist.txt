@@ -1,0 +1,3 @@
+adjective:	ANT, APE, BAD
+verb:	BAY, BID, HUE
+computer:	APP, BIT, BUG

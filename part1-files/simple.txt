@@ -1,0 +1,3 @@
+4
+adjective: 1, 2, 4
+verb: 1, 3, 4

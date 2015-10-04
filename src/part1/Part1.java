@@ -18,19 +18,89 @@ public class Part1 {
 	private Map<String, List<Integer>> categoryLetterPositions;
 	private Map<String, List<String>> wordList;
 	
-	public Part1() {
-		
-		String puzzleFile = "puzzle1.txt";
-		
-		this.wordList = readWordList();
+	public Part1(String puzzleFile, String wordListFile) {
+				
+		this.wordList = readWordListFrom(wordListFile);
 		
 		this.arraySize = readArraySizeFrom(puzzleFile);
 		
 		this.categoryLetterPositions = readCategoryLetterPositionsFrom(puzzleFile);
+	
+//		debugInitialization();
 	}
 
-	public int solve() {
+	public Assignment solve() {		
+		return backtrack(new Assignment(this.arraySize));	
+	}
 
+	// letter-based assignment
+	//    variables:  position in array
+	//	  domains:  letters A-Z
+	//	  constraints:  matches word/part of word for each category/thing
+	
+	// word-based assignment TODO
+	
+	private Assignment backtrack(Assignment assignment) {
+		
+		System.out.println("backtrack " + assignment);
+		
+		if(assignment.isComplete()) {
+			return assignment;
+		}
+		
+		int variable = selectUnassignedVariable(assignment);
+		System.out.println("selected variable: " + variable);
+		
+		for(char value : getOrderedDomainValues()) {
+			
+			// TODO do consistent check here
+			// if(consistent) {
+			
+			Assignment newAssignment = assignment.clone();
+			newAssignment.set(variable, String.valueOf(value));
+			
+			// TODO do inference checking here?
+			// if(inferences != failure) {
+			
+			Assignment result = backtrack(newAssignment);
+			
+			if(result != null) {
+				return result;
+			}
+			
+			// }
+			
+			// }
+			
+			// drop var=value from assignment (done due to cloning above)
+			// TODO? remove inferences from assignment
+		}
+		
+		return null; // null = failure
+	}
+	
+	private char[] getOrderedDomainValues() {
+		// TODO just returning alphabet for now... do something better here
+		return "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();
+	}
+
+	private int selectUnassignedVariable(Assignment assignment) {
+		// letter-based assignment first, variable = position in array
+		// TODO - word-based assignment will change this
+		
+		// TODO - for now, just picking positions in order... do something 
+		// else later
+		int position = 0;
+		for(String letter : assignment.assignment) {
+			if(letter == null) {
+				return position;
+			}
+			position++;
+		}
+		return -1;
+	}
+
+	private void debugInitialization() {
 		System.out.println("array size: " + arraySize);
 		for(String category : categoryLetterPositions.keySet()) {
 			System.out.print("  category: " + category);
@@ -47,12 +117,10 @@ public class Part1 {
 			}
 			System.out.print("\n");
 		}
-		
-		return 2;
 	}
-	
-	private Map<String, List<String>> readWordList() {
-		List<String> linesOfFile = readFile("part1-files/wordlist.txt");
+
+	private Map<String, List<String>> readWordListFrom(String filename) {
+		List<String> linesOfFile = readFile("part1-files/" + filename);
 		
 		Map<String, List<String>> wordList = new HashMap<String, List<String>>();
 		for(String line : linesOfFile) {
