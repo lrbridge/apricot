@@ -1,14 +1,5 @@
 package part1;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +11,13 @@ public class Part1 {
 	
 	public Part1(String puzzleFile, String wordListFile) {
 				
-		this.wordList = readWordListFrom(wordListFile);
+		FileReader reader = new FileReader(puzzleFile, wordListFile);
 		
-		this.arraySize = readArraySizeFrom(puzzleFile);
+		this.wordList = reader.getWordList();
 		
-		this.categoryLetterPositions = readCategoryLetterPositionsFrom(puzzleFile);
+		this.arraySize = reader.getSolutionSize();
+		
+		this.categoryLetterPositions = reader.getCategoryLetterPositions();
 	
 //		debugInitialization();
 	}
@@ -117,78 +110,6 @@ public class Part1 {
 			}
 			System.out.print("\n");
 		}
-	}
-
-	private Map<String, List<String>> readWordListFrom(String filename) {
-		List<String> linesOfFile = readFile("part1-files/" + filename);
-		
-		Map<String, List<String>> wordList = new HashMap<String, List<String>>();
-		for(String line : linesOfFile) {
-			String[] valuesInLine = line.split("[:,]");
-			String category = null;
-			List<String> words = new ArrayList<String>();
-			for(String value : valuesInLine) {
-				if(category == null) {
-					category = value; // category is first
-				}
-				else {
-					words.add(value.trim()); // followed by all words
-				}
-			}
-			wordList.put(category, words);
-		}
-		
-		return wordList;
-	}
-
-	private Integer readArraySizeFrom(String filename) {
-		List<String> linesOfFile = readFile("part1-files/" + filename);
-		return Integer.parseInt(linesOfFile.get(0)); // arraySize is first line of puzzle file
-	}
-	
-	private Map<String, List<Integer>> readCategoryLetterPositionsFrom(String filename) {
-		List<String> linesOfFile = readFile("part1-files/" + filename);
-		
-		Map<String, List<Integer>> categoryLetterPositions = new HashMap<String, List<Integer>>();
-		boolean isFirstLine = true;
-		for(String line : linesOfFile) {
-			if(isFirstLine) {
-				// do nothing, because it is the array size
-				isFirstLine = false;
-			}
-			else {
-				String[] valuesInLine = line.split("[:,]");
-				String category = null;
-				List<Integer> letterPositions = new ArrayList<Integer>();
-				for(String value : valuesInLine) {
-					if(category == null) {
-						category = value; // category is first
-					}
-					else {
-						letterPositions.add(Integer.parseInt(value.trim())); // followed by all positions of letters
-					}
-				}
-				categoryLetterPositions.put(category, letterPositions);
-			}
-		}
-		
-		return categoryLetterPositions;
-	}
-	
-	private List<String> readFile(String filename) {
-		List<String> fileLines = new ArrayList<String>();
-		Path file = Paths.get(filename);
-		try (InputStream in = Files.newInputStream(file);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-			String line = null;
-			while ((line = reader.readLine()) != null) {
-				fileLines.add(line);
-			}
-		} catch (IOException e) {
-			System.err.println(e);
-		}
-		
-		return fileLines;
 	}
 
 }
