@@ -1,5 +1,6 @@
 package part1;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,8 @@ public class Part1 {
 	private Integer arraySize = null;
 	private Map<String, List<Integer>> categoryLetterPositions;
 	private Map<String, List<String>> wordList;
+	
+	private List<Assignment> solutions = new ArrayList<Assignment>();
 	
 	public Part1(String puzzleFile, String wordListFile) {
 				
@@ -22,8 +25,10 @@ public class Part1 {
 //		debugInitialization();
 	}
 
-	public Assignment solve() {		
-		return backtrack(new Assignment(this.arraySize));	
+	public List<Assignment> solve() {		
+		backtrack(new Assignment(this.arraySize));
+		
+		return this.solutions;
 	}
 
 	// letter-based assignment
@@ -33,12 +38,15 @@ public class Part1 {
 	
 	// word-based assignment TODO
 	
-	private Assignment backtrack(Assignment assignment) {
+	private void backtrack(Assignment assignment) {
 		
 		System.out.println("backtrack " + assignment);
 		
 		if(assignment.isComplete()) {
-			return assignment;
+			// to support multiple solutions, DON'T return here
+			// continue searching tree to find all solutions
+			solutions.add(assignment);
+			return;
 		}
 		
 		int variable = selectUnassignedVariable(assignment);
@@ -54,11 +62,7 @@ public class Part1 {
 				// TODO do inference checking here?
 				// if(inferences != failure) {
 				
-				Assignment result = backtrack(newAssignment);
-				
-				if(result != null) {
-					return result;
-				}
+				backtrack(newAssignment);
 				
 				// }
 			
@@ -68,7 +72,7 @@ public class Part1 {
 			// TODO? remove inferences from assignment
 		}
 		
-		return null; // null = failure
+		return;
 	}
 	
 	private boolean isConsistent(Assignment assignment) {
