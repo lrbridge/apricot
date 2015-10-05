@@ -2,7 +2,7 @@ package part1;
 
 public class Assignment {
 
-	public String[] assignment;
+	private String[] assignment;
 
 	public Assignment(Integer arraySize) {
 		this.assignment = new String[arraySize];
@@ -43,6 +43,14 @@ public class Assignment {
 
 	public void set(int position, String letter) {
 		this.assignment[position] = letter;
+	}
+
+	public String get(int position) {
+		return this.assignment[position];
+	}
+	
+	public String getSolution() {
+		return this.toString();
 	}
 	
 }

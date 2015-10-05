@@ -6,11 +6,14 @@ import java.util.Map;
 
 public class Part1 {
 
-	private Integer arraySize = null;
+	private Integer solutionSize = null;
 	private Map<String, List<Integer>> categoryLetterPositions;
 	private Map<String, List<String>> wordList;
 	
 	private List<Assignment> solutions = new ArrayList<Assignment>();
+	
+	private List<String> searchPaths = new ArrayList<String>();
+	private StringBuilder searchPath = new StringBuilder();
 	
 	public Part1(String puzzleFile, String wordListFile) {
 				
@@ -18,17 +21,17 @@ public class Part1 {
 		
 		this.wordList = reader.getWordList();
 		
-		this.arraySize = reader.getSolutionSize();
+		this.solutionSize = reader.getSolutionSize();
 		
 		this.categoryLetterPositions = reader.getCategoryLetterPositions();
-	
-//		debugInitialization();
 	}
 
-	public List<Assignment> solve() {		
-		backtrack(new Assignment(this.arraySize));
+	public Part1Solution solve() {		
+		searchPath.append("root");
 		
-		return this.solutions;
+		backtrack(new Assignment(this.solutionSize));
+		
+		return new Part1Solution(this.solutions, this.searchPaths);
 	}
 
 	// letter-based assignment
@@ -38,31 +41,34 @@ public class Part1 {
 	
 	// word-based assignment TODO
 	
-	private void backtrack(Assignment assignment) {
-		
-		System.out.println("backtrack " + assignment);
-		
+	private boolean backtrack(Assignment assignment) {
+				
 		if(assignment.isComplete()) {
 			// to support multiple solutions, DON'T return here
 			// continue searching tree to find all solutions
 			solutions.add(assignment);
-			return;
+			searchPath.append(" (found result: " + assignment.toString() + ")\n");
+			searchPaths.add(searchPath.toString());
+			
+			return true;
 		}
 		
 		int variable = selectUnassignedVariable(assignment);
-		System.out.println("---- selected variable: " + variable + "-----");
 		
 		for(char value : getOrderedDomainValues()) {
 			
 			Assignment newAssignment = assignment.clone();
 			newAssignment.set(variable, String.valueOf(value));
+			searchPath.append(" -> " + value);
+			
+			boolean isSolution = false;
 			
 			if(isConsistent(newAssignment)) {
 				
 				// TODO do inference checking here?
 				// if(inferences != failure) {
 				
-				backtrack(newAssignment);
+				isSolution = backtrack(newAssignment);
 				
 				// }
 			
@@ -70,11 +76,35 @@ public class Part1 {
 			
 			// drop var=value from assignment (done due to cloning above)
 			// TODO? remove inferences from assignment
+					
+			if(!isSolution) {
+				searchPath.append(" -> backtrack\n");
+				searchPaths.add(searchPath.toString());
+			}
+			
+			rollback(isSolution);
 		}
 		
-		return;
+		return false;
 	}
 	
+	private void rollback(boolean isSolution) {
+		int stopIndex = searchPath.lastIndexOf(" ->");
+		String strB4 = null;
+		if(stopIndex > 0) {
+			strB4 = searchPath.substring(0, stopIndex);
+			stopIndex = strB4.lastIndexOf(" ->"); // 2x because want before last backtrack
+			if(!isSolution && stopIndex > 0) {
+				strB4 = strB4.substring(0, stopIndex);				
+			}
+		}
+		
+		searchPath = new StringBuilder();
+		if(strB4 != null) {
+			searchPath.append(strB4);
+		}
+	}
+
 	private boolean isConsistent(Assignment assignment) {
 		
 		for(String category : categoryLetterPositions.keySet()) {
@@ -94,7 +124,6 @@ public class Part1 {
 	private boolean hasAPossibleWordMatch(String category, Assignment assignment) {
 		
 		for(String word : wordList.get(category)) {
-			System.out.println("check " + word);
 			List<Integer> letterPositions = categoryLetterPositions.get(category);
 			if(isPossibleMatch(word, assignment, letterPositions)) {
 				return true;
@@ -116,16 +145,11 @@ public class Part1 {
 		while(index < possibleWordMatch.length()) {
 			
 			int position = letterPositions.get(index);
-			String letter = assignment.assignment[position - 1]; // position numbers are 1-based
-
-			if(letter != null) {
-				System.out.println("  " + letter + " vs " + index + " " + possibleWordMatch.substring(index, index+1) + "(" + possibleWordMatch + ")");	
-			}
+			String letter = assignment.get(position-1);
 
 			if(letter != null && !letter.equals(possibleWordMatch.substring(index, index+1))) {
 				// if the letter is assigned a value and it does not match the
 				// character in the word we are comparing, it is not a match
-				System.out.println("FALSE");
 				return false;
 			}
 			
@@ -147,33 +171,14 @@ public class Part1 {
 		
 		// TODO - for now, just picking positions in order... do something 
 		// else later
-		int position = 0;
-		for(String letter : assignment.assignment) {
-			if(letter == null) {
+		int position = 0; // positions are 1-based
+		while(position < this.solutionSize) {
+			if(assignment.get(position) == null) {
 				return position;
 			}
 			position++;
 		}
 		return -1;
-	}
-
-	private void debugInitialization() {
-		System.out.println("array size: " + arraySize);
-		for(String category : categoryLetterPositions.keySet()) {
-			System.out.print("  category: " + category);
-			for(Integer position : categoryLetterPositions.get(category)) {
-				System.out.print(" " + position);
-			}
-			System.out.print("\n");
-		}
-		
-		for(String category : wordList.keySet()) {
-			System.out.print("word category: " + category);
-			for(String word : wordList.get(category)) {
-				System.out.print(" " + word);
-			}
-			System.out.print("\n");
-		}
 	}
 
 }
