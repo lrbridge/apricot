@@ -42,28 +42,27 @@ public class Part1 {
 		}
 		
 		int variable = selectUnassignedVariable(assignment);
-		System.out.println("selected variable: " + variable);
+		System.out.println("---- selected variable: " + variable + "-----");
 		
 		for(char value : getOrderedDomainValues()) {
-			
-			// TODO do consistent check here
-			// if(consistent) {
 			
 			Assignment newAssignment = assignment.clone();
 			newAssignment.set(variable, String.valueOf(value));
 			
-			// TODO do inference checking here?
-			// if(inferences != failure) {
+			if(isConsistent(newAssignment)) {
+				
+				// TODO do inference checking here?
+				// if(inferences != failure) {
+				
+				Assignment result = backtrack(newAssignment);
+				
+				if(result != null) {
+					return result;
+				}
+				
+				// }
 			
-			Assignment result = backtrack(newAssignment);
-			
-			if(result != null) {
-				return result;
 			}
-			
-			// }
-			
-			// }
 			
 			// drop var=value from assignment (done due to cloning above)
 			// TODO? remove inferences from assignment
@@ -72,6 +71,67 @@ public class Part1 {
 		return null; // null = failure
 	}
 	
+	private boolean isConsistent(Assignment assignment) {
+		
+		for(String category : categoryLetterPositions.keySet()) {
+				
+			// if there is a category where NO words match, then this is
+			// not a consistent assignment
+			if(!hasAPossibleWordMatch(category, assignment)) {
+				return false; 
+			}
+			
+		}
+		
+		// if all categories still have words that could match, this is consistent
+		return true;
+	}
+
+	private boolean hasAPossibleWordMatch(String category, Assignment assignment) {
+		
+		for(String word : wordList.get(category)) {
+			System.out.println("check " + word);
+			List<Integer> letterPositions = categoryLetterPositions.get(category);
+			if(isPossibleMatch(word, assignment, letterPositions)) {
+				return true;
+			}
+		}
+		
+		// if no words in the category could match
+		return false;
+	}
+
+	private boolean isPossibleMatch(String possibleWordMatch, Assignment assignment, List<Integer> letterPositions) {
+				
+		int index = 0;
+		
+		if(possibleWordMatch.length() != letterPositions.size()) {
+			return false; // can't be match if not the same length of word
+		}
+		
+		while(index < possibleWordMatch.length()) {
+			
+			int position = letterPositions.get(index);
+			String letter = assignment.assignment[position - 1]; // position numbers are 1-based
+
+			if(letter != null) {
+				System.out.println("  " + letter + " vs " + index + " " + possibleWordMatch.substring(index, index+1) + "(" + possibleWordMatch + ")");	
+			}
+
+			if(letter != null && !letter.equals(possibleWordMatch.substring(index, index+1))) {
+				// if the letter is assigned a value and it does not match the
+				// character in the word we are comparing, it is not a match
+				System.out.println("FALSE");
+				return false;
+			}
+			
+			index++;
+		}
+		
+		// if no conflicting letters, then it could be a match
+		return true;
+	}
+
 	private char[] getOrderedDomainValues() {
 		// TODO just returning alphabet for now... do something better here
 		return "abcdefghijklmnopqrstuvwxyz".toUpperCase().toCharArray();

@@ -25,7 +25,7 @@ public class Part1Test {
 		Assignment solution = simple.solve();
 		
 		// TODO 2 solutions assertEquals(solution.getNumberSolutions(), 1);
-		assertEquals("BAID", solution);
+		assertEquals("BAID", solution.toString());
 		
 		// TODO search trace
 	}
