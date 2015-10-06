@@ -1,6 +1,7 @@
 package part1;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,8 @@ import java.util.Set;
 public class Part1 {
 
 	private Words words;
-	private Integer solutionSize = null;
-	private Map<String, List<Integer>> categoryLetterPositions;
+	private PuzzleInput puzzleInput;
+
 	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<HashSet<String>>();
 
 	private List<Assignment> solutions = new ArrayList<>();
@@ -20,22 +21,21 @@ public class Part1 {
 				
 		FileReader reader = new FileReader(puzzleFile, wordListFile);
 		
-		this.words = new Words(reader.getWordList());
+		this.words = new Words(reader);
+		this.puzzleInput = new PuzzleInput(reader);
 		
-		this.solutionSize = reader.getSolutionSize();
-		
-		this.categoryLetterPositions = reader.getCategoryLetterPositions();
-		
-		for(int x=0; x<this.solutionSize; x++) {
+		for(int x=0; x<this.puzzleInput.getSolutionSize(); x++) {
 			possibleLettersInSolution.add(new HashSet<String>());
 		}
 		
+//		HashMap<List<String>> possibleLettersInSolutionPerCategory = HashMap<>();
+		
 		// adjective
-		for(String category : this.categoryLetterPositions.keySet()) {
+		for(String category : this.puzzleInput.getCategories()) {
 			// for each category, for each spot that the category has a letter, note all possible letters
 			
 			// 1, 3, 4 (end solution) - 1 based!!
-			List<Integer> positionsInSolution = this.categoryLetterPositions.get(category);
+			List<Integer> positionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
 			
 			for(int i=0; i<positionsInSolution.size(); i++) {
 				// A, B ... then A, N, P
@@ -48,13 +48,13 @@ public class Part1 {
 		}
 		
 		
-		System.out.println("FINAL:");
-		for(HashSet<String> x : possibleLettersInSolution) {
-			System.out.println("POSITION");
-			for(String y : x) {
-				System.out.println("  " + y);
-			}
-		}
+//		System.out.println("FINAL:");
+//		for(HashSet<String> x : possibleLettersInSolution) {
+//			System.out.println("POSITION");
+//			for(String y : x) {
+//				System.out.println("  " + y);
+//			}
+//		}
 	}
 
 	public Part1Solution solve() {
@@ -62,7 +62,7 @@ public class Part1 {
 		SearchPath searchPath = new SearchPath();
 		searchPath.addRoot();
 
-		backtrack(new Assignment(this.solutionSize), searchPath);
+		backtrack(new Assignment(this.puzzleInput.getSolutionSize()), searchPath);
 		
 		return new Part1Solution(this.solutions, this.searchPaths);
 	}
@@ -128,11 +128,11 @@ public class Part1 {
 
 	private boolean isConsistent(Assignment assignment) {
 		
-		for(String category : categoryLetterPositions.keySet()) {
+		for(String category : this.puzzleInput.getCategories()) {
 				
 			// if there is a category where NO words match, then this is
 			// not a consistent assignment
-			List<Integer> letterPositions = categoryLetterPositions.get(category);
+			List<Integer> letterPositions = this.puzzleInput.getLetterPositionsInSolutionFor(category);
 			if(!this.words.hasAPossibleMatch(category, assignment, letterPositions)) {
 				return false; 
 			}
@@ -155,7 +155,7 @@ public class Part1 {
 		// TODO - for now, just picking positions in order... do something 
 		// else later
 		int position = 1; // positions are 1-based
-		while(position <= this.solutionSize) {
+		while(position <= this.puzzleInput.getSolutionSize()) {
 			if(assignment.get(position) == null) {
 				return position;
 			}

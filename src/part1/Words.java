@@ -9,8 +9,8 @@ public class Words {
 
 	private Map<String, List<String>> wordList;
 	
-	public Words(Map<String, List<String>> wordList) {
-		this.wordList = wordList;
+	public Words(FileReader reader) {
+		this.wordList = reader.getWordList();
 	}
 	
 	public boolean hasAPossibleMatch(String category, Assignment assignment, List<Integer> letterPositions) {
