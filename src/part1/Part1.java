@@ -6,19 +6,18 @@ import java.util.Map;
 
 public class Part1 {
 
+	private Words words;
 	private Integer solutionSize = null;
 	private Map<String, List<Integer>> categoryLetterPositions;
-	private Map<String, List<String>> wordList;
-	
+		
 	private List<Assignment> solutions = new ArrayList<>();
-	
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
 	public Part1(String puzzleFile, String wordListFile) {
 				
 		FileReader reader = new FileReader(puzzleFile, wordListFile);
 		
-		this.wordList = reader.getWordList();
+		this.words = new Words(reader.getWordList());
 		
 		this.solutionSize = reader.getSolutionSize();
 		
@@ -99,52 +98,14 @@ public class Part1 {
 				
 			// if there is a category where NO words match, then this is
 			// not a consistent assignment
-			if(!hasAPossibleWordMatch(category, assignment)) {
+			List<Integer> letterPositions = categoryLetterPositions.get(category);
+			if(!this.words.hasAPossibleMatch(category, assignment, letterPositions)) {
 				return false; 
 			}
 			
 		}
 		
 		// if all categories still have words that could match, this is consistent
-		return true;
-	}
-
-	private boolean hasAPossibleWordMatch(String category, Assignment assignment) {
-		
-		for(String word : wordList.get(category)) {
-			List<Integer> letterPositions = categoryLetterPositions.get(category);
-			if(isPossibleMatch(word, assignment, letterPositions)) {
-				return true;
-			}
-		}
-		
-		// if no words in the category could match
-		return false;
-	}
-
-	private boolean isPossibleMatch(String possibleWordMatch, Assignment assignment, List<Integer> letterPositions) {
-				
-		int index = 0;
-		
-		if(possibleWordMatch.length() != letterPositions.size()) {
-			return false; // can't be match if not the same length of word
-		}
-		
-		while(index < possibleWordMatch.length()) {
-			
-			int position = letterPositions.get(index);
-			String letter = assignment.get(position-1);
-
-			if(letter != null && !letter.equals(possibleWordMatch.substring(index, index+1))) {
-				// if the letter is assigned a value and it does not match the
-				// character in the word we are comparing, it is not a match
-				return false;
-			}
-			
-			index++;
-		}
-		
-		// if no conflicting letters, then it could be a match
 		return true;
 	}
 
