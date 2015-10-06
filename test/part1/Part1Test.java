@@ -8,6 +8,16 @@ import org.junit.Test;
 
 public class Part1Test {
 
+	private int getNumLines(String searchTrace) {
+		int numLinesOfTrace = 0;
+		for(char c : searchTrace.toCharArray()) {
+			if(c == '\n') {
+				numLinesOfTrace++;
+			}
+		}
+		return numLinesOfTrace;
+	}
+	
 	@Test
 	public void trivial() {
 		Part1 part1 = new Part1("trivial.txt", "smallwordlist.txt");
@@ -15,14 +25,15 @@ public class Part1Test {
 		List<Assignment> solutions = part1Solution.getSolutions();
 		
 		assertEquals(solutions.size(), 3);
-		assertEquals("ANT", solutions.get(0).getSolution());
-		assertEquals("APE", solutions.get(1).getSolution());
+		assertEquals("APE", solutions.get(0).getSolution());
+		assertEquals("ANT", solutions.get(1).getSolution());
 		assertEquals("BAD", solutions.get(2).getSolution());
 		
-		System.out.println(part1Solution.getSearchTrace());
-		// TODO add assert when shorter?
-//		assertEquals("root -> A -> N -> T (found result: ANT)", part1Solution.getSearchTrace());
+		String searchTrace = part1Solution.getSearchTrace();
+		int numLinesOfTrace = getNumLines(searchTrace);
 		
+		System.out.println(searchTrace);
+		assertEquals(numLinesOfTrace, 17);
 	}
 	
 	@Test
@@ -34,9 +45,11 @@ public class Part1Test {
 		assertEquals(solutions.size(), 1);
 		assertEquals("BAID", solutions.get(0).getSolution());
 
-		System.out.println(part1Solution.getSearchTrace());
-		// TODO add assert when shorter?
-//		assertEquals("root -> A -> N -> T (found result: ANT)", part1Solution.getSearchTrace());
+		String searchTrace = part1Solution.getSearchTrace();
+		int numLinesOfTrace = getNumLines(searchTrace);
+		
+		System.out.println(searchTrace);
+		assertEquals(numLinesOfTrace, 17);
 	}
 
 }

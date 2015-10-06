@@ -30,7 +30,7 @@ public class Assignment {
 	protected Assignment clone() {
 		Assignment clone = new Assignment(this.assignment.length);
 		
-		int position = 0;
+		int position = 1;
 		for(String letter : this.assignment) {
 			if(letter != null) {
 				clone.set(position, letter);
@@ -41,12 +41,13 @@ public class Assignment {
 		return clone;
 	}
 
+	// 1-based!
 	public void set(int position, String letter) {
-		this.assignment[position] = letter;
+		this.assignment[position-1] = letter;
 	}
 
 	public String get(int position) {
-		return this.assignment[position];
+		return this.assignment[position-1];
 	}
 	
 	public String getSolution() {

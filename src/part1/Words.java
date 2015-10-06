@@ -1,15 +1,14 @@
 package part1;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Words {
 
 	private Map<String, List<String>> wordList;
 	
-	private List<List<String>> possibleValuesEachSpot = new ArrayList<>();
-
 	public Words(Map<String, List<String>> wordList) {
 		this.wordList = wordList;
 	}
@@ -37,7 +36,7 @@ public class Words {
 		while(index < possibleWordMatch.length()) {
 			
 			int position = letterPositions.get(index);
-			String letter = assignment.get(position-1);
+			String letter = assignment.get(position);
 
 			if(letter != null && !letter.equals(possibleWordMatch.substring(index, index+1))) {
 				// if the letter is assigned a value and it does not match the
@@ -50,6 +49,14 @@ public class Words {
 		
 		// if no conflicting letters, then it could be a match
 		return true;
+	}
+
+	public Set<String> getLettersInPositionFor(String category, int position) {
+		Set<String> letters = new HashSet<String>();
+		for(String word : this.wordList.get(category)) {
+			letters.add(Character.toString(word.charAt(position)));
+		}
+		return letters;
 	}
 	
 }
