@@ -11,9 +11,8 @@ public class Part1 {
 
 	private Words words;
 	private PuzzleInput puzzleInput;
-
-	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<HashSet<String>>();
-
+	private PossibleLetters possibleLetters;
+	
 	private List<Assignment> solutions = new ArrayList<>();
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
@@ -23,38 +22,7 @@ public class Part1 {
 		
 		this.words = new Words(reader);
 		this.puzzleInput = new PuzzleInput(reader);
-		
-		for(int x=0; x<this.puzzleInput.getSolutionSize(); x++) {
-			possibleLettersInSolution.add(new HashSet<String>());
-		}
-		
-//		HashMap<List<String>> possibleLettersInSolutionPerCategory = HashMap<>();
-		
-		// adjective
-		for(String category : this.puzzleInput.getCategories()) {
-			// for each category, for each spot that the category has a letter, note all possible letters
-			
-			// 1, 3, 4 (end solution) - 1 based!!
-			List<Integer> positionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
-			
-			for(int i=0; i<positionsInSolution.size(); i++) {
-				// A, B ... then A, N, P
-				Set<String> lettersInPosition = this.words.getLettersInPositionFor(category, i);
-				// 1 ... then 3 - 1 based!
-				int positionInSolution = positionsInSolution.get(i);
-				
-				possibleLettersInSolution.get(positionInSolution - 1).addAll(lettersInPosition);
-			}
-		}
-		
-		
-//		System.out.println("FINAL:");
-//		for(HashSet<String> x : possibleLettersInSolution) {
-//			System.out.println("POSITION");
-//			for(String y : x) {
-//				System.out.println("  " + y);
-//			}
-//		}
+		this.possibleLetters = new PossibleLetters(this.puzzleInput, this.words);
 	}
 
 	public Part1Solution solve() {
@@ -88,11 +56,10 @@ public class Part1 {
 			return true;
 		}
 		
-		// all 1-based!
 		int variable = selectUnassignedVariable(assignment);
-		System.out.println("AT POSITION " + variable);
+
 		for(String value : getOrderedDomainValues(variable)) {
-			System.out.println(value);
+
 			Assignment newAssignment = assignment.clone();
 			newAssignment.set(variable, value);
 
@@ -144,8 +111,7 @@ public class Part1 {
 	}
 
 	private Set<String> getOrderedDomainValues(int indexInSolution) {
-		// 1 based!
-		return possibleLettersInSolution.get(indexInSolution - 1);
+		return this.possibleLetters.get(indexInSolution);
 	}
 
 	private int selectUnassignedVariable(Assignment assignment) {
