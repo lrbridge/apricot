@@ -1,10 +1,7 @@
 package part1;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class Part1 {
@@ -17,9 +14,7 @@ public class Part1 {
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
 	public Part1(String puzzleFile, String wordListFile) {
-				
 		FileReader reader = new FileReader(puzzleFile, wordListFile);
-		
 		this.words = new Words(reader);
 		this.puzzleInput = new PuzzleInput(reader);
 		this.possibleLetters = new PossibleLetters(this.puzzleInput, this.words);
