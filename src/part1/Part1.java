@@ -112,17 +112,9 @@ public class Part1 {
 	private int selectUnassignedVariable(Assignment assignment) {
 		// letter-based assignment first, variable = position in array
 		// TODO - word-based assignment will change this
-		
-		// TODO - for now, just picking positions in order... do something 
-		// else later
-		int position = 1; // positions are 1-based
-		while(position <= this.puzzleInput.getSolutionSize()) {
-			if(assignment.get(position) == null) {
-				return position;
-			}
-			position++;
-		}
-		return -1;
+
+		// MRV heuristic - choose variable with fewest remaining values
+		return this.possibleLetters.getUnassignedPositionWithFewestRemainingLetters(assignment);
 	}
 
 }
