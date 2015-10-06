@@ -32,7 +32,8 @@ public class Assignment {
 
 	@Override
 	protected Assignment clone() {
-		Assignment clone = new Assignment(this.assignment.length, this.possibleLetters); // TODO must clone this once starts changing as go
+		PossibleLetters clonedPossibleLetters = this.possibleLetters.clone();
+		Assignment clone = new Assignment(this.assignment.length, clonedPossibleLetters);
 		
 		int position = 1;
 		for(String letter : this.assignment) {

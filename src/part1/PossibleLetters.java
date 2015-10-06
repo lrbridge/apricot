@@ -42,9 +42,25 @@ public class PossibleLetters {
 			}
 		}
 	}
-	
+
+	private PossibleLetters(List<HashSet<String>> oldPossibleLettersInSolution) {
+		// constructor only used by clone method
+
+        for(HashSet<String> lettersInGivenPosition : oldPossibleLettersInSolution) {
+            HashSet<String> cloneLettersInGivenPosition = new HashSet<String>();
+            for(String letter : lettersInGivenPosition) {
+                cloneLettersInGivenPosition.add(letter);
+            }
+            possibleLettersInSolution.add(cloneLettersInGivenPosition);
+        }
+	}
+
 	public Set<String> get(int indexInSolution) {
 		return this.possibleLettersInSolution.get(indexInSolution - 1); // 1-based!
 	}
-	
+
+	@Override
+	protected PossibleLetters clone() {
+		return new PossibleLetters(possibleLettersInSolution);
+	}
 }
