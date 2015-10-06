@@ -8,8 +8,7 @@ public class Part1 {
 
 	private Words words;
 	private PuzzleInput puzzleInput;
-	private PossibleLetters possibleLetters;
-	
+
 	private List<Assignment> solutions = new ArrayList<>();
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
@@ -17,7 +16,6 @@ public class Part1 {
 		FileReader reader = new FileReader(puzzleFile, wordListFile);
 		this.words = new Words(reader);
 		this.puzzleInput = new PuzzleInput(reader);
-		this.possibleLetters = new PossibleLetters(this.puzzleInput, this.words);
 	}
 
 	public Part1Solution solve() {
@@ -25,7 +23,8 @@ public class Part1 {
 		SearchPath searchPath = new SearchPath();
 		searchPath.addRoot();
 
-		backtrack(new Assignment(this.puzzleInput.getSolutionSize()), searchPath);
+		PossibleLetters initialPossibleLetters = new PossibleLetters(puzzleInput, words);
+		backtrack(new Assignment(puzzleInput.getSolutionSize(), initialPossibleLetters), searchPath);
 		
 		return new Part1Solution(this.solutions, this.searchPaths);
 	}
@@ -53,7 +52,7 @@ public class Part1 {
 		
 		int variable = selectUnassignedVariable(assignment);
 
-		for(String value : getOrderedDomainValues(variable)) {
+		for(String value : getOrderedDomainValues(variable, assignment)) {
 
 			Assignment newAssignment = assignment.clone();
 			newAssignment.set(variable, value);
@@ -105,8 +104,9 @@ public class Part1 {
 		return true;
 	}
 
-	private Set<String> getOrderedDomainValues(int indexInSolution) {
-		return this.possibleLetters.get(indexInSolution);
+	private Set<String> getOrderedDomainValues(int indexInSolution, Assignment assignment) {
+		// TODO not ordered...
+		return assignment.getAllPossibleLetters(indexInSolution);
 	}
 
 	private int selectUnassignedVariable(Assignment assignment) {
@@ -114,7 +114,7 @@ public class Part1 {
 		// TODO - word-based assignment will change this
 
 		// MRV heuristic - choose variable with fewest remaining values
-		return this.possibleLetters.getUnassignedPositionWithFewestRemainingLetters(assignment);
+		return assignment.getUnassignedPositionWithFewestRemainingLetters();
 	}
 
 }

@@ -46,33 +46,5 @@ public class PossibleLetters {
 	public Set<String> get(int indexInSolution) {
 		return this.possibleLettersInSolution.get(indexInSolution - 1); // 1-based!
 	}
-
-	public int getUnassignedPositionWithFewestRemainingLetters(Assignment assignment) {
-
-		int unassignedPositionWithFewestRemainingLetters = -1; //error if no value left to assign
-
-		// 1-based!
-		for(int position = 1; position <= this.possibleLettersInSolution.size(); position++) {
-
-			// if the position is unassigned
-			if(assignment.get(position) == null) { //1-based
-
-				if(unassignedPositionWithFewestRemainingLetters == -1) {
-					unassignedPositionWithFewestRemainingLetters = position;
-				}
-				else {
-					int currentPositionLettersRemaining = this.possibleLettersInSolution.get(position-1).size();
-					int lowestSoFarLettersRemaining = this.possibleLettersInSolution.get(unassignedPositionWithFewestRemainingLetters-1).size();
-					if(currentPositionLettersRemaining < lowestSoFarLettersRemaining) {
-						unassignedPositionWithFewestRemainingLetters = position; // take the lower number of letters remaining
-					}
-				}
-
-
-			}
-		}
-
-		return unassignedPositionWithFewestRemainingLetters;
-	}
 	
 }

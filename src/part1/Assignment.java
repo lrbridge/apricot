@@ -1,11 +1,15 @@
 package part1;
 
+import java.util.Set;
+
 public class Assignment {
 
 	private String[] assignment;
+	private PossibleLetters possibleLetters;
 
-	public Assignment(Integer arraySize) {
-		this.assignment = new String[arraySize];
+	public Assignment(int solutionSize, PossibleLetters possibleLetters) {
+		this.assignment = new String[solutionSize];
+		this.possibleLetters = possibleLetters;
 	}
 	
 	@Override
@@ -28,7 +32,7 @@ public class Assignment {
 
 	@Override
 	protected Assignment clone() {
-		Assignment clone = new Assignment(this.assignment.length);
+		Assignment clone = new Assignment(this.assignment.length, this.possibleLetters); // TODO must clone this once starts changing as go
 		
 		int position = 1;
 		for(String letter : this.assignment) {
@@ -53,5 +57,35 @@ public class Assignment {
 	public String getSolution() {
 		return this.toString();
 	}
-	
+
+	public Set<String> getAllPossibleLetters(int indexInSolution) {
+		return this.possibleLetters.get(indexInSolution);
+	}
+
+	public int getUnassignedPositionWithFewestRemainingLetters() {
+
+		int unassignedPositionWithFewestRemainingLetters = -1; //error if no value left to assign
+
+		// 1-based!
+		for(int position = 1; position <= this.assignment.length; position++) {
+
+			// if the position is unassigned
+			if(this.get(position) == null) { //1-based
+
+				if(unassignedPositionWithFewestRemainingLetters == -1) {
+					unassignedPositionWithFewestRemainingLetters = position;
+				}
+				else {
+					int currentPositionLettersRemaining = this.possibleLetters.get(position).size();
+					int lowestSoFarLettersRemaining = this.possibleLetters.get(unassignedPositionWithFewestRemainingLetters).size();
+					if(currentPositionLettersRemaining < lowestSoFarLettersRemaining) {
+						unassignedPositionWithFewestRemainingLetters = position; // take the lower number of letters remaining
+					}
+				}
+			}
+		}
+
+		return unassignedPositionWithFewestRemainingLetters;
+
+	}
 }
