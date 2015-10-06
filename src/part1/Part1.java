@@ -10,11 +10,10 @@ public class Part1 {
 	private Map<String, List<Integer>> categoryLetterPositions;
 	private Map<String, List<String>> wordList;
 	
-	private List<Assignment> solutions = new ArrayList<Assignment>();
+	private List<Assignment> solutions = new ArrayList<>();
 	
-	private List<String> searchPaths = new ArrayList<String>();
-	private StringBuilder searchPath = new StringBuilder();
-	
+	private List<SearchPath> searchPaths = new ArrayList<>();
+
 	public Part1(String puzzleFile, String wordListFile) {
 				
 		FileReader reader = new FileReader(puzzleFile, wordListFile);
@@ -26,10 +25,12 @@ public class Part1 {
 		this.categoryLetterPositions = reader.getCategoryLetterPositions();
 	}
 
-	public Part1Solution solve() {		
-		searchPath.append("root");
-		
-		backtrack(new Assignment(this.solutionSize));
+	public Part1Solution solve() {
+
+		SearchPath searchPath = new SearchPath();
+		searchPath.addRoot();
+
+		backtrack(new Assignment(this.solutionSize), searchPath);
 		
 		return new Part1Solution(this.solutions, this.searchPaths);
 	}
@@ -41,15 +42,17 @@ public class Part1 {
 	
 	// word-based assignment TODO
 	
-	private boolean backtrack(Assignment assignment) {
-				
+	private boolean backtrack(Assignment assignment, SearchPath searchPath) {
+
 		if(assignment.isComplete()) {
 			// to support multiple solutions, DON'T return here
 			// continue searching tree to find all solutions
 			solutions.add(assignment);
-			searchPath.append(" (found result: " + assignment.toString() + ")\n");
-			searchPaths.add(searchPath.toString());
-			
+
+			searchPath.addSolution(assignment);
+
+			searchPaths.add(searchPath);
+
 			return true;
 		}
 		
@@ -59,8 +62,10 @@ public class Part1 {
 			
 			Assignment newAssignment = assignment.clone();
 			newAssignment.set(variable, String.valueOf(value));
-			searchPath.append(" -> " + value);
-			
+
+			SearchPath newSearchPath = searchPath.clone();
+			newSearchPath.add(Character.toString(value));
+
 			boolean isSolution = false;
 			
 			if(isConsistent(newAssignment)) {
@@ -68,7 +73,7 @@ public class Part1 {
 				// TODO do inference checking here?
 				// if(inferences != failure) {
 				
-				isSolution = backtrack(newAssignment);
+				isSolution = backtrack(newAssignment, newSearchPath);
 				
 				// }
 			
@@ -78,31 +83,14 @@ public class Part1 {
 			// TODO? remove inferences from assignment
 					
 			if(!isSolution) {
-				searchPath.append(" -> backtrack\n");
-				searchPaths.add(searchPath.toString());
+				newSearchPath.addBacktrack();
+
+				searchPaths.add(newSearchPath);
 			}
-			
-			rollback(isSolution);
+
 		}
 		
 		return false;
-	}
-	
-	private void rollback(boolean isSolution) {
-		int stopIndex = searchPath.lastIndexOf(" ->");
-		String strB4 = null;
-		if(stopIndex > 0) {
-			strB4 = searchPath.substring(0, stopIndex);
-			stopIndex = strB4.lastIndexOf(" ->"); // 2x because want before last backtrack
-			if(!isSolution && stopIndex > 0) {
-				strB4 = strB4.substring(0, stopIndex);				
-			}
-		}
-		
-		searchPath = new StringBuilder();
-		if(strB4 != null) {
-			searchPath.append(strB4);
-		}
 	}
 
 	private boolean isConsistent(Assignment assignment) {
