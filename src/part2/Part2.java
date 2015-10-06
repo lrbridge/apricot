@@ -1,11 +1,18 @@
 package part2;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+
 public class Part2 {
 
 
 		public int[][] Getboard(String filename) throws IOException
+
 	{
 	BufferedReader br = new BufferedReader(new FileReader(filename));
+
+
 	String s1="";
 	String str=br.readLine();
 	while((str!=null))
