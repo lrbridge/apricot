@@ -15,7 +15,7 @@ public class Assignment {
 		this.possibleLetters = possibleLetters;
         this.puzzleInput = puzzleInput;
 
-        System.out.println("NEW ASSIGNMENT" + possibleLetters.toString());
+//        System.out.println("NEW ASSIGNMENT" + possibleLetters.toString());
     }
 	
 	@Override
@@ -59,7 +59,7 @@ public class Assignment {
 
     public boolean propagateAssignment(int position, String letter) {
 
-        System.out.println(position + " & " + letter);
+//        System.out.println(position + " & " + letter);
 //
 //        // for each unassigned variable (position) that is connected to that assignment by constraint (by the assignment)
 //        //      aka, for all categories that involve that position
@@ -82,7 +82,7 @@ public class Assignment {
             possibleLetters.propogateChangeForward(position, letter, category);
         }
 
-        System.out.println(possibleLetters.toString());
+//        System.out.println(possibleLetters.toString());
 
         return true;
     }

@@ -81,25 +81,16 @@ public class PossibleLetters {
             }
         }
 
-        int i = 0;
-        for(Integer position : positionsInSolution) { // for each spot position in the solution
+        for(int index=0; index<positionsInSolution.size(); index++) { // for each spot position in the solution
 
-            if(position != positionAssigned) { // for all the other positions (besides where we just assigned)
+            if(index != indexJustAssigned) { // for all the other positions (besides where we just assigned)
+                int positionInSolution = positionsInSolution.get(index);
 
-                List<String> wordsForCategory = words.getWordsForCategory(category);
+                Set<String> lettersInPosition = words.getLettersInPositionForGiven(category, index, indexJustAssigned, letterAssigned);
 
-                for(String word : wordsForCategory) { // if a word in the category
-
-                    boolean hasLetterJustAssignedInPositionJustAssigned = word.substring(indexJustAssigned, indexJustAssigned+1).equals(letterAssigned);
-                    if(!hasLetterJustAssignedInPositionJustAssigned) {
-                        // remove the word's other letters from the other positions
-                        possibleLettersInSolution.get(position - 1).remove(word.substring(i, i+1));
-                    }
-
-                }
+                removeLettersNotInPosition(positionInSolution, lettersInPosition);
 
             }
-            i++;
 
         }
 

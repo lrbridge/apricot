@@ -62,5 +62,16 @@ public class Words {
 		}
 		return letters;
 	}
-	
+
+    public Set<String> getLettersInPositionForGiven(String category, int position, int positionAssigned, String letterAssigned) {
+        Set<String> letters = new HashSet<String>();
+        for(String word : this.wordList.get(category)) {
+            if(Character.toString(word.charAt(positionAssigned)).equals(letterAssigned)) {
+                letters.add(Character.toString(word.charAt(position)));
+            }
+            // if the word doesn't have the character that was just assigned at the position that was just assigned
+            // don't add it to the list
+        }
+        return letters;
+    }
 }

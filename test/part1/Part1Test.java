@@ -14,43 +14,43 @@ public class Part1Test {
 	@Test
 	public void trivial() {
 		String[] expectedWords = {"APE", "ANT", "BAD"};
-		testPart1("trivial.txt", "smallwordlist.txt", expectedWords, 17);
+		testPart1("trivial.txt", "smallwordlist.txt", expectedWords, 8);
 	}
 	
 	@Test
 	public void simple() {
 		String[] expectedWords = {"BAID"};
-		testPart1("simple.txt", "smallwordlist.txt", expectedWords, 9);
+		testPart1("simple.txt", "smallwordlist.txt", expectedWords, 4);
 	}
 	
 	@Test
 	public void puzzle1() {
 		String[] expectedWords = {"NNEMANDYE", "NWEMANDYE", "NNESAYDYE", "NWESAYDYE"};
-		testPart1("puzzle1.txt", "wordlist.txt", expectedWords, 104);
+		testPart1("puzzle1.txt", "wordlist.txt", expectedWords, 23);
 	}
 	
 	@Test
 	public void puzzle2() {
 		String[] expectedWords = {"HSIAIWNCS", "HSIAIWNPS", "HSIOIWNDS", "HSIOIWNYS"};
-		testPart1("puzzle2.txt", "wordlist.txt", expectedWords, 148);
+		testPart1("puzzle2.txt", "wordlist.txt", expectedWords, 29);
 	}
 	
 	@Test
 	public void puzzle3() {
 		String[] expectedWords = {"ASULPEA", "ASULPIE"};
-		testPart1("puzzle3.txt", "wordlist.txt", expectedWords, 261);
+		testPart1("puzzle3.txt", "wordlist.txt", expectedWords, 15);
 	}
 	
 	@Test
 	public void puzzle4() {
 		String[] expectedWords = {"HEDITYRE", "HELITYRE", "HETITYRE"};
-		testPart1("puzzle4.txt", "wordlist.txt", expectedWords, 76);
+		testPart1("puzzle4.txt", "wordlist.txt", expectedWords, 13);
 	}
 	
 	@Test
 	public void puzzle5() {
 		String[] expectedWords = {"IHTTNOIEN", "THTTNOIEN", "IHTTYOIEN", "THTTYOIEN"};
-		testPart1("puzzle5.txt", "wordlist.txt", expectedWords, 102);
+		testPart1("puzzle5.txt", "wordlist.txt", expectedWords, 25);
 	}
 
 	private void testPart1(String filename, String wordlist, String[] expectedWordsArray, int expectedLinesInTrace) {
