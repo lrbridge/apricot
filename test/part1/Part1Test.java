@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import part1.part1.assignment.BaseAssignment;
@@ -86,7 +87,7 @@ public class Part1Test {
     @Test
     public void puzzle2Word() {
         String[] expectedWords = {"HSIAIWNCS", "HSIAIWNPS", "HSIOIWNDS", "HSIOIWNYS"};
-        testPart1("word", "puzzle2.txt", "wordlist.txt", expectedWords, 112439);
+        testPart1("word", "puzzle2.txt", "wordlist.txt", expectedWords, 1537);
     }
 
     @Test
@@ -112,11 +113,11 @@ public class Part1Test {
 
 		Part1 part1 = new Part1(filename, wordlist, wordOrLetterBased);
 		Part1Solution part1Solution = part1.solve();
-		List<BaseAssignment> solutions = part1Solution.getSolutions();
+		Set<BaseAssignment> solutions = part1Solution.getSolutions();
 		
-		for(int i=0; i<solutions.size(); i++) {
-			System.out.println(solutions.get(i).getSolution());
-            assertTrue(expectedWords.contains(solutions.get(i).getSolution()));
+		for(BaseAssignment solution : solutions) {
+			System.out.println(solution.getSolution());
+            assertTrue(expectedWords.contains(solution.getSolution()));
 		}
         assertEquals(solutions.size(), expectedWords.size());
 

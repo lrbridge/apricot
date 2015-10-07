@@ -8,7 +8,9 @@ import part1.part1.type.PossibleLetters;
 import part1.part1.type.PossibleWords;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Part1 {
 
@@ -16,7 +18,7 @@ public class Part1 {
 	private PuzzleInput puzzleInput;
     private boolean isWordBased;
 
-	private List<BaseAssignment> solutions = new ArrayList<>();
+	private Set<BaseAssignment> solutions = new HashSet<>();
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
 	public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {

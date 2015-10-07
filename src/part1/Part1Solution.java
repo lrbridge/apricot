@@ -4,18 +4,19 @@ import part1.part1.assignment.BaseAssignment;
 import part1.part1.assignment.LetterAssignment;
 
 import java.util.List;
+import java.util.Set;
 
 public class Part1Solution {
 
-	private List<BaseAssignment> solutions;
+	private Set<BaseAssignment> solutions;
 	private List<SearchPath> searchPaths;
 	
-	public Part1Solution(List<BaseAssignment> solutions, List<SearchPath> searchPaths) {
+	public Part1Solution(Set<BaseAssignment> solutions, List<SearchPath> searchPaths) {
 		this.solutions = solutions;
 		this.searchPaths = searchPaths;
 	}
 
-	public List<BaseAssignment> getSolutions() {
+	public Set<BaseAssignment> getSolutions() {
 		return solutions;
 	}
 
