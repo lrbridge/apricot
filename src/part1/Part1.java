@@ -25,8 +25,9 @@ public class Part1 {
 		SearchPath searchPath = new SearchPath();
 		searchPath.addRoot();
 
+        Assignment initialAssignment = new Assignment(puzzleInput.getSolutionSize(), puzzleInput);
 		PossibleLetters initialPossibleLetters = new PossibleLetters(puzzleInput, words);
-		backtrack(new Assignment(puzzleInput.getSolutionSize(), initialPossibleLetters, puzzleInput), searchPath);
+		backtrack(initialAssignment, initialPossibleLetters, searchPath);
 		
 		return new Part1Solution(this.solutions, this.searchPaths);
 	}
@@ -49,7 +50,7 @@ public class Part1 {
 
     // also TODO In the first line of the trace file, indicate your assignment order
 
-	private boolean backtrack(Assignment assignment, SearchPath searchPath) {
+	private boolean backtrack(Assignment assignment, PossibleLetters possibleLetters, SearchPath searchPath) {
 
 		if(assignment.isComplete()) {
 			// to support multiple solutions, DON'T return here
@@ -63,12 +64,14 @@ public class Part1 {
 			return true;
 		}
 		
-		int variable = selectUnassignedVariable(assignment);
-
-		for(String value : getOrderedDomainValues(variable, assignment)) {
+		int variable = selectUnassignedVariable(possibleLetters, assignment);
+System.out.println(variable);
+		for(String value : getOrderedDomainValues(variable, possibleLetters)) {
 
 			Assignment newAssignment = assignment.clone();
 			newAssignment.set(variable, value);
+
+            PossibleLetters newPossibleLetters = possibleLetters.clone();
 
 			SearchPath newSearchPath = searchPath.clone();
 			newSearchPath.add(value);
@@ -78,12 +81,12 @@ public class Part1 {
 			if(isConsistent(newAssignment)) {
 
                 // Perform inferences by propagating assignment changes through TODO
-                boolean isStillConsistent = newAssignment.propagateAssignment(variable, value);
+                boolean isStillConsistent = newPossibleLetters.propagateAssignment(variable, value);
 
 				if(isStillConsistent) {
 
                     // if it's still consistent after inferences, recurse deeper
-				    isSolution = backtrack(newAssignment, newSearchPath);
+				    isSolution = backtrack(newAssignment, newPossibleLetters, newSearchPath);
 				
 				}
 
@@ -123,19 +126,19 @@ public class Part1 {
 		return true;
 	}
 
-	private Set<String> getOrderedDomainValues(int indexInSolution, Assignment assignment) {
+	private Set<String> getOrderedDomainValues(int indexInSolution, PossibleLetters possibleLetters) {
 		// TODO not ordered... what does "least constrained" value mean in this case?
         //      I don't know if there is any easy way to compute this... every assignment dramatically changes
         //      the possible values of every other space.  Maybe we can assume inferences take care of this?
-		return assignment.getAllPossibleLetters(indexInSolution);
+		return possibleLetters.getAllPossibleLetters(indexInSolution);
     }
 
-	private int selectUnassignedVariable(Assignment assignment) {
+	private int selectUnassignedVariable(PossibleLetters possibleLetters, Assignment assignment) {
 		// letter-based assignment first, variable = position in array
 		// TODO - word-based assignment will change this
 
 		// MRV heuristic - choose variable with fewest remaining values
-		return assignment.getUnassignedPositionWithFewestRemainingLetters();
+		return possibleLetters.getUnassignedPositionWithFewestRemainingLetters(assignment);
 	}
 
 }

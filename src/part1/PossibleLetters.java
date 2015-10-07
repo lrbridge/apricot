@@ -34,6 +34,7 @@ public class PossibleLetters {
                 }
             }
         }
+        System.out.println(this);
 	}
 
     private void initializePossibleLettersForAllPositionsToNull() {
@@ -51,7 +52,7 @@ public class PossibleLetters {
         possibleLettersInSolution.get(position - 1).addAll(lettersInPosition);
     }
 
-    public void removeLettersNotInPosition(int position, Set<String> lettersInPosition) {
+    private void removeLettersNotInPosition(int position, Set<String> lettersInPosition) {
         List<String> lettersToRemove = new ArrayList<>();
         for(String letter : possibleLettersInSolution.get(position - 1)) {
             if(!lettersInPosition.contains(letter)) {
@@ -63,7 +64,40 @@ public class PossibleLetters {
         }
     }
 
-    public void propogateChangeForward(int positionAssigned, String letterAssigned, String category) {
+    public boolean propagateAssignment(int position, String letter) {
+
+//        System.out.println(position + " & " + letter);
+//
+//        // for each unassigned variable (position) that is connected to that assignment by constraint (by the assignment)
+//        //      aka, for all categories that involve that position
+//        //              go through other positions for that category & remove inconsistent values
+//
+//        //              if any get to down to 0 return false
+//        //              if any down to 1, assign & propogate assignment again
+//
+//        //              if done... return true  (WHAT IS DONE??)
+//
+//
+        // remove all letters except the one assigned for that spot
+        HashSet<String> letterAssigned = new HashSet<>();
+        letterAssigned.add(letter);
+        this.removeLettersNotInPosition(position, letterAssigned);
+
+        List<String> categoriesAffectedByAssignment = this.puzzleInput.getCategoriesWithPosition(position);
+
+        for(String category : categoriesAffectedByAssignment) {
+            propogateChangeForward(position, letter, category);
+        }
+
+//        System.out.println(possibleLetters.toString());
+
+        // TODO return false / see if anything else can be assigned / etc...?
+
+        return true;
+    }
+
+
+    private void propogateChangeForward(int positionAssigned, String letterAssigned, String category) {
 
         // ex: already got rid of O from AO
         // had word CAT and DOG
@@ -112,10 +146,6 @@ public class PossibleLetters {
         }
 	}
 
-	public Set<String> get(int indexInSolution) {
-		return this.possibleLettersInSolution.get(indexInSolution - 1); // 1-based!
-	}
-
 	@Override
 	protected PossibleLetters clone() {
 		return new PossibleLetters(possibleLettersInSolution, puzzleInput, words);
@@ -135,5 +165,40 @@ public class PossibleLetters {
             str.append("\n");
         }
         return str.toString();
+    }
+
+    private Set<String> get(int indexInSolution) {
+        return this.possibleLettersInSolution.get(indexInSolution - 1); // 1-based!
+    }
+
+    public Set<String> getAllPossibleLetters(int indexInSolution) {
+        return this.get(indexInSolution);
+    }
+
+    public int getUnassignedPositionWithFewestRemainingLetters(Assignment assignment) {
+
+        int unassignedPositionWithFewestRemainingLetters = -1; //error if no value left to assign
+
+        // 1-based!
+        for(int position = 1; position <= this.possibleLettersInSolution.size(); position++) {
+
+            // if the position is unassigned
+            if(assignment.get(position) == null) { //1-based
+
+                if(unassignedPositionWithFewestRemainingLetters == -1) {
+                    unassignedPositionWithFewestRemainingLetters = position;
+                }
+                else {
+                    int currentPositionLettersRemaining = this.get(position).size();
+                    int lowestSoFarLettersRemaining = this.get(unassignedPositionWithFewestRemainingLetters).size();
+                    if(currentPositionLettersRemaining < lowestSoFarLettersRemaining) {
+                        unassignedPositionWithFewestRemainingLetters = position; // take the lower number of letters remaining
+                    }
+                }
+            }
+        }
+
+        return unassignedPositionWithFewestRemainingLetters;
+
     }
 }
