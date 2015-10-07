@@ -189,7 +189,11 @@ public class Board {
 		
 		int max = -1;
 		int[][]restore=new int[6][6];
-		restore=TPboard;
+		for (int a=0;a<6;a++){
+			for (int b=0;b<6;b++){
+				restore[a][b]=TPboard[a][b];
+			}
+		}
 		if (turn==1){	
 				for (int i=0;i<pointsAvailable.size();i++){
 				Point point=pointsAvailable.get(i);		
@@ -227,7 +231,11 @@ public class Board {
 			if (turn==2){
 				for (int i=0;i<pointsAvailable.size();i++){
 				Point point=pointsAvailable.get(i);
-				TPboard=restore;
+				for (int a=0;a<6;a++){
+					for (int b=0;b<6;b++){
+						TPboard[a][b]=restore[a][b];
+					}
+				}
 				TPmove(point,2);
 				System.out.println("Player2 turn");
 				for (int o=0;o<6;o++){
@@ -269,11 +277,19 @@ public class Board {
 		int min = Integer.MAX_VALUE;
 		
 		int [][]restore=new int [6][6];
-		restore=TPboard;
+		for (int a=0;a<6;a++){
+			for (int b=0;b<6;b++){
+				restore[a][b]=TPboard[a][b];
+			}
+		}
 		if (turn==1){	
 				for (int i=0;i<pointsAvailable.size();i++){
 				Point point=pointsAvailable.get(i);	
-				TPboard=restore;
+				for (int a=0;a<6;a++){
+					for (int b=0;b<6;b++){
+						TPboard[a][b]=restore[a][b];
+					}
+				}
 				TPmove(point,1);
 				System.out.println("Player1 turn");
 				for (int o=0;o<6;o++){
