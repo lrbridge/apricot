@@ -14,47 +14,46 @@ import java.util.Set;
 
 public class Part1 {
 
-	private Words words;
-	private PuzzleInput puzzleInput;
+    private Words words;
+    private PuzzleInput puzzleInput;
     private boolean isWordBased;
 
-	private Set<BaseAssignment> solutions = new HashSet<>();
-	private List<SearchPath> searchPaths = new ArrayList<>();
+    private Set<BaseAssignment> solutions = new HashSet<>();
+    private List<SearchPath> searchPaths = new ArrayList<>();
 
-	public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {
-		FileReader reader = new FileReader(puzzleFile, wordListFile);
-		this.words = new Words(reader);
-		this.puzzleInput = new PuzzleInput(reader);
+    public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {
+        FileReader reader = new FileReader(puzzleFile, wordListFile);
+        this.words = new Words(reader);
+        this.puzzleInput = new PuzzleInput(reader);
         this.isWordBased = wordOrLetterBased.equals("word");
-	}
+    }
 
-	public Part1Solution solve() {
+    public Part1Solution solve() {
 
-		SearchPath searchPath = new SearchPath();
-		searchPath.addRoot();
+        SearchPath searchPath = new SearchPath();
+        searchPath.addRoot();
 
         BaseAssignment initialAssignment;
         AssignmentType initialAssignmentType;
-        if(isWordBased) {
+        if (isWordBased) {
             initialAssignment = new WordAssignment(puzzleInput.getSolutionSize(), puzzleInput);
             initialAssignmentType = new PossibleWords(puzzleInput, words);
-        }
-        else {
+        } else {
             initialAssignment = new LetterAssignment(puzzleInput.getSolutionSize(), puzzleInput);
             initialAssignmentType = new PossibleLetters(puzzleInput, words);
         }
 
-		backtrack(initialAssignment, initialAssignmentType, searchPath);
-		
-		return new Part1Solution(this.solutions, this.searchPaths);
-	}
+        backtrack(initialAssignment, initialAssignmentType, searchPath);
 
-	// letter-based assignment
-	//    variables:  position in array
-	//	  domains:  letters A-Z
-	//	  constraints:  matches word for each category in given positions
-	
-	// word-based assignment TODO
+        return new Part1Solution(this.solutions, this.searchPaths);
+    }
+
+    // letter-based assignment
+    //    variables:  position in array
+    //	  domains:  letters A-Z
+    //	  constraints:  matches word for each category in given positions
+
+    // word-based assignment TODO
     //    variables:  category to assign word
     //    domains:  words in the word list for the given category
     //    constraints:  matches word for each category in given positions
@@ -67,80 +66,80 @@ public class Part1 {
 
     // also TODO In the first line of the trace file, indicate your assignment order
 
-	private boolean backtrack(BaseAssignment assignment, AssignmentType assignmentType, SearchPath searchPath) {
+    private boolean backtrack(BaseAssignment assignment, AssignmentType assignmentType, SearchPath searchPath) {
 
-		if(assignment.isComplete()) {
-			// to support multiple solutions, DON'T return here
-			// continue searching tree to find all solutions
+        if (assignment.isComplete()) {
+            // to support multiple solutions, DON'T return here
+            // continue searching tree to find all solutions
 
-			solutions.add(assignment);
+            solutions.add(assignment);
 
-			searchPath.addSolution(assignment);
-			searchPaths.add(searchPath);
+            searchPath.addSolution(assignment);
+            searchPaths.add(searchPath);
 
-			return true;
-		}
-		
-		Object variable = assignmentType.selectUnassignedVariable(assignmentType, assignment);
+            return true;
+        }
 
-		for(String value : assignmentType.getOrderedDomainValues(variable, assignmentType)) {
+        Object variable = assignmentType.selectUnassignedVariable(assignmentType, assignment);
 
-			BaseAssignment newAssignment = assignment.clone();
-			newAssignment.set(variable, value);
+        for (String value : assignmentType.getOrderedDomainValues(variable, assignmentType)) {
+
+            BaseAssignment newAssignment = assignment.clone();
+            newAssignment.set(variable, value);
 
             AssignmentType newAssignmentType = assignmentType.clone();
 
-			SearchPath newSearchPath = searchPath.clone();
-			newSearchPath.add(value);
+            SearchPath newSearchPath = searchPath.clone();
+            newSearchPath.add(value);
 
-			boolean isSolution = false;
-			
-			if(isConsistent(newAssignment)) {
+            boolean isSolution = false;
+
+            if (isConsistent(newAssignment)) {
 
                 // Perform inferences by propagating assignment changes through TODO
                 boolean isStillConsistent = newAssignmentType.propagateAssignment(variable, value);
 
-				if(isStillConsistent) {
+                if (isStillConsistent) {
 
                     // if it's still consistent after inferences, recurse deeper
-				    isSolution = backtrack(newAssignment, newAssignmentType, newSearchPath);
-				
-				}
+                    isSolution = backtrack(newAssignment, newAssignmentType, newSearchPath);
+
+                }
 
                 // if it's not consistent, than don't bother searching deeper in path
-			
-			}
-			
-			// Because we cloned the assignments (and possible values) above, we
+
+            }
+
+            // Because we cloned the assignments (and possible values) above, we
             // don't need to revert the assignments/inferences here because it is
             // take care of in the cloning (we just ditch the clone and roll back to the previous instance)
-					
-			if(!isSolution) {
-				newSearchPath.addBacktrack();
 
-				searchPaths.add(newSearchPath);
-			}
+            if (!isSolution) {
+                newSearchPath.addBacktrack();
 
-		}
-		
-		return false;
-	}
+                searchPaths.add(newSearchPath);
+            }
 
-	private boolean isConsistent(BaseAssignment assignment) {
-		
-		for(String category : this.puzzleInput.getCategories()) {
-				
-			// if there is a category where NO words match, then this is
-			// not a consistent assignment
-			List<Integer> letterPositions = this.puzzleInput.getLetterPositionsInSolutionFor(category);
-			if(!this.words.hasAPossibleMatch(category, assignment, letterPositions)) {
-				return false; 
-			}
-			
-		}
-		
-		// if all categories still have words that could match, this is consistent
-		return true;
-	}
+        }
+
+        return false;
+    }
+
+    private boolean isConsistent(BaseAssignment assignment) {
+
+        for (String category : this.puzzleInput.getCategories()) {
+
+            // if there is a category where NO words match, then this is
+            // not a consistent assignment
+            List<Integer> letterPositions = this.puzzleInput.getLetterPositionsInSolutionFor(category);
+            if (!this.words.hasAPossibleMatch(category, assignment, letterPositions)) {
+                return false;
+            }
+
+        }
+
+        // if all categories still have words that could match, this is consistent
+        return true;
+    }
 
 }

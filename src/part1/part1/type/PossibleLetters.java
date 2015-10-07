@@ -1,8 +1,8 @@
 package part1.part1.type;
 
-import part1.part1.assignment.BaseAssignment;
 import part1.PuzzleInput;
 import part1.Words;
+import part1.part1.assignment.BaseAssignment;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,33 +17,32 @@ import java.util.Set;
 */
 public class PossibleLetters implements AssignmentType {
 
-	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<>();
+    private List<HashSet<String>> possibleLettersInSolution = new ArrayList<>();
     private PuzzleInput puzzleInput;
     private Words words;
 
-	public PossibleLetters(PuzzleInput puzzleInput, Words words) {
+    public PossibleLetters(PuzzleInput puzzleInput, Words words) {
 
         this.puzzleInput = puzzleInput;
         this.words = words;
 
         initializePossibleLettersForAllPositionsToNull();
 
-		for(String category : puzzleInput.getCategories()) {
+        for (String category : puzzleInput.getCategories()) {
             List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
 
-            for(int i=0; i<positionsInSolution.size(); i++) {
+            for (int i = 0; i < positionsInSolution.size(); i++) {
                 Set<String> lettersInPosition = words.getLettersInPositionFor(category, i);
                 int positionInSolution = positionsInSolution.get(i);
 
-                if(isFirstTimeAddingLettersToPosition(positionInSolution)) {
+                if (isFirstTimeAddingLettersToPosition(positionInSolution)) {
                     addAllLetters(positionInSolution, lettersInPosition);
-                }
-                else {
+                } else {
                     removeLettersNotInPosition(positionInSolution, lettersInPosition);
                 }
             }
         }
-	}
+    }
 
     public boolean propagateAssignment(Object variable, String letter) {
 
@@ -56,7 +55,7 @@ public class PossibleLetters implements AssignmentType {
 
         List<String> categoriesAffectedByAssignment = this.puzzleInput.getCategoriesWithPosition(position);
 
-        for(String category : categoriesAffectedByAssignment) {
+        for (String category : categoriesAffectedByAssignment) {
             propogateChangeForward(position, letter, category);
         }
 
@@ -66,9 +65,9 @@ public class PossibleLetters implements AssignmentType {
     }
 
     public Set<String> getOrderedDomainValues(Object variable, AssignmentType assignmentType) {
-    // TODO not ordered... what does "least constrained" value mean in this case?
-    //      I don't know if there is any easy way to compute this... every assignment dramatically changes
-    //      the possible values of every other space.  Maybe we can assume inferences take care of this?
+        // TODO not ordered... what does "least constrained" value mean in this case?
+        //      I don't know if there is any easy way to compute this... every assignment dramatically changes
+        //      the possible values of every other space.  Maybe we can assume inferences take care of this?
 
         Integer indexInSolution = (Integer) variable;
 
@@ -76,25 +75,24 @@ public class PossibleLetters implements AssignmentType {
     }
 
     public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
-    // letter-based assignment first, variable = position in array
-    // TODO - word-based assignment will change this
+        // letter-based assignment first, variable = position in array
+        // TODO - word-based assignment will change this
 
-    // MRV heuristic - choose variable with fewest remaining values
+        // MRV heuristic - choose variable with fewest remaining values
         int unassignedPositionWithFewestRemainingLetters = -1; //error if no value left to assign
 
         // 1-based!
-        for(int position = 1; position <= this.possibleLettersInSolution.size(); position++) {
+        for (int position = 1; position <= this.possibleLettersInSolution.size(); position++) {
 
             // if the position is unassigned
-            if(assignment.get(position) == null) { //1-based
+            if (assignment.get(position) == null) { //1-based
 
-                if(unassignedPositionWithFewestRemainingLetters == -1) {
+                if (unassignedPositionWithFewestRemainingLetters == -1) {
                     unassignedPositionWithFewestRemainingLetters = position;
-                }
-                else {
+                } else {
                     int currentPositionLettersRemaining = this.get(position).size();
                     int lowestSoFarLettersRemaining = this.get(unassignedPositionWithFewestRemainingLetters).size();
-                    if(currentPositionLettersRemaining < lowestSoFarLettersRemaining) {
+                    if (currentPositionLettersRemaining < lowestSoFarLettersRemaining) {
                         unassignedPositionWithFewestRemainingLetters = position; // take the lower number of letters remaining
                     }
                 }
@@ -106,7 +104,7 @@ public class PossibleLetters implements AssignmentType {
     }
 
     private void initializePossibleLettersForAllPositionsToNull() {
-        for(int i=0; i<puzzleInput.getSolutionSize(); i++) {
+        for (int i = 0; i < puzzleInput.getSolutionSize(); i++) {
             possibleLettersInSolution.add(null);
         }
     }
@@ -122,12 +120,12 @@ public class PossibleLetters implements AssignmentType {
 
     private void removeLettersNotInPosition(int position, Set<String> lettersInPosition) {
         List<String> lettersToRemove = new ArrayList<>();
-        for(String letter : possibleLettersInSolution.get(position - 1)) {
-            if(!lettersInPosition.contains(letter)) {
+        for (String letter : possibleLettersInSolution.get(position - 1)) {
+            if (!lettersInPosition.contains(letter)) {
                 lettersToRemove.add(letter); // no concurrent modification
             }
         }
-        for(String letter : lettersToRemove) {
+        for (String letter : lettersToRemove) {
             possibleLettersInSolution.get(position - 1).remove(letter);
         }
     }
@@ -144,15 +142,15 @@ public class PossibleLetters implements AssignmentType {
         List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
 
         int indexJustAssigned = -1;
-        for(int i=0; i<positionsInSolution.size(); i++) {
-            if(positionsInSolution.get(i).intValue() == positionAssigned) {
+        for (int i = 0; i < positionsInSolution.size(); i++) {
+            if (positionsInSolution.get(i).intValue() == positionAssigned) {
                 indexJustAssigned = i;
             }
         }
 
-        for(int index=0; index<positionsInSolution.size(); index++) { // for each spot position in the solution
+        for (int index = 0; index < positionsInSolution.size(); index++) { // for each spot position in the solution
 
-            if(index != indexJustAssigned) { // for all the other positions (besides where we just assigned)
+            if (index != indexJustAssigned) { // for all the other positions (besides where we just assigned)
                 int positionInSolution = positionsInSolution.get(index);
 
                 Set<String> lettersInPosition = words.getLettersInPositionForGiven(category, index, indexJustAssigned, letterAssigned);
@@ -172,28 +170,28 @@ public class PossibleLetters implements AssignmentType {
         this.words = words;
 
         // clone possible letters
-        for(HashSet<String> lettersInGivenPosition : oldPossibleLettersInSolution) {
+        for (HashSet<String> lettersInGivenPosition : oldPossibleLettersInSolution) {
             HashSet<String> cloneLettersInGivenPosition = new HashSet<>();
-            for(String letter : lettersInGivenPosition) {
+            for (String letter : lettersInGivenPosition) {
                 cloneLettersInGivenPosition.add(letter);
             }
             possibleLettersInSolution.add(cloneLettersInGivenPosition);
         }
-	}
+    }
 
-	@Override
-	public PossibleLetters clone() {
-		return new PossibleLetters(possibleLettersInSolution, puzzleInput, words);
-	}
+    @Override
+    public PossibleLetters clone() {
+        return new PossibleLetters(possibleLettersInSolution, puzzleInput, words);
+    }
 
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
         str.append("Possible letters: \n");
-        int i=0;
-        for(HashSet<String> x : possibleLettersInSolution) {
+        int i = 0;
+        for (HashSet<String> x : possibleLettersInSolution) {
             str.append(" " + i);
-            for(String y : x) {
+            for (String y : x) {
                 str.append(y);
             }
             i++;

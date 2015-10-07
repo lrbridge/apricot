@@ -32,7 +32,7 @@ public class SearchPath {
     @Override
     public SearchPath clone() {
         SearchPath clone = new SearchPath();
-        for(String item : path) {
+        for (String item : path) {
             clone.add(item);
         }
         return clone;
@@ -44,30 +44,29 @@ public class SearchPath {
 
         boolean isSameAsPrevious = true;
 
-        for(int i=0; i<path.size(); i++) {
+        for (int i = 0; i < path.size(); i++) {
 
             String item = path.get(i);
 
             StringBuilder stringToAppend = new StringBuilder();
 
-            if(!item.startsWith(" (found result") && !item.equals("root")) {
+            if (!item.startsWith(" (found result") && !item.equals("root")) {
                 stringToAppend.append(" -> ");
             }
 
             stringToAppend.append(item);
 
-            if(item.startsWith(" (found result") || item.equals("backtrack")) {
+            if (item.startsWith(" (found result") || item.equals("backtrack")) {
                 stringToAppend.append("\n");
             }
 
-            if(previousSearchPath != null && isSameAsPrevious) {
-                if(previousSearchPath.path.size() > i && previousSearchPath.path.get(i).equals(item)) {
+            if (previousSearchPath != null && isSameAsPrevious) {
+                if (previousSearchPath.path.size() > i && previousSearchPath.path.get(i).equals(item)) {
                     // if it's the same as the previous search path item, then blank it out
-                    for(int j=0; j<stringToAppend.length(); j++) {
-                        stringToAppend.replace(j, j+1, " ");
+                    for (int j = 0; j < stringToAppend.length(); j++) {
+                        stringToAppend.replace(j, j + 1, " ");
                     }
-                }
-                else {
+                } else {
                     isSameAsPrevious = false;
                 }
             }
@@ -76,7 +75,7 @@ public class SearchPath {
         }
 
         String testIfOnlyBacktrack = prettySearchPath.toString();
-        if(testIfOnlyBacktrack.trim().equals("-> backtrack")) {
+        if (testIfOnlyBacktrack.trim().equals("-> backtrack")) {
             return ""; // don't print search path if it is just a backtrack
         }
 

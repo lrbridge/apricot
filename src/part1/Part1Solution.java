@@ -1,40 +1,39 @@
 package part1;
 
 import part1.part1.assignment.BaseAssignment;
-import part1.part1.assignment.LetterAssignment;
 
 import java.util.List;
 import java.util.Set;
 
 public class Part1Solution {
 
-	private Set<BaseAssignment> solutions;
-	private List<SearchPath> searchPaths;
-	
-	public Part1Solution(Set<BaseAssignment> solutions, List<SearchPath> searchPaths) {
-		this.solutions = solutions;
-		this.searchPaths = searchPaths;
-	}
+    private Set<BaseAssignment> solutions;
+    private List<SearchPath> searchPaths;
 
-	public Set<BaseAssignment> getSolutions() {
-		return solutions;
-	}
+    public Part1Solution(Set<BaseAssignment> solutions, List<SearchPath> searchPaths) {
+        this.solutions = solutions;
+        this.searchPaths = searchPaths;
+    }
 
-	public String getSearchTrace() {
+    public Set<BaseAssignment> getSolutions() {
+        return solutions;
+    }
 
-		StringBuilder str = new StringBuilder();
-		SearchPath previousSearchTrace = null;
+    public String getSearchTrace() {
 
-		for(SearchPath searchPath : searchPaths) {
+        StringBuilder str = new StringBuilder();
+        SearchPath previousSearchTrace = null;
 
-			String prettySearchPath = searchPath.prettyPrint(previousSearchTrace);
+        for (SearchPath searchPath : searchPaths) {
 
-			str.append(prettySearchPath);
+            String prettySearchPath = searchPath.prettyPrint(previousSearchTrace);
 
-			previousSearchTrace = searchPath;
-		}
-		
-		return str.toString();
-	}
+            str.append(prettySearchPath);
+
+            previousSearchTrace = searchPath;
+        }
+
+        return str.toString();
+    }
 
 }

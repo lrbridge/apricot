@@ -15,9 +15,9 @@ public class WordAssignment extends BaseAssignment {
         WordAssignment clone = new WordAssignment(this.assignment.length, this.puzzleInput);
 
         int position = 1;
-        for(String letter : this.assignment) {
-            if(letter != null) {
-                clone.assignment[position-1] = letter;
+        for (String letter : this.assignment) {
+            if (letter != null) {
+                clone.assignment[position - 1] = letter;
             }
             position++;
         }
@@ -32,8 +32,8 @@ public class WordAssignment extends BaseAssignment {
         List<Integer> positionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
 
         int index = 0;
-        for(Integer position : positionsInSolution) {
-            this.assignment[position-1] = value.substring(index, index+1);
+        for (Integer position : positionsInSolution) {
+            this.assignment[position - 1] = value.substring(index, index + 1);
             index++;
         }
     }

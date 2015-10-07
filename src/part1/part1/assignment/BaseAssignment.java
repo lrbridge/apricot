@@ -6,44 +6,44 @@ import java.util.Arrays;
 
 public abstract class BaseAssignment {
 
-	protected String[] assignment;
+    protected String[] assignment;
     protected PuzzleInput puzzleInput;
 
-	public BaseAssignment(int solutionSize, PuzzleInput puzzleInput) {
-		this.assignment = new String[solutionSize];
+    public BaseAssignment(int solutionSize, PuzzleInput puzzleInput) {
+        this.assignment = new String[solutionSize];
         this.puzzleInput = puzzleInput;
     }
-	
-	@Override
-	public String toString() {
-		StringBuilder str = new StringBuilder();
-		for(String letter : assignment) {
-			str.append(letter);
-		}
-		return str.toString();
-	}
 
-	public boolean isComplete() {
-		for(String letter : assignment) {
-			if(letter == null) {
-				return false; // if any letter is null
-			}
-		}
-		return true; // if all letters are assigned
-	}
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (String letter : assignment) {
+            str.append(letter);
+        }
+        return str.toString();
+    }
 
-	@Override
-	public abstract BaseAssignment clone();
+    public boolean isComplete() {
+        for (String letter : assignment) {
+            if (letter == null) {
+                return false; // if any letter is null
+            }
+        }
+        return true; // if all letters are assigned
+    }
 
-	public abstract void set(Object variable, String value);
+    @Override
+    public abstract BaseAssignment clone();
 
-	public String get(int position) {
-		return this.assignment[position-1];
-	}
-	
-	public String getSolution() {
-		return this.toString();
-	}
+    public abstract void set(Object variable, String value);
+
+    public String get(int position) {
+        return this.assignment[position - 1];
+    }
+
+    public String getSolution() {
+        return this.toString();
+    }
 
     // don't want to have duplicate assignments in our list of solutions!
     // override equals to return true for an Assignment if the same letters are in the same order in the assignment
@@ -51,8 +51,8 @@ public abstract class BaseAssignment {
     public boolean equals(Object o) {
         BaseAssignment otherAssignment = (BaseAssignment) o;
 
-        for(int i=0; i<assignment.length; i++) {
-            if(!assignment[i].equals(otherAssignment.assignment[i])) {
+        for (int i = 0; i < assignment.length; i++) {
+            if (!assignment[i].equals(otherAssignment.assignment[i])) {
                 return false;
             }
         }

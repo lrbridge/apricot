@@ -1,8 +1,8 @@
 package part1.part1.type;
 
-import part1.part1.assignment.BaseAssignment;
 import part1.PuzzleInput;
 import part1.Words;
+import part1.part1.assignment.BaseAssignment;
 
 import java.util.HashSet;
 import java.util.List;
@@ -51,13 +51,13 @@ public class PossibleWords implements AssignmentType {
     public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
 
         // TODO make this better... for now, just first unassigned category we run across
-        for(String category : this.puzzleInput.getCategories()) {
+        for (String category : this.puzzleInput.getCategories()) {
 
             List<Integer> positionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
 
-            for(Integer position : positionsInSolution) {
+            for (Integer position : positionsInSolution) {
 
-                if(assignment.get(position) == null) {
+                if (assignment.get(position) == null) {
                     return category;
                 }
 
