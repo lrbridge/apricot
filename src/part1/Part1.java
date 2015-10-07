@@ -1,11 +1,14 @@
 package part1;
 
+import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.LetterAssignment;
+import part1.part1.assignment.WordAssignment;
 import part1.part1.type.AssignmentType;
 import part1.part1.type.PossibleLetters;
+import part1.part1.type.PossibleWords;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Part1 {
 
@@ -13,7 +16,7 @@ public class Part1 {
 	private PuzzleInput puzzleInput;
     private boolean isWordBased;
 
-	private List<Assignment> solutions = new ArrayList<>();
+	private List<BaseAssignment> solutions = new ArrayList<>();
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
 	public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {
@@ -28,15 +31,16 @@ public class Part1 {
 		SearchPath searchPath = new SearchPath();
 		searchPath.addRoot();
 
-        Assignment initialAssignment = new Assignment(puzzleInput.getSolutionSize(), puzzleInput);
-
+        BaseAssignment initialAssignment;
         AssignmentType initialAssignmentType;
-//        if(isWordBased) {
-//            initialAssignmentType = new PossibleWords(puzzleInput, words)
-//        }
-//        else {
+        if(isWordBased) {
+            initialAssignment = new WordAssignment(puzzleInput.getSolutionSize(), puzzleInput);
+            initialAssignmentType = new PossibleWords(puzzleInput, words);
+        }
+        else {
+            initialAssignment = new LetterAssignment(puzzleInput.getSolutionSize(), puzzleInput);
             initialAssignmentType = new PossibleLetters(puzzleInput, words);
-//        }
+        }
 
 		backtrack(initialAssignment, initialAssignmentType, searchPath);
 		
@@ -61,7 +65,7 @@ public class Part1 {
 
     // also TODO In the first line of the trace file, indicate your assignment order
 
-	private boolean backtrack(Assignment assignment, AssignmentType assignmentType, SearchPath searchPath) {
+	private boolean backtrack(BaseAssignment assignment, AssignmentType assignmentType, SearchPath searchPath) {
 
 		if(assignment.isComplete()) {
 			// to support multiple solutions, DON'T return here
@@ -75,11 +79,11 @@ public class Part1 {
 			return true;
 		}
 		
-		int variable = assignmentType.selectUnassignedVariable(assignmentType, assignment);
+		Object variable = assignmentType.selectUnassignedVariable(assignmentType, assignment);
 
 		for(String value : assignmentType.getOrderedDomainValues(variable, assignmentType)) {
 
-			Assignment newAssignment = assignment.clone();
+			BaseAssignment newAssignment = assignment.clone();
 			newAssignment.set(variable, value);
 
             AssignmentType newAssignmentType = assignmentType.clone();
@@ -120,7 +124,7 @@ public class Part1 {
 		return false;
 	}
 
-	private boolean isConsistent(Assignment assignment) {
+	private boolean isConsistent(BaseAssignment assignment) {
 		
 		for(String category : this.puzzleInput.getCategories()) {
 				

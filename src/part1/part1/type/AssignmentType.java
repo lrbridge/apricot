@@ -1,6 +1,6 @@
 package part1.part1.type;
 
-import part1.Assignment;
+import part1.part1.assignment.BaseAssignment;
 
 import java.util.Set;
 
@@ -8,10 +8,10 @@ public interface AssignmentType {
 
     AssignmentType clone();
 
-    boolean propagateAssignment(int variable, String value);
+    boolean propagateAssignment(Object variable, String value);
 
-    Set<String> getOrderedDomainValues(int indexInSolution, AssignmentType assignmentType);
+    Set<String> getOrderedDomainValues(Object variable, AssignmentType assignmentType);
 
-    int selectUnassignedVariable(AssignmentType assignmentType, Assignment assignment);
+    Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment);
 
 }

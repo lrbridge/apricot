@@ -3,11 +3,11 @@ package part1;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import part1.part1.assignment.BaseAssignment;
 
 public class Part1Test {
 	
@@ -62,25 +62,25 @@ public class Part1Test {
     @Test
     public void trivialWord() {
         String[] expectedWords = {"APE", "ANT", "BAD"};
-        testPart1("word", "trivial.txt", "smallwordlist.txt", expectedWords, 12343);
+        testPart1("word", "trivial.txt", "smallwordlist.txt", expectedWords, 3);
     }
 
     @Test
     public void simpleWord() {
         String[] expectedWords = {"BAID"};
-        testPart1("word", "simple.txt", "smallwordlist.txt", expectedWords, 11243);
+        testPart1("word", "simple.txt", "smallwordlist.txt", expectedWords, 5);
     }
 
     @Test
     public void sampleWord() {
         String[] expectedWords = {"BAURANH", "BAARATH", "BAARAMH", "BAIRAEH"};
-        testPart1("word", "sample.txt", "wordlist.txt", expectedWords, 7124);
+        testPart1("word", "sample.txt", "wordlist.txt", expectedWords, 266);
     }
 
     @Test
     public void puzzle1Word() {
         String[] expectedWords = {"NNEMANDYE", "NWEMANDYE", "NNESAYDYE", "NWESAYDYE"};
-        testPart1("word", "puzzle1.txt", "wordlist.txt", expectedWords, 112341);
+        testPart1("word", "puzzle1.txt", "wordlist.txt", expectedWords, 282);
     }
 
     @Test
@@ -92,19 +92,19 @@ public class Part1Test {
     @Test
     public void puzzle3Word() {
         String[] expectedWords = {"ASULPEA", "ASULPIE"};
-        testPart1("word", "puzzle3.txt", "wordlist.txt", expectedWords, 12437);
+        testPart1("word", "puzzle3.txt", "wordlist.txt", expectedWords, 242);
     }
 
     @Test
     public void puzzle4Word() {
         String[] expectedWords = {"HEDITYRE", "HELITYRE", "HETITYRE"};
-        testPart1("word", "puzzle4.txt", "wordlist.txt", expectedWords, 12346);
+        testPart1("word", "puzzle4.txt", "wordlist.txt", expectedWords, 597);
     }
 
     @Test
     public void puzzle5Word() {
         String[] expectedWords = {"IHTTNOIEN", "THTTNOIEN", "IHTTYOIEN", "THTTYOIEN"};
-        testPart1("word", "puzzle5.txt", "wordlist.txt", expectedWords, 112346);
+        testPart1("word", "puzzle5.txt", "wordlist.txt", expectedWords, 479);
     }
 
 	private void testPart1(String wordOrLetterBased, String filename, String wordlist, String[] expectedWordsArray, int expectedLinesInTrace) {
@@ -112,13 +112,13 @@ public class Part1Test {
 
 		Part1 part1 = new Part1(filename, wordlist, wordOrLetterBased);
 		Part1Solution part1Solution = part1.solve();
-		List<Assignment> solutions = part1Solution.getSolutions();
+		List<BaseAssignment> solutions = part1Solution.getSolutions();
 		
-		assertEquals(solutions.size(), expectedWords.size());
 		for(int i=0; i<solutions.size(); i++) {
 			System.out.println(solutions.get(i).getSolution());
             assertTrue(expectedWords.contains(solutions.get(i).getSolution()));
 		}
+        assertEquals(solutions.size(), expectedWords.size());
 
 		String searchTrace = part1Solution.getSearchTrace();
 		int numLinesOfTrace = getNumLines(searchTrace);

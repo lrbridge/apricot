@@ -1,18 +1,21 @@
 package part1;
 
+import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.LetterAssignment;
+
 import java.util.List;
 
 public class Part1Solution {
 
-	private List<Assignment> solutions;
+	private List<BaseAssignment> solutions;
 	private List<SearchPath> searchPaths;
 	
-	public Part1Solution(List<Assignment> solutions, List<SearchPath> searchPaths) {
+	public Part1Solution(List<BaseAssignment> solutions, List<SearchPath> searchPaths) {
 		this.solutions = solutions;
 		this.searchPaths = searchPaths;
 	}
 
-	public List<Assignment> getSolutions() {
+	public List<BaseAssignment> getSolutions() {
 		return solutions;
 	}
 

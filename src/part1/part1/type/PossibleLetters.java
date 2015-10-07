@@ -1,6 +1,6 @@
 package part1.part1.type;
 
-import part1.Assignment;
+import part1.part1.assignment.BaseAssignment;
 import part1.PuzzleInput;
 import part1.Words;
 
@@ -9,6 +9,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/*
+   letter-based assignment
+      variables:  position in array
+	  domains:  letters A-Z
+	  constraints:  matches word for each category in given positions
+*/
 public class PossibleLetters implements AssignmentType {
 
 	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<>();
@@ -39,7 +45,9 @@ public class PossibleLetters implements AssignmentType {
         }
 	}
 
-    public boolean propagateAssignment(int position, String letter) {
+    public boolean propagateAssignment(Object variable, String letter) {
+
+        Integer position = (Integer) variable;
 
         // remove all letters except the one assigned for that spot
         HashSet<String> letterAssigned = new HashSet<>();
@@ -57,14 +65,17 @@ public class PossibleLetters implements AssignmentType {
         return true;
     }
 
-    public Set<String> getOrderedDomainValues(int indexInSolution, AssignmentType assignmentType) {
+    public Set<String> getOrderedDomainValues(Object variable, AssignmentType assignmentType) {
     // TODO not ordered... what does "least constrained" value mean in this case?
     //      I don't know if there is any easy way to compute this... every assignment dramatically changes
     //      the possible values of every other space.  Maybe we can assume inferences take care of this?
+
+        Integer indexInSolution = (Integer) variable;
+
         return this.get(indexInSolution);
     }
 
-    public int selectUnassignedVariable(AssignmentType assignmentType, Assignment assignment) {
+    public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
     // letter-based assignment first, variable = position in array
     // TODO - word-based assignment will change this
 
