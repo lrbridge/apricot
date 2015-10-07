@@ -62,49 +62,49 @@ public class Part1Test {
     @Test
     public void trivialWord() {
         String[] expectedWords = {"APE", "ANT", "BAD"};
-        testPart1("word", "trivial.txt", "smallwordlist.txt", expectedWords, 3);
+        testPart1("word", "trivial.txt", "smallwordlist.txt", expectedWords, 12343);
     }
 
     @Test
     public void simpleWord() {
         String[] expectedWords = {"BAID"};
-        testPart1("word", "simple.txt", "smallwordlist.txt", expectedWords, 1);
+        testPart1("word", "simple.txt", "smallwordlist.txt", expectedWords, 11243);
     }
 
     @Test
     public void sampleWord() {
         String[] expectedWords = {"BAURANH", "BAARATH", "BAARAMH", "BAIRAEH"};
-        testPart1("word", "sample.txt", "wordlist.txt", expectedWords, 7);
+        testPart1("word", "sample.txt", "wordlist.txt", expectedWords, 7124);
     }
 
     @Test
     public void puzzle1Word() {
         String[] expectedWords = {"NNEMANDYE", "NWEMANDYE", "NNESAYDYE", "NWESAYDYE"};
-        testPart1("word", "puzzle1.txt", "wordlist.txt", expectedWords, 11);
+        testPart1("word", "puzzle1.txt", "wordlist.txt", expectedWords, 112341);
     }
 
     @Test
     public void puzzle2Word() {
         String[] expectedWords = {"HSIAIWNCS", "HSIAIWNPS", "HSIOIWNDS", "HSIOIWNYS"};
-        testPart1("word", "puzzle2.txt", "wordlist.txt", expectedWords, 19);
+        testPart1("word", "puzzle2.txt", "wordlist.txt", expectedWords, 112439);
     }
 
     @Test
     public void puzzle3Word() {
         String[] expectedWords = {"ASULPEA", "ASULPIE"};
-        testPart1("word", "puzzle3.txt", "wordlist.txt", expectedWords, 7);
+        testPart1("word", "puzzle3.txt", "wordlist.txt", expectedWords, 12437);
     }
 
     @Test
     public void puzzle4Word() {
         String[] expectedWords = {"HEDITYRE", "HELITYRE", "HETITYRE"};
-        testPart1("word", "puzzle4.txt", "wordlist.txt", expectedWords, 6);
+        testPart1("word", "puzzle4.txt", "wordlist.txt", expectedWords, 12346);
     }
 
     @Test
     public void puzzle5Word() {
         String[] expectedWords = {"IHTTNOIEN", "THTTNOIEN", "IHTTYOIEN", "THTTYOIEN"};
-        testPart1("word", "puzzle5.txt", "wordlist.txt", expectedWords, 16);
+        testPart1("word", "puzzle5.txt", "wordlist.txt", expectedWords, 112346);
     }
 
 	private void testPart1(String wordOrLetterBased, String filename, String wordlist, String[] expectedWordsArray, int expectedLinesInTrace) {

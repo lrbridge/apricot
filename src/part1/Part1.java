@@ -34,19 +34,30 @@ public class Part1 {
 	// letter-based assignment
 	//    variables:  position in array
 	//	  domains:  letters A-Z
-	//	  constraints:  matches word/part of word for each category/thing
+	//	  constraints:  matches word for each category in given positions
 	
 	// word-based assignment TODO
-	
+    //    variables:  category to assign word
+    //    domains:  words in the word list for the given category
+    //    constraints:  matches word for each category in given positions
+
+    // ONLY things that change between the two:
+    //    selectUnassignedVariable & variable -> gets a category (later MRV)
+    //    getOrderedDomainValues & value -> words for the category (later LRV?)
+    //    propogateAssignment --> ...?
+    //    need to pull all possible values stuff out of assignment...
+
+    // also TODO In the first line of the trace file, indicate your assignment order
+
 	private boolean backtrack(Assignment assignment, SearchPath searchPath) {
 
 		if(assignment.isComplete()) {
 			// to support multiple solutions, DON'T return here
 			// continue searching tree to find all solutions
+
 			solutions.add(assignment);
 
 			searchPath.addSolution(assignment);
-
 			searchPaths.add(searchPath);
 
 			return true;
