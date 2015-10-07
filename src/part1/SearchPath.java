@@ -1,5 +1,7 @@
 package part1;
 
+import part1.part1.assignment.BaseAssignment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class SearchPath {
         path.add("backtrack");
     }
 
-    public void addSolution(Assignment assignment) {
+    public void addSolution(BaseAssignment assignment) {
         path.add(" (found result: " + assignment.toString() + ")");
     }
 

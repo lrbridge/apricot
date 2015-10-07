@@ -1,5 +1,8 @@
 package part1;
 
+import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.LetterAssignment;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +20,7 @@ public class Words {
         return wordList.get(category);
     }
 
-	public boolean hasAPossibleMatch(String category, Assignment assignment, List<Integer> letterPositions) {
+	public boolean hasAPossibleMatch(String category, BaseAssignment assignment, List<Integer> letterPositions) {
 		
 		for(String word : wordList.get(category)) {
 			if(isPossibleMatch(word, assignment, letterPositions)) {
@@ -29,7 +32,7 @@ public class Words {
 		return false;
 	}
 
-	private boolean isPossibleMatch(String possibleWordMatch, Assignment assignment, List<Integer> letterPositions) {
+	private boolean isPossibleMatch(String possibleWordMatch, BaseAssignment assignment, List<Integer> letterPositions) {
 				
 		int index = 0;
 		

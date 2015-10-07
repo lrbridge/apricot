@@ -1,6 +1,14 @@
 package part1;
 
+import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.LetterAssignment;
+import part1.part1.assignment.WordAssignment;
+import part1.part1.type.AssignmentType;
+import part1.part1.type.PossibleLetters;
+import part1.part1.type.PossibleWords;
+
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +18,7 @@ public class Part1 {
 	private PuzzleInput puzzleInput;
     private boolean isWordBased;
 
-	private List<Assignment> solutions = new ArrayList<>();
+	private Set<BaseAssignment> solutions = new HashSet<>();
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
 	public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {
@@ -25,9 +33,18 @@ public class Part1 {
 		SearchPath searchPath = new SearchPath();
 		searchPath.addRoot();
 
-        Assignment initialAssignment = new Assignment(puzzleInput.getSolutionSize(), puzzleInput);
-		PossibleLetters initialPossibleLetters = new PossibleLetters(puzzleInput, words);
-		backtrack(initialAssignment, initialPossibleLetters, searchPath);
+        BaseAssignment initialAssignment;
+        AssignmentType initialAssignmentType;
+        if(isWordBased) {
+            initialAssignment = new WordAssignment(puzzleInput.getSolutionSize(), puzzleInput);
+            initialAssignmentType = new PossibleWords(puzzleInput, words);
+        }
+        else {
+            initialAssignment = new LetterAssignment(puzzleInput.getSolutionSize(), puzzleInput);
+            initialAssignmentType = new PossibleLetters(puzzleInput, words);
+        }
+
+		backtrack(initialAssignment, initialAssignmentType, searchPath);
 		
 		return new Part1Solution(this.solutions, this.searchPaths);
 	}
@@ -50,7 +67,7 @@ public class Part1 {
 
     // also TODO In the first line of the trace file, indicate your assignment order
 
-	private boolean backtrack(Assignment assignment, PossibleLetters possibleLetters, SearchPath searchPath) {
+	private boolean backtrack(BaseAssignment assignment, AssignmentType assignmentType, SearchPath searchPath) {
 
 		if(assignment.isComplete()) {
 			// to support multiple solutions, DON'T return here
@@ -64,14 +81,14 @@ public class Part1 {
 			return true;
 		}
 		
-		int variable = selectUnassignedVariable(possibleLetters, assignment);
-System.out.println(variable);
-		for(String value : getOrderedDomainValues(variable, possibleLetters)) {
+		Object variable = assignmentType.selectUnassignedVariable(assignmentType, assignment);
 
-			Assignment newAssignment = assignment.clone();
+		for(String value : assignmentType.getOrderedDomainValues(variable, assignmentType)) {
+
+			BaseAssignment newAssignment = assignment.clone();
 			newAssignment.set(variable, value);
 
-            PossibleLetters newPossibleLetters = possibleLetters.clone();
+            AssignmentType newAssignmentType = assignmentType.clone();
 
 			SearchPath newSearchPath = searchPath.clone();
 			newSearchPath.add(value);
@@ -81,12 +98,12 @@ System.out.println(variable);
 			if(isConsistent(newAssignment)) {
 
                 // Perform inferences by propagating assignment changes through TODO
-                boolean isStillConsistent = newPossibleLetters.propagateAssignment(variable, value);
+                boolean isStillConsistent = newAssignmentType.propagateAssignment(variable, value);
 
 				if(isStillConsistent) {
 
                     // if it's still consistent after inferences, recurse deeper
-				    isSolution = backtrack(newAssignment, newPossibleLetters, newSearchPath);
+				    isSolution = backtrack(newAssignment, newAssignmentType, newSearchPath);
 				
 				}
 
@@ -109,7 +126,7 @@ System.out.println(variable);
 		return false;
 	}
 
-	private boolean isConsistent(Assignment assignment) {
+	private boolean isConsistent(BaseAssignment assignment) {
 		
 		for(String category : this.puzzleInput.getCategories()) {
 				
@@ -124,21 +141,6 @@ System.out.println(variable);
 		
 		// if all categories still have words that could match, this is consistent
 		return true;
-	}
-
-	private Set<String> getOrderedDomainValues(int indexInSolution, PossibleLetters possibleLetters) {
-		// TODO not ordered... what does "least constrained" value mean in this case?
-        //      I don't know if there is any easy way to compute this... every assignment dramatically changes
-        //      the possible values of every other space.  Maybe we can assume inferences take care of this?
-		return possibleLetters.getAllPossibleLetters(indexInSolution);
-    }
-
-	private int selectUnassignedVariable(PossibleLetters possibleLetters, Assignment assignment) {
-		// letter-based assignment first, variable = position in array
-		// TODO - word-based assignment will change this
-
-		// MRV heuristic - choose variable with fewest remaining values
-		return possibleLetters.getUnassignedPositionWithFewestRemainingLetters(assignment);
 	}
 
 }
