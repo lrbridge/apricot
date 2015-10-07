@@ -48,60 +48,76 @@ public class Board {
 	}
 	
 	
-	//When either player place a move, it will affect other points
+	/* M1 Death blitz : take opponents' space if it is adjacent to your latest occupied space */
 	public void Pmove(Point point,int turn){
 		Pboard[point.x][point.y]=turn;
 		if(oldpointP(point,turn)){
 		if (point.x+1 < boardWidth){
-			if (Pboard[point.x+1][point.y]!=0)Pboard[point.x+1][point.y]=turn;
+			if (Pboard[point.x+1][point.y]!=0)
+                Pboard[point.x+1][point.y]=turn;
 		}
 		if (point.x-1>=0){
-			if (Pboard[point.x-1][point.y]!=0)Pboard[point.x-1][point.y]=turn;
+			if (Pboard[point.x-1][point.y]!=0)
+                Pboard[point.x-1][point.y]=turn;
 		}
 		if (point.y+1 < boardHeight){
-			if (Pboard[point.x][point.y+1]!=0)Pboard[point.x][point.y+1]=turn;
+			if (Pboard[point.x][point.y+1]!=0)
+                Pboard[point.x][point.y+1]=turn;
 		}
 		if (point.y-1>=0){
-			if (Pboard[point.x][point.y-1]!=0)Pboard[point.x][point.y-1]=turn;
+			if (Pboard[point.x][point.y-1]!=0)
+                Pboard[point.x][point.y-1]=turn;
 		}
 		}
 	}
-	
+
+    /* update the blitz on the temporary board as well */
 	public void TPmove(Point point,int turn){
 		TPboard[point.x][point.y]=turn;
+
 		if(oldpointTP(point,turn)){
 		if (point.x+1 < boardWidth){
-			if (TPboard[point.x+1][point.y]!=0)TPboard[point.x+1][point.y]=turn;
+			if (TPboard[point.x+1][point.y]!=0)
+                TPboard[point.x+1][point.y]=turn;
 		}
 		if (point.x-1>=0){
-			if (TPboard[point.x-1][point.y]!=0)TPboard[point.x-1][point.y]=turn;
+			if (TPboard[point.x-1][point.y]!=0)
+                TPboard[point.x-1][point.y]=turn;
 		}
 		if (point.y+1 < boardHeight){
-			if (TPboard[point.x][point.y+1]!=0)TPboard[point.x][point.y+1]=turn;
+			if (TPboard[point.x][point.y+1]!=0)
+                TPboard[point.x][point.y+1]=turn;
 		}
 		if (point.y-1>=0){
-			if (TPboard[point.x][point.y-1]!=0)TPboard[point.x][point.y-1]=turn;
+			if (TPboard[point.x][point.y-1]!=0)
+                TPboard[point.x][point.y-1]=turn;
 		}
 		}
 	}
-	
+
+    /* check if the player has occupied the nearby space */
 	private boolean oldpointTP(Point point,int turn) {
 		int k=0;
 		if (point.x+1 < boardWidth){
-			if (TPboard[point.x+1][point.y]==turn)k++;
+			if (TPboard[point.x+1][point.y]==turn)
+                k++;
 		}
 		if (point.x-1>=0){
-			if (TPboard[point.x-1][point.y]==turn)k++;
+			if (TPboard[point.x-1][point.y]==turn)
+                k++;
 		}
 		if (point.y+1 < boardHeight){
-			if (TPboard[point.x][point.y+1]==turn)k++;
+			if (TPboard[point.x][point.y+1]==turn)
+                k++;
 		}
 		if (point.y-1>=0){
-			if (TPboard[point.x][point.y-1]==turn)k++;
+			if (TPboard[point.x][point.y-1]==turn)
+                k++;
 		}
 		if (k>0){
 			return true;
-		} else return false;
+		} else
+            return false;
 	}
 
 	private boolean oldpointP(Point point,int turn) {
@@ -128,7 +144,8 @@ public class Board {
 		int sum=0;
 		for (int i=0; i < boardWidth;i++){
 			for (int j=0; j < boardHeight;j++){
-				if (TPboard[i][j]==1)sum+=Sboard[i][j];					
+				if (TPboard[i][j]==1)
+                    sum+=Sboard[i][j];
 				}
 			}
 		return sum;
@@ -168,7 +185,7 @@ public class Board {
 	        return availablePoints;
 	    }
 	
-	 Point nextmove=new Point(0, 0);
+	Point nextmove = new Point(0, 0);
 	  
 	public static boolean ifEnd(){
 		List<Point> point=getAvailableStatesP();	
@@ -180,9 +197,11 @@ public class Board {
 		int score=checkTPvalue();
 		
 		List<Point> pointsAvailable = getAvailableStatesTP();
-		if (pointsAvailable.isEmpty()) return score;
-		
-		if (depth==3) return score;
+
+		if (pointsAvailable.isEmpty())
+            return score;
+		if (depth==3)
+            return score;
 		
 		int max = -1;
 
@@ -195,7 +214,7 @@ public class Board {
 		if (turn==1){
 
 				for (int i=0;i<pointsAvailable.size();i++){
-                    Point point=pointsAvailable.get(i);
+                    Point point = pointsAvailable.get(i);
 
                     for (int a=0;a<boardWidth;a++){
                         for (int b=0;b<boardHeight;b++){
@@ -277,13 +296,17 @@ public class Board {
 	public int minimax_min(int depth,int turn){
 		int score=checkTPvalue();
 		List<Point> pointsAvailable = getAvailableStatesTP();
-		if (pointsAvailable.isEmpty()) return score;
-		if (depth==3) return score;
+
+		if (pointsAvailable.isEmpty())
+            return score;
+
+		if (depth==3)
+            return score;
 		int min = Integer.MAX_VALUE;
 		
 		int [][]restore=new int [boardWidth][boardHeight];
 		for (int a=0;a<boardWidth;a++){
-			for (int b=0;b<boardHeight;b++){
+			for (int b=0;b<boardHeight;b++) {
 				restore[a][b]=TPboard[a][b];
 			}
 		}
@@ -296,6 +319,7 @@ public class Board {
 					}
 				}
 				TPmove(point,1);
+
 				System.out.println("Player1 turn");
 				for (int o=0;o<boardWidth;o++){
 					for (int j=0;j<boardHeight;j++){
@@ -339,9 +363,21 @@ public class Board {
 		Board b=new Board();
 		while (!ifEnd()){		
 			b.minimax_max(0, 1);
-			TPboard=Pboard;
+
+            for (int i=0;i<boardWidth;i++){
+                for (int j=0;j<boardHeight;j++){
+                    TPboard[i][j]=Pboard[i][j];
+                }
+            }
+
 			b.minimax_max(0, 2);
-			TPboard=Pboard;
+
+            for (int i=0;i<boardWidth;i++){
+                for (int j=0;j<boardHeight;j++){
+                    TPboard[i][j]=Pboard[i][j];
+                }
+            }
+
 		/*	for (int o=0;o<6;o++){
 				for (int j=0;j<6;j++){
 					System.out.print(Pboard[o][j]+" ");
