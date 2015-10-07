@@ -84,6 +84,8 @@ public class Assignment {
 
 //        System.out.println(possibleLetters.toString());
 
+        // TODO return false / see if anything else can be assigned / etc...?
+
         return true;
     }
 

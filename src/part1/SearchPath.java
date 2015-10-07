@@ -73,6 +73,11 @@ public class SearchPath {
             prettySearchPath.append(stringToAppend.toString());
         }
 
+        String testIfOnlyBacktrack = prettySearchPath.toString();
+        if(testIfOnlyBacktrack.trim().equals("-> backtrack")) {
+            return ""; // don't print search path if it is just a backtrack
+        }
+
         return prettySearchPath.toString();
     }
 }
