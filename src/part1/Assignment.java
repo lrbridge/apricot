@@ -48,8 +48,22 @@ public class Assignment {
 
 	// 1-based!
 	public void set(int position, String letter) {
-		this.assignment[position-1] = letter;
+        this.assignment[position-1] = letter;
 	}
+
+//    public boolean propogateAssignment() {
+//        // TODO
+//
+//        // go through all officially assignments & set possible letters to just that letter
+//        // OR just start with one just assigned.
+//
+//        // look at each category for that spot... what words are possible?... remove .. OR
+//        // then, go through each spot like initialization & basically compute for each spot what letters are possible again?
+//
+//        // if get to only 1 assignment, change it in assignment & propogate again (?)
+//
+//        // do until stable (return true) OR until 0 left for someone (return false)
+//    }
 
 	public String get(int position) {
 		return this.assignment[position-1];

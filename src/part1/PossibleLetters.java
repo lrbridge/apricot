@@ -7,13 +7,12 @@ import java.util.Set;
 
 public class PossibleLetters {
 
-	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<HashSet<String>>();
+	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<>();
 	
-	public PossibleLetters(PuzzleInput puzzleInput, Words words) {	
-		for(int x=0; x<puzzleInput.getSolutionSize(); x++) {
- 			possibleLettersInSolution.add(null);
- 		}
-		
+	public PossibleLetters(PuzzleInput puzzleInput, Words words) {
+
+        initializePossibleLettersForAllPositionsToNull(puzzleInput);
+
 		for(String category : puzzleInput.getCategories()) {
 			// for each category, for each spot that the category has a letter, look at all possible letters
 			List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
@@ -22,32 +21,49 @@ public class PossibleLetters {
 				Set<String> lettersInPosition = words.getLettersInPositionFor(category, i);
 				int positionInSolution = positionsInSolution.get(i);	
 				
-				// initialize possibleLettersInSolution and add all the letters from the first category
-				if(possibleLettersInSolution.get(positionInSolution - 1) == null) {
-					possibleLettersInSolution.set(positionInSolution - 1, new HashSet<String>());
-					possibleLettersInSolution.get(positionInSolution - 1).addAll(lettersInPosition);
+				if(isFirstTimeAddingLettersToPosition(positionInSolution)) {
+                    addAllLetters(positionInSolution, lettersInPosition);
 				}
 				else {
-					// then for other categories, remove letters that aren't in it
-					List<String> lettersToRemove = new ArrayList<String>();
-					for(String letter : possibleLettersInSolution.get(positionInSolution - 1)) {
-						if(!lettersInPosition.contains(letter)) {
-							lettersToRemove.add(letter); // no concurrent modification
-						}
-					}
-					for(String letter : lettersToRemove) {
-						possibleLettersInSolution.get(positionInSolution - 1).remove(letter);
-					}
+					removeLettersNotInPosition(positionInSolution, lettersInPosition);
 				}
 			}
 		}
 	}
 
-	private PossibleLetters(List<HashSet<String>> oldPossibleLettersInSolution) {
-		// constructor only used by clone method
+    private void initializePossibleLettersForAllPositionsToNull(PuzzleInput puzzleInput) {
+        for(int i=0; i<puzzleInput.getSolutionSize(); i++) {
+            possibleLettersInSolution.add(null);
+        }
+    }
 
+    private boolean isFirstTimeAddingLettersToPosition(int position) {
+        return this.possibleLettersInSolution.get(position - 1) == null;
+    }
+
+    private void addAllLetters(int position, Set<String> lettersInPosition) {
+        possibleLettersInSolution.set(position - 1, new HashSet<String>());
+        possibleLettersInSolution.get(position - 1).addAll(lettersInPosition);
+    }
+
+    private void removeLettersNotInPosition(int position, Set<String> lettersInPosition) {
+        List<String> lettersToRemove = new ArrayList<>();
+        for(String letter : possibleLettersInSolution.get(position - 1)) {
+            if(!lettersInPosition.contains(letter)) {
+                lettersToRemove.add(letter); // no concurrent modification
+            }
+        }
+        for(String letter : lettersToRemove) {
+            possibleLettersInSolution.get(position - 1).remove(letter);
+        }
+    }
+
+    // private constructor that is only used by clone method
+    private PossibleLetters(List<HashSet<String>> oldPossibleLettersInSolution) {
+
+        // clone possible letters
         for(HashSet<String> lettersInGivenPosition : oldPossibleLettersInSolution) {
-            HashSet<String> cloneLettersInGivenPosition = new HashSet<String>();
+            HashSet<String> cloneLettersInGivenPosition = new HashSet<>();
             for(String letter : lettersInGivenPosition) {
                 cloneLettersInGivenPosition.add(letter);
             }

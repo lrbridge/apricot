@@ -63,18 +63,24 @@ public class Part1 {
 			boolean isSolution = false;
 			
 			if(isConsistent(newAssignment)) {
+
+                // Perform inferences by propagating assignment changes through TODO
+                boolean isStillConsistent = true;// assignment.propagateAssignment();
+
+				if(isStillConsistent) {
+
+                    // if it's still consistent after inferences, recurse deeper
+				    isSolution = backtrack(newAssignment, newSearchPath);
 				
-				// TODO do inference checking here?
-				// if(inferences != failure) {
-				
-				isSolution = backtrack(newAssignment, newSearchPath);
-				
-				// }
+				}
+
+                // if it's not consistent, than don't bother searching deeper in path
 			
 			}
 			
-			// drop var=value from assignment (done due to cloning above)
-			// TODO? remove inferences from assignment
+			// Because we cloned the assignments (and possible values) above, we
+            // don't need to revert the assignments/inferences here because it is
+            // take care of in the cloning (we just ditch the clone and roll back to the previous instance)
 					
 			if(!isSolution) {
 				newSearchPath.addBacktrack();
@@ -105,9 +111,11 @@ public class Part1 {
 	}
 
 	private Set<String> getOrderedDomainValues(int indexInSolution, Assignment assignment) {
-		// TODO not ordered...
+		// TODO not ordered... what does "least constrained" value mean in this case?
+        //      I don't know if there is any easy way to compute this... every assignment dramatically changes
+        //      the possible values of every other space.  Maybe we can assume inferences take care of this?
 		return assignment.getAllPossibleLetters(indexInSolution);
-	}
+    }
 
 	private int selectUnassignedVariable(Assignment assignment) {
 		// letter-based assignment first, variable = position in array
