@@ -69,7 +69,7 @@ public class Part1Test {
 		String searchTrace = part1Solution.getSearchTrace();
 		int numLinesOfTrace = getNumLines(searchTrace);
 		
-//		System.out.println(searchTrace);
+		System.out.println(searchTrace);
 		assertEquals(numLinesOfTrace, expectedLinesInTrace);
 	}
 	

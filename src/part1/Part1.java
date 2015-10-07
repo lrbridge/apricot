@@ -24,7 +24,7 @@ public class Part1 {
 		searchPath.addRoot();
 
 		PossibleLetters initialPossibleLetters = new PossibleLetters(puzzleInput, words);
-		backtrack(new Assignment(puzzleInput.getSolutionSize(), initialPossibleLetters), searchPath);
+		backtrack(new Assignment(puzzleInput.getSolutionSize(), initialPossibleLetters, puzzleInput), searchPath);
 		
 		return new Part1Solution(this.solutions, this.searchPaths);
 	}
@@ -65,7 +65,7 @@ public class Part1 {
 			if(isConsistent(newAssignment)) {
 
                 // Perform inferences by propagating assignment changes through TODO
-                boolean isStillConsistent = true;// assignment.propagateAssignment();
+                boolean isStillConsistent = newAssignment.propagateAssignment(variable, value);
 
 				if(isStillConsistent) {
 

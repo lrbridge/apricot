@@ -8,30 +8,35 @@ import java.util.Set;
 public class PossibleLetters {
 
 	private List<HashSet<String>> possibleLettersInSolution = new ArrayList<>();
-	
+
+    private PuzzleInput puzzleInput;
+    private Words words;
+
 	public PossibleLetters(PuzzleInput puzzleInput, Words words) {
 
-        initializePossibleLettersForAllPositionsToNull(puzzleInput);
+        this.puzzleInput = puzzleInput;
+        this.words = words;
+
+        initializePossibleLettersForAllPositionsToNull();
 
 		for(String category : puzzleInput.getCategories()) {
-			// for each category, for each spot that the category has a letter, look at all possible letters
-			List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
-			
-			for(int i=0; i<positionsInSolution.size(); i++) {
-				Set<String> lettersInPosition = words.getLettersInPositionFor(category, i);
-				int positionInSolution = positionsInSolution.get(i);	
-				
-				if(isFirstTimeAddingLettersToPosition(positionInSolution)) {
+            List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
+
+            for(int i=0; i<positionsInSolution.size(); i++) {
+                Set<String> lettersInPosition = words.getLettersInPositionFor(category, i);
+                int positionInSolution = positionsInSolution.get(i);
+
+                if(isFirstTimeAddingLettersToPosition(positionInSolution)) {
                     addAllLetters(positionInSolution, lettersInPosition);
-				}
-				else {
-					removeLettersNotInPosition(positionInSolution, lettersInPosition);
-				}
-			}
-		}
+                }
+                else {
+                    removeLettersNotInPosition(positionInSolution, lettersInPosition);
+                }
+            }
+        }
 	}
 
-    private void initializePossibleLettersForAllPositionsToNull(PuzzleInput puzzleInput) {
+    private void initializePossibleLettersForAllPositionsToNull() {
         for(int i=0; i<puzzleInput.getSolutionSize(); i++) {
             possibleLettersInSolution.add(null);
         }
@@ -46,7 +51,7 @@ public class PossibleLetters {
         possibleLettersInSolution.get(position - 1).addAll(lettersInPosition);
     }
 
-    private void removeLettersNotInPosition(int position, Set<String> lettersInPosition) {
+    public void removeLettersNotInPosition(int position, Set<String> lettersInPosition) {
         List<String> lettersToRemove = new ArrayList<>();
         for(String letter : possibleLettersInSolution.get(position - 1)) {
             if(!lettersInPosition.contains(letter)) {
@@ -58,8 +63,53 @@ public class PossibleLetters {
         }
     }
 
+    public void propogateChangeForward(int positionAssigned, String letterAssigned, String category) {
+
+        // ex: already got rid of O from AO
+        // had word CAT and DOG
+        // now, want to get rid of D and G because O is gone
+
+        // so, again, get all words for the given category and the OTHER positions (start fresh for them kinda)
+        //      then, if position letter does not match in a word, remove that letter
+
+        List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
+
+        int indexJustAssigned = -1;
+        for(int i=0; i<positionsInSolution.size(); i++) {
+            if(positionsInSolution.get(i).intValue() == positionAssigned) {
+                indexJustAssigned = i;
+            }
+        }
+
+        int i = 0;
+        for(Integer position : positionsInSolution) { // for each spot position in the solution
+
+            if(position != positionAssigned) { // for all the other positions (besides where we just assigned)
+
+                List<String> wordsForCategory = words.getWordsForCategory(category);
+
+                for(String word : wordsForCategory) { // if a word in the category
+
+                    boolean hasLetterJustAssignedInPositionJustAssigned = word.substring(indexJustAssigned, indexJustAssigned+1).equals(letterAssigned);
+                    if(!hasLetterJustAssignedInPositionJustAssigned) {
+                        // remove the word's other letters from the other positions
+                        possibleLettersInSolution.get(position - 1).remove(word.substring(i, i+1));
+                    }
+
+                }
+
+            }
+            i++;
+
+        }
+
+    }
+
     // private constructor that is only used by clone method
-    private PossibleLetters(List<HashSet<String>> oldPossibleLettersInSolution) {
+    private PossibleLetters(List<HashSet<String>> oldPossibleLettersInSolution, PuzzleInput puzzleInput, Words words) {
+
+        this.puzzleInput = puzzleInput;
+        this.words = words;
 
         // clone possible letters
         for(HashSet<String> lettersInGivenPosition : oldPossibleLettersInSolution) {
@@ -77,6 +127,22 @@ public class PossibleLetters {
 
 	@Override
 	protected PossibleLetters clone() {
-		return new PossibleLetters(possibleLettersInSolution);
+		return new PossibleLetters(possibleLettersInSolution, puzzleInput, words);
 	}
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Possible letters: \n");
+        int i=0;
+        for(HashSet<String> x : possibleLettersInSolution) {
+            str.append(" " + i);
+            for(String y : x) {
+                str.append(y);
+            }
+            i++;
+            str.append("\n");
+        }
+        return str.toString();
+    }
 }

@@ -1,16 +1,22 @@
 package part1;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Assignment {
 
 	private String[] assignment;
 	private PossibleLetters possibleLetters;
+    private PuzzleInput puzzleInput;
 
-	public Assignment(int solutionSize, PossibleLetters possibleLetters) {
+	public Assignment(int solutionSize, PossibleLetters possibleLetters, PuzzleInput puzzleInput) {
 		this.assignment = new String[solutionSize];
 		this.possibleLetters = possibleLetters;
-	}
+        this.puzzleInput = puzzleInput;
+
+        System.out.println("NEW ASSIGNMENT" + possibleLetters.toString());
+    }
 	
 	@Override
 	public String toString() {
@@ -33,7 +39,7 @@ public class Assignment {
 	@Override
 	protected Assignment clone() {
 		PossibleLetters clonedPossibleLetters = this.possibleLetters.clone();
-		Assignment clone = new Assignment(this.assignment.length, clonedPossibleLetters);
+		Assignment clone = new Assignment(this.assignment.length, clonedPossibleLetters, this.puzzleInput);
 		
 		int position = 1;
 		for(String letter : this.assignment) {
@@ -51,19 +57,35 @@ public class Assignment {
         this.assignment[position-1] = letter;
 	}
 
-//    public boolean propogateAssignment() {
-//        // TODO
+    public boolean propagateAssignment(int position, String letter) {
+
+        System.out.println(position + " & " + letter);
 //
-//        // go through all officially assignments & set possible letters to just that letter
-//        // OR just start with one just assigned.
+//        // for each unassigned variable (position) that is connected to that assignment by constraint (by the assignment)
+//        //      aka, for all categories that involve that position
+//        //              go through other positions for that category & remove inconsistent values
 //
-//        // look at each category for that spot... what words are possible?... remove .. OR
-//        // then, go through each spot like initialization & basically compute for each spot what letters are possible again?
+//        //              if any get to down to 0 return false
+//        //              if any down to 1, assign & propogate assignment again
 //
-//        // if get to only 1 assignment, change it in assignment & propogate again (?)
+//        //              if done... return true  (WHAT IS DONE??)
 //
-//        // do until stable (return true) OR until 0 left for someone (return false)
-//    }
+//
+        // remove all letters except the one assigned for that spot
+        HashSet<String> letterAssigned = new HashSet<>();
+        letterAssigned.add(letter);
+        this.possibleLetters.removeLettersNotInPosition(position, letterAssigned);
+
+        List<String> categoriesAffectedByAssignment = this.puzzleInput.getCategoriesWithPosition(position);
+
+        for(String category : categoriesAffectedByAssignment) {
+            possibleLetters.propogateChangeForward(position, letter, category);
+        }
+
+        System.out.println(possibleLetters.toString());
+
+        return true;
+    }
 
 	public String get(int position) {
 		return this.assignment[position-1];

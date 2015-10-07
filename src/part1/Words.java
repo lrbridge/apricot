@@ -12,7 +12,11 @@ public class Words {
 	public Words(FileReader reader) {
 		this.wordList = reader.getWordList();
 	}
-	
+
+    public List<String> getWordsForCategory(String category) {
+        return wordList.get(category);
+    }
+
 	public boolean hasAPossibleMatch(String category, Assignment assignment, List<Integer> letterPositions) {
 		
 		for(String word : wordList.get(category)) {
