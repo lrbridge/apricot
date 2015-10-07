@@ -8,14 +8,16 @@ public class Part1 {
 
 	private Words words;
 	private PuzzleInput puzzleInput;
+    private boolean isWordBased;
 
 	private List<Assignment> solutions = new ArrayList<>();
 	private List<SearchPath> searchPaths = new ArrayList<>();
 
-	public Part1(String puzzleFile, String wordListFile) {
+	public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {
 		FileReader reader = new FileReader(puzzleFile, wordListFile);
 		this.words = new Words(reader);
 		this.puzzleInput = new PuzzleInput(reader);
+        this.isWordBased = wordOrLetterBased.equals("word");
 	}
 
 	public Part1Solution solve() {
