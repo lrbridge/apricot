@@ -61,7 +61,7 @@ public class PossibleLetters implements AssignmentType {
 
     public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
 
-        // MRV heuristic - choose variable with fewest remaining values
+        // MRV heuristic - choose variable with minimum remaining values
         int unassignedPositionWithFewestRemainingLetters = -1; //error if no value left to assign
 
         // 1-based!
@@ -184,22 +184,6 @@ public class PossibleLetters implements AssignmentType {
     @Override
     public PossibleLetters clone() {
         return new PossibleLetters(possibleLettersInSolution, puzzleInput, words);
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        str.append("Possible letters: \n");
-        int i = 0;
-        for (HashSet<String> x : possibleLettersInSolution) {
-            str.append(" " + i);
-            for (String y : x) {
-                str.append(y);
-            }
-            i++;
-            str.append("\n");
-        }
-        return str.toString();
     }
 
     private Set<String> get(int indexInSolution) {

@@ -109,16 +109,31 @@ public class PossibleWords implements AssignmentType {
     @Override
     public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
 
-        // TODO make this better... for now, just first unassigned category we run across
+        // MRV heuristic - choose variable (category) with minimum remaining values
+
+        String categoryWithFewestRemainingValues = null;
+
         for (String category : this.puzzleInput.getCategories()) {
 
             if(isUnassigned(category, assignment)) {
-                return category;
+
+                if(categoryWithFewestRemainingValues == null) {
+                    categoryWithFewestRemainingValues = category;
+                }
+                else {
+                    int bestCategoryNumValues = this.possibleWordsForEachCategory.get(categoryWithFewestRemainingValues).size();
+                    int categoryNumValues = this.possibleWordsForEachCategory.get(category).size();
+                    if(categoryNumValues < bestCategoryNumValues) {
+                        categoryWithFewestRemainingValues = category;
+                    }
+                }
+
+
             }
 
         }
 
-        return "";
+        return categoryWithFewestRemainingValues;
 
     }
 
