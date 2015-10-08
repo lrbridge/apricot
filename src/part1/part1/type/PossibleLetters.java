@@ -26,25 +26,10 @@ public class PossibleLetters implements AssignmentType {
         this.puzzleInput = puzzleInput;
         this.words = words;
 
-        initializePossibleLettersForAllPositionsToNull();
-
-        for (String category : puzzleInput.getCategories()) {
-            List<Integer> positionsInSolution = puzzleInput.getLetterPositionsInSolutionFor(category);
-
-            for (int i = 0; i < positionsInSolution.size(); i++) {
-                Set<String> lettersInPosition = words.getLettersInPositionFor(category, i);
-                int positionInSolution = positionsInSolution.get(i);
-
-                if (isFirstTimeAddingLettersToPosition(positionInSolution)) {
-                    addAllLetters(positionInSolution, lettersInPosition);
-                } else {
-                    removeLettersNotInPosition(positionInSolution, lettersInPosition);
-                }
-            }
-        }
+        initializePossibleLettersWithCommonLettersForAllCategories();
     }
 
-    public boolean propagateAssignment(Object variable, String letter) {
+    public boolean propagateAssignment(Object variable, String letter, BaseAssignment assignment) {
 
         Integer position = (Integer) variable;
 
@@ -75,8 +60,6 @@ public class PossibleLetters implements AssignmentType {
     }
 
     public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
-        // letter-based assignment first, variable = position in array
-        // TODO - word-based assignment will change this
 
         // MRV heuristic - choose variable with fewest remaining values
         int unassignedPositionWithFewestRemainingLetters = -1; //error if no value left to assign
@@ -103,9 +86,28 @@ public class PossibleLetters implements AssignmentType {
 
     }
 
-    private void initializePossibleLettersForAllPositionsToNull() {
-        for (int i = 0; i < puzzleInput.getSolutionSize(); i++) {
+    private void initializePossibleLettersWithCommonLettersForAllCategories() {
+        for (int i = 0; i < this.puzzleInput.getSolutionSize(); i++) {
             possibleLettersInSolution.add(null);
+        }
+
+        for (String category : this.puzzleInput.getCategories()) {
+            List<Integer> positionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
+
+            for (int indexInWord = 0; indexInWord < positionsInSolution.size(); indexInWord++) {
+                adjustPossibleLettersFor(category, positionsInSolution, indexInWord);
+            }
+        }
+    }
+
+    private void adjustPossibleLettersFor(String category, List<Integer> positionsInSolution, int indexInWord) {
+        Set<String> lettersInPosition = this.words.getLettersInPositionFor(category, indexInWord);
+        int positionInSolution = positionsInSolution.get(indexInWord);
+
+        if (isFirstTimeAddingLettersToPosition(positionInSolution)) {
+            addAllLetters(positionInSolution, lettersInPosition);
+        } else {
+            removeLettersNotInPosition(positionInSolution, lettersInPosition);
         }
     }
 

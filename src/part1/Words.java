@@ -19,16 +19,17 @@ public class Words {
         return wordList.get(category);
     }
 
-    public boolean hasAPossibleMatch(String category, BaseAssignment assignment, List<Integer> letterPositions) {
+    public Set<String> getWordsThatCouldMatch(String category, BaseAssignment assignment, List<Integer> letterPositions) {
+
+        Set<String> wordsThatCouldMatch = new HashSet<>();
 
         for (String word : wordList.get(category)) {
             if (isPossibleMatch(word, assignment, letterPositions)) {
-                return true;
+                wordsThatCouldMatch.add(word);
             }
         }
 
-        // if no words in the category could match
-        return false;
+        return wordsThatCouldMatch;
     }
 
     private boolean isPossibleMatch(String possibleWordMatch, BaseAssignment assignment, List<Integer> letterPositions) {

@@ -69,43 +69,43 @@ public class Part1Test {
     @Test
     public void simpleWord() {
         String[] expectedWords = {"BAID"};
-        testPart1("word", "simple.txt", "smallwordlist.txt", expectedWords, 5);
+        testPart1("word", "simple.txt", "smallwordlist.txt", expectedWords, 3);
     }
 
     @Test
     public void sampleWord() {
         String[] expectedWords = {"BAURANH", "BAARATH", "BAARAMH", "BAIRAEH"};
-        testPart1("word", "sample.txt", "wordlist.txt", expectedWords, 266);
+        testPart1("word", "sample.txt", "wordlist.txt", expectedWords, 56);
     }
 
     @Test
     public void puzzle1Word() {
         String[] expectedWords = {"NNEMANDYE", "NWEMANDYE", "NNESAYDYE", "NWESAYDYE"};
-        testPart1("word", "puzzle1.txt", "wordlist.txt", expectedWords, 282);
+        testPart1("word", "puzzle1.txt", "wordlist.txt", expectedWords, 58);
     }
 
     @Test
     public void puzzle2Word() {
         String[] expectedWords = {"HSIAIWNCS", "HSIAIWNPS", "HSIOIWNDS", "HSIOIWNYS"};
-        testPart1("word", "puzzle2.txt", "wordlist.txt", expectedWords, 1537);
+        testPart1("word", "puzzle2.txt", "wordlist.txt", expectedWords, 130);
     }
 
     @Test
     public void puzzle3Word() {
         String[] expectedWords = {"ASULPEA", "ASULPIE"};
-        testPart1("word", "puzzle3.txt", "wordlist.txt", expectedWords, 242);
+        testPart1("word", "puzzle3.txt", "wordlist.txt", expectedWords, 59);
     }
 
     @Test
     public void puzzle4Word() {
         String[] expectedWords = {"HEDITYRE", "HELITYRE", "HETITYRE"};
-        testPart1("word", "puzzle4.txt", "wordlist.txt", expectedWords, 597);
+        testPart1("word", "puzzle4.txt", "wordlist.txt", expectedWords, 58);
     }
 
     @Test
     public void puzzle5Word() {
         String[] expectedWords = {"IHTTNOIEN", "THTTNOIEN", "IHTTYOIEN", "THTTYOIEN"};
-        testPart1("word", "puzzle5.txt", "wordlist.txt", expectedWords, 479);
+        testPart1("word", "puzzle5.txt", "wordlist.txt", expectedWords, 13);
     }
 
     private void testPart1(String wordOrLetterBased, String filename, String wordlist, String[] expectedWordsArray, int expectedLinesInTrace) {

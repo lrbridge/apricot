@@ -8,7 +8,7 @@ public interface AssignmentType {
 
     AssignmentType clone();
 
-    boolean propagateAssignment(Object variable, String value);
+    boolean propagateAssignment(Object variable, String value, BaseAssignment assignment);
 
     Set<String> getOrderedDomainValues(Object variable, AssignmentType assignmentType);
 

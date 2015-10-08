@@ -97,7 +97,7 @@ public class Part1 {
             if (isConsistent(newAssignment)) {
 
                 // Perform inferences by propagating assignment changes through TODO
-                boolean isStillConsistent = newAssignmentType.propagateAssignment(variable, value);
+                boolean isStillConsistent = newAssignmentType.propagateAssignment(variable, value, newAssignment);
 
                 if (isStillConsistent) {
 
@@ -132,7 +132,7 @@ public class Part1 {
             // if there is a category where NO words match, then this is
             // not a consistent assignment
             List<Integer> letterPositions = this.puzzleInput.getLetterPositionsInSolutionFor(category);
-            if (!this.words.hasAPossibleMatch(category, assignment, letterPositions)) {
+            if (this.words.getWordsThatCouldMatch(category, assignment, letterPositions).size() == 0) {
                 return false;
             }
 
