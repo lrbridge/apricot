@@ -1,11 +1,11 @@
 package part1;
 
-import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.Assignment;
 import part1.part1.assignment.LetterAssignment;
 import part1.part1.assignment.WordAssignment;
-import part1.part1.type.AssignmentType;
-import part1.part1.type.PossibleLetters;
-import part1.part1.type.PossibleWords;
+import part1.part1.type.VariableValueSelection;
+import part1.part1.type.LetterBasedVarValSelection;
+import part1.part1.type.WordBasedVarValSelection;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ public class Part1 {
     private PuzzleInput puzzleInput;
     private boolean isWordBased;
 
-    private Set<BaseAssignment> solutions = new HashSet<>();
+    private Set<Assignment> solutions = new HashSet<>();
     private List<SearchPath> searchPaths = new ArrayList<>();
 
     public Part1(String puzzleFile, String wordListFile, String wordOrLetterBased) {
@@ -28,49 +28,43 @@ public class Part1 {
         this.isWordBased = wordOrLetterBased.equals("word");
     }
 
+    /**
+     * Solve the word puzzle
+     */
     public Part1Solution solve() {
 
+        Assignment initialAssignment;
+        VariableValueSelection initialVariableValueSelection;
+        String assignmentOrdering;
+
+        // Change behavior of word-based or letter-based assignment by using different implementations
+        // of Assignment and VariableValueSelection
+        if (isWordBased) {
+            initialAssignment = new WordAssignment(puzzleInput.getSolutionSize(), puzzleInput);
+            initialVariableValueSelection = new WordBasedVarValSelection(puzzleInput, words);
+            assignmentOrdering = "category with fewest remaining words";
+        }
+        else {
+            initialAssignment = new LetterAssignment(puzzleInput.getSolutionSize(), puzzleInput);
+            initialVariableValueSelection = new LetterBasedVarValSelection(puzzleInput, words);
+            assignmentOrdering = "position with fewest remaining letters";
+        }
+
+        // searchPath and this.searchPaths keep track of all the paths we visited/backtracking for printing out later
         SearchPath searchPath = new SearchPath();
         searchPath.addRoot();
 
-        BaseAssignment initialAssignment;
-        AssignmentType initialAssignmentType;
-        if (isWordBased) {
-            initialAssignment = new WordAssignment(puzzleInput.getSolutionSize(), puzzleInput);
-            initialAssignmentType = new PossibleWords(puzzleInput, words);
-        } else {
-            initialAssignment = new LetterAssignment(puzzleInput.getSolutionSize(), puzzleInput);
-            initialAssignmentType = new PossibleLetters(puzzleInput, words);
-        }
+        // start recursion to search tree for solutions
+        backtrack(initialAssignment, initialVariableValueSelection, searchPath);
 
-        backtrack(initialAssignment, initialAssignmentType, searchPath);
-
-        return new Part1Solution(this.solutions, this.searchPaths);
+        // return the pretty-printed search paths, solutions, etc.
+        return new Part1Solution(this.solutions, this.searchPaths, assignmentOrdering);
     }
 
-    // letter-based assignment
-    //    variables:  position in array
-    //	  domains:  letters A-Z
-    //	  constraints:  matches word for each category in given positions
-
-    // word-based assignment TODO
-    //    variables:  category to assign word
-    //    domains:  words in the word list for the given category
-    //    constraints:  matches word for each category in given positions
-
-    // ONLY things that change between the two:
-    //    selectUnassignedVariable & variable -> gets a category (later MRV)
-    //    getOrderedDomainValues & value -> words for the category (later LRV?)
-    //    propogateAssignment --> ...?
-    //    need to pull all possible values stuff out of assignment...
-
-    // also TODO In the first line of the trace file, indicate your assignment order
-
-    private boolean backtrack(BaseAssignment assignment, AssignmentType assignmentType, SearchPath searchPath) {
+    private boolean backtrack(Assignment assignment, VariableValueSelection variableValueSelection, SearchPath searchPath) {
 
         if (assignment.isComplete()) {
-            // to support multiple solutions, DON'T return here
-            // continue searching tree to find all solutions
+            // to find all solutions, DON'T stop when find a solution; search entire tree
 
             solutions.add(assignment);
 
@@ -80,16 +74,17 @@ public class Part1 {
             return true;
         }
 
-        Object variable = assignmentType.selectUnassignedVariable(assignmentType, assignment);
+        Object variable = variableValueSelection.selectUnassignedVariable(variableValueSelection, assignment);
 
-        for (String value : assignmentType.getOrderedDomainValues(variable, assignmentType)) {
+        for (String value : variableValueSelection.getOrderedDomainValues(variable, variableValueSelection)) {
 
-            BaseAssignment newAssignment = assignment.clone();
-            newAssignment.set(variable, value);
-
-            AssignmentType newAssignmentType = assignmentType.clone();
-
+            // clone all the recursing changing state so we don't have to bother removing nodes when roll up tree
+            Assignment newAssignment = assignment.clone();
+            VariableValueSelection newAssignmentType = variableValueSelection.clone();
             SearchPath newSearchPath = searchPath.clone();
+
+            // assign the variable to the value
+            newAssignment.set(variable, value);
             newSearchPath.add(value);
 
             boolean isSolution = false;
@@ -110,13 +105,12 @@ public class Part1 {
 
             }
 
-            // Because we cloned the assignments (and possible values) above, we
-            // don't need to revert the assignments/inferences here because it is
-            // take care of in the cloning (we just ditch the clone and roll back to the previous instance)
+            // Because we cloned the assignments (and possible values) above, we don't need to revert the
+            // assignments/inferences here (we just ditch the clone and roll back to the previous instance)
 
+            // if we didn't find a solution, backtrack up tree
             if (!isSolution) {
                 newSearchPath.addBacktrack();
-
                 searchPaths.add(newSearchPath);
             }
 
@@ -125,12 +119,11 @@ public class Part1 {
         return false;
     }
 
-    private boolean isConsistent(BaseAssignment assignment) {
+    private boolean isConsistent(Assignment assignment) {
 
         for (String category : this.puzzleInput.getCategories()) {
 
-            // if there is a category where NO words match, then this is
-            // not a consistent assignment
+            // if there is a category where NO words match, then this is not a consistent assignment
             List<Integer> letterPositions = this.puzzleInput.getLetterPositionsInSolutionFor(category);
             if (this.words.getWordsThatCouldMatch(category, assignment, letterPositions).size() == 0) {
                 return false;

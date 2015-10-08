@@ -1,7 +1,7 @@
 package part1;
 
 import org.junit.Test;
-import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.Assignment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -113,11 +113,11 @@ public class Part1Test {
 
         Part1 part1 = new Part1(filename, wordlist, wordOrLetterBased);
         Part1Solution part1Solution = part1.solve();
-        Set<BaseAssignment> solutions = part1Solution.getSolutions();
+        Set<Assignment> solutions = part1Solution.getSolutions();
 
-        for (BaseAssignment solution : solutions) {
-            System.out.println(solution.getSolution());
-            assertTrue(expectedWords.contains(solution.getSolution()));
+        for (Assignment solution : solutions) {
+            System.out.println(solution.toString());
+            assertTrue(expectedWords.contains(solution.toString()));
         }
         assertEquals(solutions.size(), expectedWords.size());
 
@@ -125,7 +125,7 @@ public class Part1Test {
         int numLinesOfTrace = getNumLines(searchTrace);
 
         System.out.println(searchTrace);
-        assertEquals(numLinesOfTrace, expectedLinesInTrace);
+        assertEquals(numLinesOfTrace, expectedLinesInTrace+1); // +1 for search order: line added to top
     }
 
     private int getNumLines(String searchTrace) {

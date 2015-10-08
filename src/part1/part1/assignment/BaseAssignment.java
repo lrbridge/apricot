@@ -4,7 +4,7 @@ import part1.PuzzleInput;
 
 import java.util.Arrays;
 
-public abstract class BaseAssignment {
+public abstract class BaseAssignment implements Assignment {
 
     protected String[] assignment;
     protected PuzzleInput puzzleInput;
@@ -26,23 +26,19 @@ public abstract class BaseAssignment {
     public boolean isComplete() {
         for (String letter : assignment) {
             if (letter == null) {
-                return false; // if any letter is null
+                return false; // if any letter is null, not a complete assignment
             }
         }
-        return true; // if all letters are assigned
+        return true; // if all letters are assigned, the assignment is complete
     }
 
     @Override
-    public abstract BaseAssignment clone();
+    public abstract Assignment clone();
 
     public abstract void set(Object variable, String value);
 
     public String get(int position) {
         return this.assignment[position - 1];
-    }
-
-    public String getSolution() {
-        return this.toString();
     }
 
     // don't want to have duplicate assignments in our list of solutions!

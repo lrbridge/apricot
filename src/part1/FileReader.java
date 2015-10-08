@@ -23,12 +23,12 @@ public class FileReader {
     }
 
     public Map<String, List<String>> getWordList() {
-        Map<String, List<String>> wordList = new HashMap<String, List<String>>();
+        Map<String, List<String>> wordList = new HashMap<>();
 
         for (String line : wordListFileLines) {
             String[] valuesInLine = line.split("[:,]");
             String category = null;
-            List<String> words = new ArrayList<String>();
+            List<String> words = new ArrayList<>();
             for (String value : valuesInLine) {
                 if (category == null) {
                     category = value; // category is first
@@ -57,7 +57,7 @@ public class FileReader {
             } else {
                 String[] valuesInLine = line.split("[:,]");
                 String category = null;
-                List<Integer> letterPositions = new ArrayList<Integer>();
+                List<Integer> letterPositions = new ArrayList<>();
                 for (String value : valuesInLine) {
                     if (category == null) {
                         category = value; // category is first
@@ -73,11 +73,11 @@ public class FileReader {
     }
 
     private List<String> readFile(String filename) {
-        List<String> fileLines = new ArrayList<String>();
+        List<String> fileLines = new ArrayList<>();
         Path file = Paths.get(filename);
         try (InputStream in = Files.newInputStream(file);
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
-            String line = null;
+            String line;
             while ((line = reader.readLine()) != null) {
                 fileLines.add(line);
             }

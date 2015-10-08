@@ -1,6 +1,6 @@
 package part1;
 
-import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.Assignment;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,7 +19,7 @@ public class Words {
         return wordList.get(category);
     }
 
-    public Set<String> getWordsThatCouldMatch(String category, BaseAssignment assignment, List<Integer> letterPositions) {
+    public Set<String> getWordsThatCouldMatch(String category, Assignment assignment, List<Integer> letterPositions) {
 
         Set<String> wordsThatCouldMatch = new HashSet<>();
 
@@ -32,7 +32,7 @@ public class Words {
         return wordsThatCouldMatch;
     }
 
-    private boolean isPossibleMatch(String possibleWordMatch, BaseAssignment assignment, List<Integer> letterPositions) {
+    private boolean isPossibleMatch(String possibleWordMatch, Assignment assignment, List<Integer> letterPositions) {
 
         int index = 0;
 
@@ -59,7 +59,7 @@ public class Words {
     }
 
     public Set<String> getLettersInPositionFor(String category, int position) {
-        Set<String> letters = new HashSet<String>();
+        Set<String> letters = new HashSet<>();
         for (String word : this.wordList.get(category)) {
             letters.add(Character.toString(word.charAt(position)));
         }
@@ -67,13 +67,13 @@ public class Words {
     }
 
     public Set<String> getLettersInPositionForGiven(String category, int position, int positionAssigned, String letterAssigned) {
-        Set<String> letters = new HashSet<String>();
+        Set<String> letters = new HashSet<>();
         for (String word : this.wordList.get(category)) {
             if (Character.toString(word.charAt(positionAssigned)).equals(letterAssigned)) {
                 letters.add(Character.toString(word.charAt(position)));
             }
             // if the word doesn't have the character that was just assigned at the position that was just assigned
-            // don't add it to the list
+            // don't add any of that word's letters to the list
         }
         return letters;
     }

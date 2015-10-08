@@ -11,7 +11,7 @@ public class WordAssignment extends BaseAssignment {
     }
 
     @Override
-    public WordAssignment clone() {
+    public Assignment clone() {
         WordAssignment clone = new WordAssignment(this.assignment.length, this.puzzleInput);
 
         int position = 1;

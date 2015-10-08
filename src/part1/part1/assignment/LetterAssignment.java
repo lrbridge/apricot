@@ -9,7 +9,7 @@ public class LetterAssignment extends BaseAssignment {
     }
 
     @Override
-    public LetterAssignment clone() {
+    public Assignment clone() {
         LetterAssignment clone = new LetterAssignment(this.assignment.length, this.puzzleInput);
 
         int position = 1;

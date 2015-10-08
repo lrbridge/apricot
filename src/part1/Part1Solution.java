@@ -1,21 +1,23 @@
 package part1;
 
-import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.Assignment;
 
 import java.util.List;
 import java.util.Set;
 
 public class Part1Solution {
 
-    private Set<BaseAssignment> solutions;
+    private Set<Assignment> solutions;
     private List<SearchPath> searchPaths;
+    private String assignmentOrdering;
 
-    public Part1Solution(Set<BaseAssignment> solutions, List<SearchPath> searchPaths) {
+    public Part1Solution(Set<Assignment> solutions, List<SearchPath> searchPaths, String assignmentOrdering) {
         this.solutions = solutions;
         this.searchPaths = searchPaths;
+        this.assignmentOrdering = assignmentOrdering;
     }
 
-    public Set<BaseAssignment> getSolutions() {
+    public Set<Assignment> getSolutions() {
         return solutions;
     }
 
@@ -23,6 +25,10 @@ public class Part1Solution {
 
         StringBuilder str = new StringBuilder();
         SearchPath previousSearchTrace = null;
+
+        str.append("search order: ");
+        str.append(assignmentOrdering);
+        str.append("\n");
 
         for (SearchPath searchPath : searchPaths) {
 

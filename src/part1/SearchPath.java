@@ -1,6 +1,6 @@
 package part1;
 
-import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.Assignment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +21,8 @@ public class SearchPath {
         path.add("backtrack");
     }
 
-    public void addSolution(BaseAssignment assignment) {
+    public void addSolution(Assignment assignment) {
         path.add(" (found result: " + assignment.toString() + ")");
-    }
-
-    public void pop() {
-        path.remove(path.size() - 1); // remove the last item on the search path
     }
 
     @Override

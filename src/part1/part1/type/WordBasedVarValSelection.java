@@ -2,7 +2,7 @@ package part1.part1.type;
 
 import part1.PuzzleInput;
 import part1.Words;
-import part1.part1.assignment.BaseAssignment;
+import part1.part1.assignment.Assignment;
 
 import java.util.*;
 
@@ -12,14 +12,14 @@ import java.util.*;
 	  domains:  words in the word list for the given category
 	  constraints:  matches word for each category in given positions
 */
-public class PossibleWords implements AssignmentType {
+public class WordBasedVarValSelection implements VariableValueSelection {
 
     private PuzzleInput puzzleInput;
     private Words words;
 
     private HashMap<String, HashSet<String>> possibleWordsForEachCategory = new HashMap<>();
 
-    public PossibleWords(PuzzleInput puzzleInput, Words words) {
+    public WordBasedVarValSelection(PuzzleInput puzzleInput, Words words) {
         this.puzzleInput = puzzleInput;
         this.words = words;
 
@@ -27,15 +27,13 @@ public class PossibleWords implements AssignmentType {
     }
 
     private void initializePossibleWordsForEachCategory() {
-
         for(String category : this.puzzleInput.getCategories()) {
             possibleWordsForEachCategory.put(category, new HashSet<>(this.words.getWordsForCategory(category)));
         }
-
     }
 
     // private constructor that is only used by clone method
-    private PossibleWords(HashMap<String, HashSet<String>> oldPossibleWordsForEachCategory, PuzzleInput puzzleInput, Words words) {
+    private WordBasedVarValSelection(HashMap<String, HashSet<String>> oldPossibleWordsForEachCategory, PuzzleInput puzzleInput, Words words) {
 
         this.puzzleInput = puzzleInput;
         this.words = words;
@@ -51,37 +49,44 @@ public class PossibleWords implements AssignmentType {
     }
 
     @Override
-    public AssignmentType clone() {
-
-        return new PossibleWords(this.possibleWordsForEachCategory, this.puzzleInput, this.words);
+    public VariableValueSelection clone() {
+        return new WordBasedVarValSelection(this.possibleWordsForEachCategory, this.puzzleInput, this.words);
     }
 
     @Override
-    public boolean propagateAssignment(Object variableAssigned, String valueAssigned, BaseAssignment assignment) {
+    public boolean propagateAssignment(Object variableAssigned, String valueAssigned, Assignment assignment) {
 
         String categoryAssigned = (String) variableAssigned;
 
+        updatePossibleWordsForRecentAssignment(valueAssigned, categoryAssigned);
+
+        // propagate changes forward to other unassigned categories that were affected
+        List<Integer> affectedPositions = this.puzzleInput.getLetterPositionsInSolutionFor(categoryAssigned);
+        for(Integer affectedPosition : affectedPositions) {
+            for(String affectedCategory : this.puzzleInput.getCategoriesWithPosition(affectedPosition)) {
+                if(isUnassigned(affectedCategory, assignment)) { // for unassigned categories that were affected
+
+                    List<Integer> letterPositionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(affectedCategory);
+
+                    Set<String> wordsThatCouldMatch = this.words.getWordsThatCouldMatch(affectedCategory, assignment, letterPositionsInSolution);
+
+                    if(wordsThatCouldMatch.size() == 0) {
+                        // if we ever remove all possible words, then quit early - inconsistent assignment!
+                        return false;
+                    }
+
+                    removeWordsNotInCategory(affectedCategory, wordsThatCouldMatch);
+                }
+            }
+        }
+        return true;
+    }
+
+    private void updatePossibleWordsForRecentAssignment(String valueAssigned, String categoryAssigned) {
         // update possible words for assignment that just happened
         HashSet<String> valuesAssigned = new HashSet<>();
         valuesAssigned.add(valueAssigned);
         this.removeWordsNotInCategory(categoryAssigned, valuesAssigned);
-
-        // propogate changes forward to other unassigned categories (TODO just affected?)
-
-        for(String category : this.puzzleInput.getCategories()) {
-
-            if(isUnassigned(category, assignment)) {
-
-                List<Integer> letterPositionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
-
-                Set<String> wordsThatCouldMatch = this.words.getWordsThatCouldMatch(category, assignment, letterPositionsInSolution);
-
-                removeWordsNotInCategory(category, wordsThatCouldMatch);
-            }
-
-        }
-
-        return true;
     }
 
     private void removeWordsNotInCategory(String category, Set<String> wordsThatCouldMatch) {
@@ -97,17 +102,17 @@ public class PossibleWords implements AssignmentType {
     }
 
     @Override
-    public Set<String> getOrderedDomainValues(Object variable, AssignmentType assignmentType) {
-
-        // TODO not ordered... but at least a smaller & smaller list as we go
+    public Set<String> getOrderedDomainValues(Object variable, VariableValueSelection assignmentType) {
+        // return just the possible words for each category at this time
+        // these are not ordered currently, because to order we would have to return in order the
+        //      words that rule out fewest choices for neighboring vars... which seems hard to compute
 
         String category = (String) variable;
-
         return this.possibleWordsForEachCategory.get(category);
     }
 
     @Override
-    public Object selectUnassignedVariable(AssignmentType assignmentType, BaseAssignment assignment) {
+    public Object selectUnassignedVariable(VariableValueSelection assignmentType, Assignment assignment) {
 
         // MRV heuristic - choose variable (category) with minimum remaining values
 
@@ -127,27 +132,19 @@ public class PossibleWords implements AssignmentType {
                         categoryWithFewestRemainingValues = category;
                     }
                 }
-
-
             }
-
         }
 
         return categoryWithFewestRemainingValues;
-
     }
 
-    private boolean isUnassigned(String category, BaseAssignment assignment) {
-        List<Integer> positionsInSolution = this.puzzleInput.getLetterPositionsInSolutionFor(category);
+    private boolean isUnassigned(String category, Assignment assignment) {
 
-        for (Integer position : positionsInSolution) {
-
+        for (Integer position : this.puzzleInput.getLetterPositionsInSolutionFor(category)) {
             if (assignment.get(position) == null) {
-                return true;
+                return true; // unassigned if any of the positions of that word in the assignment are null
             }
-
         }
-
         return false;
     }
 }
