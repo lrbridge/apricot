@@ -1,11 +1,11 @@
 package part1;
 
-import part1.part1.assignment.Assignment;
-import part1.part1.assignment.LetterAssignment;
-import part1.part1.assignment.WordAssignment;
-import part1.part1.type.VariableValueSelection;
-import part1.part1.type.LetterBasedVarValSelection;
-import part1.part1.type.WordBasedVarValSelection;
+import part1.assignment.Assignment;
+import part1.assignment.LetterAssignment;
+import part1.assignment.WordAssignment;
+import part1.type.VariableValueSelection;
+import part1.type.LetterBasedVarValSelection;
+import part1.type.WordBasedVarValSelection;
 
 import java.util.ArrayList;
 import java.util.HashSet;

@@ -1,7 +1,7 @@
 package part1;
 
 import org.junit.Test;
-import part1.part1.assignment.Assignment;
+import part1.assignment.Assignment;
 
 import java.util.Arrays;
 import java.util.List;

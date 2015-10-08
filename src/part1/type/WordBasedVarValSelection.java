@@ -1,8 +1,8 @@
-package part1.part1.type;
+package part1.type;
 
 import part1.PuzzleInput;
 import part1.Words;
-import part1.part1.assignment.Assignment;
+import part1.assignment.Assignment;
 
 import java.util.*;
 

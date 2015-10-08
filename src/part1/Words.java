@@ -1,6 +1,6 @@
 package part1;
 
-import part1.part1.assignment.Assignment;
+import part1.assignment.Assignment;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,4 +1,4 @@
-package part1.part1.assignment;
+package part1.assignment;
 
 import part1.PuzzleInput;
 

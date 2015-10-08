@@ -1,6 +1,6 @@
-package part1.part1.type;
+package part1.type;
 
-import part1.part1.assignment.Assignment;
+import part1.assignment.Assignment;
 
 import java.util.Set;
 

@@ -1,7 +1,7 @@
-package part1.part1.assignment;
+package part1.assignment;
 
 public interface Assignment {
-    
+
     boolean isComplete();
 
     String get(int position);
