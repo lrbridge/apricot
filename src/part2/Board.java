@@ -123,26 +123,26 @@ public class Board {
 		}else return false;		
 	}
 
-	//Find the total value player1 owned
-	public int checkTPvalue(){
-		int sum=0;
-		for (int i=0; i < boardWidth;i++){
-			for (int j=0; j < boardHeight;j++){
-				if (TPboard[i][j]==1)sum+=Sboard[i][j];					
-				}
-			}
-		return sum;
-		}
-	
-	public int checkPvalue(){
-		int sum=0;
-		for (int i=0;i<boardWidth;i++){
-			for (int j=0;j<boardHeight;j++){
-				if (Pboard[i][j]==1)sum+=Sboard[i][j];					
-				}
-			}
-		return sum;
-		}
+    //Find the total value player1 owned
+    public int checkTPvalue1(){
+        int sum=0;
+        for (int i=0;i<6;i++){
+            for (int j=0;j<6;j++){
+                if (TPboard[i][j]==1)sum+=Sboard[i][j];
+            }
+        }
+        return sum;
+    }
+
+    public int checkTPvalue2(){
+        int sum=0;
+        for (int i=0;i<6;i++){
+            for (int j=0;j<6;j++){
+                if (TPboard[i][j]==2)sum+=Sboard[i][j];
+            }
+        }
+        return sum;
+    }
 	
 	  public static List<Point> getAvailableStatesTP() {
 		  List<Point> availablePoints = new ArrayList<>();
@@ -176,13 +176,16 @@ public class Board {
 	}
 	
 	public int minimax_max(int depth,int turn){
-		
-		int score=checkTPvalue();
+
+        int score=0;
+        if (turn==1){
+            score=checkTPvalue1();
+        }else if (turn==2) score=checkTPvalue2();
 		
 		List<Point> pointsAvailable = getAvailableStatesTP();
 		if (pointsAvailable.isEmpty()) return score;
 		
-		if (depth==3) return score;
+		if (depth==4) return score;
 		
 		int max = -1;
 
@@ -204,15 +207,6 @@ public class Board {
                     }
 
                     TPmove(point,1);
-
-                    System.out.println("Player1 turn");
-                    for (int o=0;o<boardWidth;o++){
-                        for (int j=0;j<boardHeight;j++){
-                            System.out.print(TPboard[o][j]+" ");
-                        }
-                        System.out.println("");
-                    }
-                    System.out.println("");
 
                     int currentScore=minimax_min(depth+1,2);
                     if (currentScore>max){
@@ -242,14 +236,7 @@ public class Board {
 					}
 				}
 				TPmove(point,2);
-				System.out.println("Player2 turn");
-				for (int o=0;o<boardWidth;o++){
-					for (int j=0;j<boardHeight;j++){
-						System.out.print(TPboard[o][j]+" ");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
+
 				
 				int currentScore=minimax_min(depth+1,1);
 				if (currentScore>max){
@@ -275,10 +262,14 @@ public class Board {
 	}
 	
 	public int minimax_min(int depth,int turn){
-		int score=checkTPvalue();
+        int score=0;
+        if (turn==2){
+            score=checkTPvalue1();
+        }else if (turn==1) score=checkTPvalue2();
+
 		List<Point> pointsAvailable = getAvailableStatesTP();
 		if (pointsAvailable.isEmpty()) return score;
-		if (depth==3) return score;
+		//if (depth==3) return score;
 		int min = Integer.MAX_VALUE;
 		
 		int [][]restore=new int [boardWidth][boardHeight];
@@ -296,14 +287,14 @@ public class Board {
 					}
 				}
 				TPmove(point,1);
-				System.out.println("Player1 turn");
-				for (int o=0;o<boardWidth;o++){
-					for (int j=0;j<boardHeight;j++){
-						System.out.print(TPboard[o][j]+" ");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
+//				System.out.println("Player1 turn");
+//				for (int o=0;o<boardWidth;o++){
+//					for (int j=0;j<boardHeight;j++){
+//						System.out.print(TPboard[o][j]+" ");
+//					}
+//					System.out.println("");
+//				}
+//				System.out.println("");
 				
 				int currentScore=minimax_max(depth+1,2);
 				if (currentScore<min){
@@ -313,17 +304,21 @@ public class Board {
 		}
 			if (turn==2){
 				for (int i=0;i<pointsAvailable.size();i++){
-				Point point=pointsAvailable.get(i);
-				TPboard=restore;
-				TPmove(point,2);
-				System.out.println("Player2 turn");
-				for (int o=0;o<boardWidth;o++){
-					for (int j=0;j<boardHeight;j++){
-						System.out.print(TPboard[o][j]+" ");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
+                    Point point=pointsAvailable.get(i);
+                    for (int a=0;a<6;a++){
+                        for (int b=0;b<6;b++){
+                            TPboard[a][b]=restore[a][b];
+                        }
+                    }
+                    TPmove(point,2);
+//				System.out.println("Player2 turn");
+//				for (int o=0;o<boardWidth;o++){
+//					for (int j=0;j<boardHeight;j++){
+//						System.out.print(TPboard[o][j]+" ");
+//					}
+//					System.out.println("");
+//				}
+//				System.out.println("");
 				
 				int currentScore=minimax_max(depth+1,1);
 				if (currentScore<min){
@@ -338,10 +333,18 @@ public class Board {
 	public static void main(String args[]) {
 		Board b=new Board();
 		while (!ifEnd()){		
-			b.minimax_max(0, 1);
-			TPboard=Pboard;
 			b.minimax_max(0, 2);
-			TPboard=Pboard;
+            for (int a=0;a<6;a++){
+                for (int c=0;c<6;c++){
+                    TPboard[a][c]=Pboard[a][c];
+                }
+            }
+			b.minimax_max(0, 1);
+            for (int a=0;a<6;a++){
+                for (int c=0;c<6;c++){
+                    TPboard[a][c]=Pboard[a][c];
+                }
+            }
 		/*	for (int o=0;o<6;o++){
 				for (int j=0;j<6;j++){
 					System.out.print(Pboard[o][j]+" ");
@@ -350,13 +353,5 @@ public class Board {
 			}
 			System.out.println("");*/
 		}
-		
-		
-		
-		
-		
 	}
-	
-
-	
 }
