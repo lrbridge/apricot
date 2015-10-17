@@ -1,4 +1,4 @@
-package part2;
+package wargame;
 
 public class Point {
  int x;
