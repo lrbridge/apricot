@@ -1,11 +1,27 @@
 package part2;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertArrayEquals;
+
+import org.junit.Test;
+
 public class Part2Test {
 
-    // Disabled for now since there is no solve function for part 2
-//	@Test
-//	public void test() {
-//		assertEquals(new Part2().solve(), 2);
-//	}
+	@Test
+	public void test() {
+		int[][] actualSolution = new Part2().solve();
+		int[][] expectedSolution = {
+			{1, 2, 1, 2, 1, 2}, 
+			{2, 1, 2, 2, 2, 1}, 
+			{1, 2, 1, 2, 1, 2}, 
+			{1, 1, 2, 1, 2, 1}, 
+			{1, 2, 1, 2, 1, 2}, 
+			{2, 1, 2, 1, 2, 1}
+		};
+		assertEquals(actualSolution.length, expectedSolution.length);
+		for(int i=0; i<actualSolution.length; i++) {
+			assertArrayEquals(actualSolution[i], expectedSolution[i]);
+		}
+	}
 
 }
