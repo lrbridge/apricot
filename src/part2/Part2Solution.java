@@ -24,9 +24,33 @@ public class Part2Solution {
 		return this.actualState.getBlueScore();
 	}
 
+	public int getBlueNumNodesExpanded() {
+		return blue.getNumNodesExpanded();
+	}
+	
+	public double getBlueAvgNumNodesExpandedPerMove() {
+		if(blue.getNumMoves() < 1) {
+			return 0.0;
+		}
+		return blue.getNumNodesExpanded() / blue.getNumMoves();
+	}
+	
 	public int getGreenScore() {
 		return this.actualState.getGreenScore();
 	}
+	
+	public int getGreenNumNodesExpanded() {
+		return green.getNumNodesExpanded();
+	}
+	
+	public double getGreenAvgNumNodesExpandedPerMove() {
+		if(green.getNumMoves() < 1) {
+			return 0.0;
+		}
+		return green.getNumNodesExpanded() / green.getNumMoves();
+	}
+	
+	// TODO blue & green avg time per move
 	
 	@Override
 	public String toString() {
@@ -38,28 +62,12 @@ public class Part2Solution {
 			str.append("\n");
 		}
 		str.append("Blue: " + getBlueScore() + "\n");
+		str.append("  nodes expanded: " + getBlueNumNodesExpanded() + "\n");
+		str.append("  avg nodes / move: " + getBlueAvgNumNodesExpandedPerMove() + "\n");
 		str.append("Green: " + getGreenScore() + "\n");
+		str.append("  nodes expanded: " + getGreenNumNodesExpanded() + "\n");
+		str.append("  avg nodes / move: " + getGreenAvgNumNodesExpandedPerMove() + "\n");
 		str.append("---------------\n");
 		return str.toString();
 	}
-
-	// TODO this is per-player...
-//	public void setFinalResults(int numNodesExpanded, double avgNodesExpandedPerMove, double avgTimePerMove) {
-//		this.numNodesExpanded = numNodesExpanded;
-//		this.avgNodesExpandedPerMove = avgNodesExpandedPerMove;
-//		this.avgTimePerMove = avgTimePerMove;
-//	}
-//	
-//	public int getNumNodesExpanded() {
-//		return numNodesExpanded;
-//	}
-//
-//	public double getAvgNodesExpandedPerMove() {
-//		return avgNodesExpandedPerMove;
-//	}
-//
-//	public double getAvgTimePerMove() {
-//		return avgTimePerMove;
-//	}
-	
 }

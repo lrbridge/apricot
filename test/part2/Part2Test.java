@@ -2,6 +2,7 @@ package part2;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -23,12 +24,26 @@ public class Part2Test {
 		}
 		
 		assertEquals(solution.getBlueScore(), 1);
-		assertEquals(solution.getGreenScore(), 0);
+		assertEquals(solution.getBlueNumNodesExpanded(), 1);
+		assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == 1.0);
 
-//		assertEquals(solution.getNumNodesExpanded(), 1);
-//		assertTrue(solution.getAvgNodesExpandedPerMove() == 1.0);
-//		assertTrue(solution.getAvgTimePerMove() == 1.0);
+		assertEquals(solution.getGreenScore(), 0);
+		assertEquals(solution.getGreenNumNodesExpanded(), 0);
+		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 0.0);
 	}
+	
+//	@Test
+//	public void testTiny() {
+//		int[][] actualSolution = new Part2().solve("tiny.txt");
+//		int[][] expectedSolution = {
+//			{1, 1}, 
+//			{1, 1}
+//		};
+//		assertEquals(actualSolution.length, expectedSolution.length);
+//		for(int i=0; i<actualSolution.length; i++) {
+//			assertArrayEquals(actualSolution[i], expectedSolution[i]);
+//		}
+//	}
 	
 //	@Test
 //	public void test() {
@@ -46,18 +61,6 @@ public class Part2Test {
 //			assertArrayEquals(actualSolution[i], expectedSolution[i]);
 //		}
 //	}
-	
-//	@Test
-//	public void testTiny() {
-//		int[][] actualSolution = new Part2().solve("tiny.txt");
-//		int[][] expectedSolution = {
-//			{1, 1}, 
-//			{1, 1}
-//		};
-//		assertEquals(actualSolution.length, expectedSolution.length);
-//		for(int i=0; i<actualSolution.length; i++) {
-//			assertArrayEquals(actualSolution[i], expectedSolution[i]);
-//		}
-//	}
+
 
 }

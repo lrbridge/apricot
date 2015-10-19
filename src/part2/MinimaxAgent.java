@@ -2,7 +2,11 @@ package part2;
 
 public class MinimaxAgent implements Agent {
 
-	Board board;
+	private Board board;
+	
+	private int numNodesExpanded = 0;
+	private int numMoves = 0;
+//	private int timeMs; TODO
 	
 	@Override
 	public void setBoard(Board board) {
@@ -11,6 +15,7 @@ public class MinimaxAgent implements Agent {
 	
 	@Override
 	public Move pickBestMove() {
+		numMoves++;
 		
 		MinimaxPossibleSolution initialSolution = new MinimaxPossibleSolution(board);
 		
@@ -30,7 +35,7 @@ public class MinimaxAgent implements Agent {
 			
 			MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropBlue(0,0);
 			if(newPossibility != null) {
-//				numNodesExpanded++;
+				numNodesExpanded++;
 				maxBlue = moveGreen(newPossibility);
 			}
 		
@@ -48,13 +53,22 @@ public class MinimaxAgent implements Agent {
 			
 			MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropGreen(0,0);
 			if(newPossibility != null) {
+				numNodesExpanded++;
 				maxGreen = moveBlue(newPossibility);
 			}
 			
 			return maxGreen;
 			
 		}
-	
+
+	public int getNumNodesExpanded() {
+		return numNodesExpanded;
+	}
+
+	public int getNumMoves() {
+		return numMoves;
+	}
+
 
 	//private Part2Solution moveGreen(Part2Solution possibleSolution) {
 	//	
