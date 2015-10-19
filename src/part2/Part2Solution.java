@@ -29,10 +29,10 @@ public class Part2Solution {
 	}
 	
 	public double getBlueAvgNumNodesExpandedPerMove() {
-		if(blue.getNumMoves() < 1) {
+		if(actualState.getNumMovesBlue() < 1) {
 			return 0.0;
 		}
-		return blue.getNumNodesExpanded() / blue.getNumMoves();
+		return blue.getNumNodesExpanded() / actualState.getNumMovesBlue();
 	}
 	
 	public int getGreenScore() {
@@ -44,10 +44,10 @@ public class Part2Solution {
 	}
 	
 	public double getGreenAvgNumNodesExpandedPerMove() {
-		if(green.getNumMoves() < 1) {
+		if(actualState.getNumMovesGreen() < 1) {
 			return 0.0;
 		}
-		return green.getNumNodesExpanded() / green.getNumMoves();
+		return green.getNumNodesExpanded() / actualState.getNumMovesGreen();
 	}
 	
 	// TODO blue & green avg time per move

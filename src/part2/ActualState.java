@@ -6,8 +6,12 @@ public class ActualState {
 
 	private Board board;
 	private String[][] playerLocations;
+	
 	private int blueScore = 0;
 	private int greenScore = 0;
+	
+	private int numMovesBlue = 0;
+	private int numMovesGreen = 0;
 	
 	public ActualState(Board board) {
 		this.playerLocations = new String[board.getWidth()][board.getHeight()];
@@ -20,6 +24,14 @@ public class ActualState {
 	
 	public int getGreenScore() {
 		return greenScore;
+	}
+	
+	public int getNumMovesBlue() {
+		return numMovesBlue;
+	}
+	
+	public int getNumMovesGreen() {
+		return numMovesGreen;
 	}
 
 	public String[][] getStateOfBoard() {
@@ -34,9 +46,11 @@ public class ActualState {
 			
 			if(player == "B") {
 				blueScore += board.get(move.row, move.col);
+				numMovesBlue++;
 			}
 			else {
 				greenScore += board.get(move.row, move.col);
+				numMovesGreen++;
 			}
 			
 		}

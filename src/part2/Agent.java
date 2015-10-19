@@ -7,7 +7,5 @@ public interface Agent {
 	public void setBoard(Board board);
 
 	public int getNumNodesExpanded();
-	
-	public int getNumMoves();
-	
+		
 }

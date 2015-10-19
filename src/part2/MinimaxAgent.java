@@ -5,7 +5,6 @@ public class MinimaxAgent implements Agent {
 	private Board board;
 	
 	private int numNodesExpanded = 0;
-	private int numMoves = 0;
 //	private int timeMs; TODO
 	
 	@Override
@@ -14,9 +13,7 @@ public class MinimaxAgent implements Agent {
 	}
 	
 	@Override
-	public Move pickBestMove() {
-		numMoves++;
-		
+	public Move pickBestMove() {		
 		MinimaxPossibleSolution initialSolution = new MinimaxPossibleSolution(board);
 		
 		MinimaxPossibleSolution solution = moveBlue(initialSolution);
@@ -26,47 +23,43 @@ public class MinimaxAgent implements Agent {
 
 	private MinimaxPossibleSolution moveBlue(MinimaxPossibleSolution possibleSolution) {
 			
-			if(possibleSolution.isDone()) {
-				return possibleSolution;
-			}
-			
-			// if is impossible, newPossibility will be null
-			MinimaxPossibleSolution maxBlue = null;
-			
-			MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropBlue(0,0);
-			if(newPossibility != null) {
-				numNodesExpanded++;
-				maxBlue = moveGreen(newPossibility);
-			}
-		
-			return maxBlue;
+		if(possibleSolution.isDone()) {
+			return possibleSolution;
 		}
+		
+		// if is impossible, newPossibility will be null
+		MinimaxPossibleSolution maxBlue = null;
+		
+		MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropBlue(0,0);
+		if(newPossibility != null) {
+			numNodesExpanded++;
+			maxBlue = moveGreen(newPossibility);
+		}
+	
+		return maxBlue;
+	}
 	
 	private MinimaxPossibleSolution moveGreen(MinimaxPossibleSolution possibleSolution) {
 			
-			if(possibleSolution.isDone()) {
-				return possibleSolution;
-			}
-			
-			// if is impossible, newPossibility will be null
-			MinimaxPossibleSolution maxGreen = null;
-			
-			MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropGreen(0,0);
-			if(newPossibility != null) {
-				numNodesExpanded++;
-				maxGreen = moveBlue(newPossibility);
-			}
-			
-			return maxGreen;
-			
+		if(possibleSolution.isDone()) {
+			return possibleSolution;
 		}
+		
+		// if is impossible, newPossibility will be null
+		MinimaxPossibleSolution maxGreen = null;
+		
+		MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropGreen(0,0);
+		if(newPossibility != null) {
+			numNodesExpanded++;
+			maxGreen = moveBlue(newPossibility);
+		}
+		
+		return maxGreen;
+		
+	}
 
 	public int getNumNodesExpanded() {
 		return numNodesExpanded;
-	}
-
-	public int getNumMoves() {
-		return numMoves;
 	}
 
 

@@ -32,18 +32,30 @@ public class Part2Test {
 		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 0.0);
 	}
 	
-//	@Test
-//	public void testTiny() {
-//		int[][] actualSolution = new Part2().solve("tiny.txt");
-//		int[][] expectedSolution = {
-//			{1, 1}, 
-//			{1, 1}
-//		};
-//		assertEquals(actualSolution.length, expectedSolution.length);
-//		for(int i=0; i<actualSolution.length; i++) {
-//			assertArrayEquals(actualSolution[i], expectedSolution[i]);
-//		}
-//	}
+	@Test
+	public void testTiny() {
+		Part2Solution solution = new Part2("tiny.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+		
+		String[][] expectedStateOfBoard = {
+			{"B","G"},
+			{"x","y"}
+		};
+		
+		System.out.println(solution);
+				
+		assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
+		for(int i=0; i<solution.getStateOfBoard().length; i++) {
+			assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
+		}
+		
+		assertEquals(solution.getBlueScore(), 1);
+		assertEquals(solution.getBlueNumNodesExpanded(), 1);
+		assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == 1.0);
+
+		assertEquals(solution.getGreenScore(), 0);
+		assertEquals(solution.getGreenNumNodesExpanded(), 0);
+		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 0.0);
+	}
 	
 //	@Test
 //	public void test() {
