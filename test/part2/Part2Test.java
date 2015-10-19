@@ -1,8 +1,7 @@
 package part2;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
@@ -10,11 +9,13 @@ public class Part2Test {
 	
 	@Test
 	public void testOneSquare() {
-		Part2Solution solution = new Part2().solve("onesquare.txt");
+		Part2Solution solution = new Part2("onesquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
 		
 		String[][] expectedStateOfBoard = {
 			{"B"}
 		};
+		
+		System.out.println(solution);
 				
 		assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
 		for(int i=0; i<solution.getStateOfBoard().length; i++) {
@@ -27,8 +28,6 @@ public class Part2Test {
 //		assertEquals(solution.getNumNodesExpanded(), 1);
 //		assertTrue(solution.getAvgNodesExpandedPerMove() == 1.0);
 //		assertTrue(solution.getAvgTimePerMove() == 1.0);
-		
-		System.out.println(solution);
 	}
 	
 //	@Test
