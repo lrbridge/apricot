@@ -23,19 +23,29 @@ public class Part2 {
 	}
 	
 	public Part2Solution play() {
-		
+
+		System.out.println("PLAY!");
+
 		while(!isEnd()) {
-			
+//		int count = 0;
+//		while(count < 4) {
+
 			if(isBlueTurn) {
 				Move move = blue.pickBestMove();
 				actualState.applyMove("B", move);
-				isBlueTurn = false;
+                blue.updateBoard("B", move);
+                green.updateBoard("B", move);
+                isBlueTurn = false;
 			}
 			else {
 				Move move = green.pickBestMove();
 				actualState.applyMove("G", move);
-				isBlueTurn = true;
+                blue.updateBoard("G", move);
+                green.updateBoard("G", move);
+                isBlueTurn = true;
 			}
+
+//			count++;
 		}
 		
 		return new Part2Solution(actualState, blue, green);

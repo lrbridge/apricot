@@ -7,5 +7,19 @@ public class Move {
 	public MOVE_TYPE type;
 	public int row;
 	public int col;
-	
+
+	public Move(MOVE_TYPE type, int row, int col) {
+		this.type = type;
+		this.row = row;
+		this.col = col;
+	}
+
+	@Override
+	public String toString() {
+		return "Move{" +
+				"type=" + type +
+				", row=" + row +
+				", col=" + col +
+				'}';
+	}
 }

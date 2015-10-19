@@ -37,8 +37,8 @@ public class Part2Test {
 		Part2Solution solution = new Part2("tiny.txt", new MinimaxAgent(), new MinimaxAgent()).play();
 		
 		String[][] expectedStateOfBoard = {
-			{"B","G"},
-			{"x","y"}
+			{"G","B"},
+			{"G","B"}
 		};
 		
 		System.out.println(solution);
@@ -48,13 +48,13 @@ public class Part2Test {
 			assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
 		}
 		
-		assertEquals(solution.getBlueScore(), 1);
-		assertEquals(solution.getBlueNumNodesExpanded(), 1);
-		assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == 1.0);
+		assertEquals(solution.getBlueScore(), 2);
+		assertEquals(solution.getBlueNumNodesExpanded(), 68); // 64, then 4
+		assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == 34.0);
 
-		assertEquals(solution.getGreenScore(), 0);
-		assertEquals(solution.getGreenNumNodesExpanded(), 0);
-		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 0.0);
+		assertEquals(solution.getGreenScore(), 2);
+		assertEquals(solution.getGreenNumNodesExpanded(), 16); // 16, then 0
+		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 8.0);
 	}
 	
 //	@Test

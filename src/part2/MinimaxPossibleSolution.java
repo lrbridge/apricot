@@ -2,13 +2,19 @@ package part2;
 
 import part2.Move.MOVE_TYPE;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MinimaxPossibleSolution {
 	
 	private Board pointValues;
 	private String[][] playerLocations;
 
 	private Move latestMove;
-	
+
+	private int blueScore = 0;
+	private int greenScore = 0;
+
 	public MinimaxPossibleSolution(Board pointValues) {
 		this.pointValues = pointValues;	
 		
@@ -32,50 +38,70 @@ public class MinimaxPossibleSolution {
 					return false;
 				}
 			}
-		}		
+		}
+
+		StringBuilder str = new StringBuilder();
+		str.append("Done....");
+		for(String[] x : playerLocations) {
+			for(String y : x) {
+				str.append(y + " ");
+			}
+			str.append("\n");
+		}
+		System.out.println(str.toString());
 		return true;
 	}
 	
 	public MinimaxPossibleSolution clone() {
 		return new MinimaxPossibleSolution(pointValues, playerLocations); 
 	}
-	
-	public MinimaxPossibleSolution commandoParaDropGreen(int row, int col) {
-		
-		if(playerLocations[row][col] != null) {
-			return null;
-		}
-		
-		this.latestMove = new Move();
-		this.latestMove.col = col;
-		this.latestMove.row = row;
-		this.latestMove.type = MOVE_TYPE.COMMANDO_PARA_DROP;
-		
-		this.playerLocations[row][col] = "G";
-//		this.greenScore += this.pointValues.get(row, col);
-		
-		return this;
-	}
 
-	public MinimaxPossibleSolution commandoParaDropBlue(int row, int col) {
+	public MinimaxPossibleSolution commandoParaDrop(String agentLetter, int row, int col) {
+		this.latestMove = new Move(MOVE_TYPE.COMMANDO_PARA_DROP, row, col);
 		
-		if(this.playerLocations[row][col] != null) {
-			return null;
+		this.playerLocations[row][col] = agentLetter;
+
+		if(agentLetter.equals("B")) {
+			this.blueScore += this.pointValues.get(row, col);
 		}
-		
-		this.latestMove = new Move();
-		this.latestMove.col = col;
-		this.latestMove.row = row;
-		this.latestMove.type = MOVE_TYPE.COMMANDO_PARA_DROP;
-		
-		this.playerLocations[row][col] = "B";
-//		this.blueScore += this.pointValues.get(row, col);
+		else {
+			this.greenScore += this.pointValues.get(row, col);
+		}
 
 		return this;
 	}
 
 	public Move getMove() {
 		return latestMove;
+	}
+
+	public List<Move> getPossibleMoves() {
+
+		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+
+		for(int i=0; i<playerLocations.length; i++) {
+			for(int j=0; j<playerLocations[0].length; j++) {
+				if(playerLocations[i][j] == null) {
+					possibleMoves.add(new Move(MOVE_TYPE.COMMANDO_PARA_DROP, i, j));
+				}
+			}
+		}
+
+		return possibleMoves;
+	}
+
+	public void makeMove(String agentLetter, Move move) {
+		if(move.type.equals(MOVE_TYPE.COMMANDO_PARA_DROP)) {
+			commandoParaDrop(agentLetter, move.row, move.col);
+		}
+	}
+
+	public int getBlueScore() {
+		return blueScore;
+	}
+
+	public int getGreenScore() {
+		return greenScore;
 	}
 
 }

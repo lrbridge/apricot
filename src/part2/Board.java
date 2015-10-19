@@ -9,13 +9,13 @@ import java.util.List;
 
 public class Board {
 
-	private int[][] board;
+	private Integer[][] board;
 	
 	public Board(String filename) {
 		board = readBoard("part2-files/" + filename);
 	}
 
-	private int[][] readBoard(String filename) {
+	private Integer[][] readBoard(String filename) {
 		// ugly data structure just used temporarily for reading in the board
 		List<String[]> crudeBoard = new ArrayList<String[]>();
 		BufferedReader br;
@@ -32,7 +32,7 @@ public class Board {
 			System.out.println("File not Found");
 		}		
 			
-		int[][] dataBoard = new int[crudeBoard.size()][crudeBoard.get(0).length];
+		Integer[][] dataBoard = new Integer[crudeBoard.size()][crudeBoard.get(0).length];
 
 		for (int i = 0; i < crudeBoard.size(); i++) {
 			for (int j = 0; j < crudeBoard.get(0).length; j++) {

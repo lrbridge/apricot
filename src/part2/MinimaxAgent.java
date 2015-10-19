@@ -1,24 +1,35 @@
 package part2;
 
+import java.util.List;
+
 public class MinimaxAgent implements Agent {
 
 	private Board board;
-	
+    private MinimaxPossibleSolution stateSoFar;
+
 	private int numNodesExpanded = 0;
 //	private int timeMs; TODO
-	
-	@Override
+
+    @Override
+    public void updateBoard(String agentLetter, Move move) {
+        stateSoFar.makeMove(agentLetter, move);
+    }
+
+    @Override
 	public void setBoard(Board board) {
 		this.board = board;
+        this.stateSoFar = new MinimaxPossibleSolution(board);
 	}
 	
 	@Override
 	public Move pickBestMove() {		
-		MinimaxPossibleSolution initialSolution = new MinimaxPossibleSolution(board);
+		MinimaxPossibleSolution initialSolution = stateSoFar.clone();
 		
 		MinimaxPossibleSolution solution = moveBlue(initialSolution);
-		
-		return solution.getMove();
+
+		Move bestMove = solution.getMove();
+		System.out.println("BEST MOVE:" + bestMove);
+		return bestMove;
 	}
 
 	private MinimaxPossibleSolution moveBlue(MinimaxPossibleSolution possibleSolution) {
@@ -27,16 +38,34 @@ public class MinimaxAgent implements Agent {
 			return possibleSolution;
 		}
 		
-		// if is impossible, newPossibility will be null
 		MinimaxPossibleSolution maxBlue = null;
-		
-		MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropBlue(0,0);
-		if(newPossibility != null) {
-			numNodesExpanded++;
-			maxBlue = moveGreen(newPossibility);
+
+		List<Move> possibleMoves = possibleSolution.getPossibleMoves();
+
+		for(Move possibleMove : possibleMoves) {
+			MinimaxPossibleSolution newPossibility = possibleSolution.clone();
+            System.out.println("... B plays " + possibleMove.row + " " + possibleMove.col);
+            newPossibility.makeMove("B", possibleMove); // apply this move
+            newPossibility = moveGreen(newPossibility); // then DFS
+            numNodesExpanded++;
+
+			if(maxBlue == null) {
+				maxBlue = newPossibility;
+			}
+			else {
+
+				int maxMoveBlueWinsBy = maxBlue.getBlueScore() - maxBlue.getGreenScore();
+				int possibleMoveBlueWinsBy = newPossibility.getBlueScore() - newPossibility.getGreenScore();
+
+				if(maxMoveBlueWinsBy < possibleMoveBlueWinsBy) {
+					maxBlue = newPossibility;
+				}
+
+			}
+
 		}
-	
-		return maxBlue;
+
+        return maxBlue;
 	}
 	
 	private MinimaxPossibleSolution moveGreen(MinimaxPossibleSolution possibleSolution) {
@@ -45,14 +74,32 @@ public class MinimaxAgent implements Agent {
 			return possibleSolution;
 		}
 		
-		// if is impossible, newPossibility will be null
 		MinimaxPossibleSolution maxGreen = null;
-		
-		MinimaxPossibleSolution newPossibility = possibleSolution.clone().commandoParaDropGreen(0,0);
-		if(newPossibility != null) {
-			numNodesExpanded++;
-			maxGreen = moveBlue(newPossibility);
-		}
+
+        List<Move> possibleMoves = possibleSolution.getPossibleMoves();
+
+        for(Move possibleMove : possibleMoves) {
+            MinimaxPossibleSolution newPossibility = possibleSolution.clone();
+            newPossibility.makeMove("G", possibleMove); // apply this move
+            System.out.println("... G plays " + possibleMove.row + " " + possibleMove.col);
+            newPossibility = moveBlue(newPossibility); // then DFS
+            numNodesExpanded++;
+
+            if(maxGreen == null) {
+                maxGreen = newPossibility;
+            }
+            else {
+
+                int maxMoveGreenWinsBy = maxGreen.getGreenScore() - maxGreen.getBlueScore();
+                int possibleMoveGreenWinsBy = newPossibility.getGreenScore() - newPossibility.getBlueScore();
+
+                if(maxMoveGreenWinsBy < possibleMoveGreenWinsBy) {
+                    maxGreen = newPossibility;
+                }
+
+            }
+
+        }
 		
 		return maxGreen;
 		
