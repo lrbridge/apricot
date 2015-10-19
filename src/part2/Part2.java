@@ -2,7 +2,7 @@ package part2;
 
 public class Part2 {
 	
-	public int[][] solve(String filename) {
+	public Part2Solution solve(String filename) {
 		Board b = new Board(filename);
 		return b.solve();
 	}

@@ -8,31 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
+
+	private int[][] board;
 	
-	/* the board to keep track of the player's occupation in the board */
-	int[][] Pboard;
-	/*
-	 * the board to calculate the possible movement of the player's occupation
-	 * in the board
-	 */
-	int[][] TPboard;
-	/* the board to calculate the score of the player in the board */
-	int[][] Sboard;
-	
-	int boardWidth;
-	int boardHeight;
+	private int numNodesExpanded;
+//	private int numMoves;  // TODO need to do these... at a player-level per piazza
+//	private int totalTimeMs;
 	
 	public Board(String filename) {
-		Sboard = readBoard("part2-files/" + filename);
-
-		boardWidth = Sboard.length;
-		boardHeight = Sboard[0].length;
-		
-		Pboard = new int[boardWidth][boardHeight];
-		TPboard = new int[boardWidth][boardHeight];
+		board = readBoard("part2-files/" + filename);
 	}
 
-	public int[][] readBoard(String filename) {
+	private int[][] readBoard(String filename) {
 		// ugly data structure just used temporarily for reading in the board
 		List<String[]> crudeBoard = new ArrayList<String[]>();
 		BufferedReader br;
@@ -58,334 +45,126 @@ public class Board {
 		}
 		return dataBoard;
 	}
-
-	// When either player place a move, it will affect other points
-	public void Pmove(Point point, int turn) {
-		Pboard[point.x][point.y] = turn;
-		if (oldpointP(point, turn)) {
-			if (point.x + 1 < boardWidth) {
-				if (Pboard[point.x + 1][point.y] != 0)
-					Pboard[point.x + 1][point.y] = turn;
-			}
-			if (point.x - 1 >= 0) {
-				if (Pboard[point.x - 1][point.y] != 0)
-					Pboard[point.x - 1][point.y] = turn;
-			}
-			if (point.y + 1 < boardHeight) {
-				if (Pboard[point.x][point.y + 1] != 0)
-					Pboard[point.x][point.y + 1] = turn;
-			}
-			if (point.y - 1 >= 0) {
-				if (Pboard[point.x][point.y - 1] != 0)
-					Pboard[point.x][point.y - 1] = turn;
-			}
+	
+	private Part2Solution moveGreen(Part2Solution possibleSolution) {
+		
+		if(possibleSolution.isDone()) {
+			return possibleSolution;
 		}
+		
+		// if is impossible, newPossibility will be null
+		Part2Solution maxGreen = null;
+		
+		Part2Solution newPossibility = possibleSolution.clone().commandoParaDropGreen(0,0);
+		if(newPossibility != null) {
+			maxGreen = moveBlue(newPossibility);
+		}
+//		
+//		newPossibility = possibleSolution.clone().moveMin(0,1);
+//		if(newPossibility != null) {
+//			PossibleSolution option2 = maxMove(newPossibility);
+//			if(minOption == null) {
+//				minOption = option2;
+//			}
+//			else if(option2.getMaxScore() < minOption.getMaxScore()) {
+//				minOption = option2;
+//			}
+//		}
+//		
+//		newPossibility = possibleSolution.clone().moveMin(1,0);
+//		if(newPossibility != null) {
+//			PossibleSolution option3 = maxMove(newPossibility);
+//			if(minOption == null) {
+//				minOption = option3;
+//			}
+//			else if(option3.getMaxScore() < minOption.getMaxScore()) {
+//				minOption = option3;
+//			}
+//		}
+//		
+//		newPossibility = possibleSolution.clone().moveMin(1,1);
+//		if(newPossibility != null) {
+//			PossibleSolution option4 = maxMove(newPossibility);
+//			if(minOption == null) {
+//				minOption = option4;
+//			}
+//			else if(option4.getMaxScore() < minOption.getMaxScore()) {
+//				minOption = option4;
+//			}
+//		}
+		
+		return maxGreen;
+		
+	}
+	
+	private Part2Solution moveBlue(Part2Solution possibleSolution) {
+		
+		if(possibleSolution.isDone()) {
+			return possibleSolution;
+		}
+		
+		// if is impossible, newPossibility will be null
+		Part2Solution maxBlue = null;
+		
+		Part2Solution newPossibility = possibleSolution.clone().commandoParaDropBlue(0,0);
+		if(newPossibility != null) {
+			numNodesExpanded++;
+			maxBlue = moveGreen(newPossibility);
+		}
+		
+//		newPossibility = possibleSolution.clone().moveMax(0,1);
+//		if(newPossibility != null) {
+//			PossibleSolution option2 = minMove(newPossibility);
+//			if(maxOption == null) {
+//				maxOption = option2;
+//			}
+//			else if(option2.getMaxScore() > maxOption.getMaxScore()) {
+//				maxOption = option2;
+//			}
+//		}
+//		
+//		newPossibility = possibleSolution.clone().moveMax(1,0);
+//		if(newPossibility != null) {
+//			PossibleSolution option3 = minMove(newPossibility);
+//			if(maxOption == null) {
+//				maxOption = option3;
+//			}
+//			else if(option3.getMaxScore() > maxOption.getMaxScore()) {
+//				maxOption = option3;
+//			}
+//		}
+//		
+//		newPossibility = possibleSolution.clone().moveMax(1,1);
+//		if(newPossibility != null) {
+//			PossibleSolution option4 = minMove(newPossibility);
+//			if(maxOption == null) {
+//				maxOption = option4;
+//			}
+//			else if(option4.getMaxScore() > maxOption.getMaxScore()) {
+//				maxOption = option4;
+//			}
+//		}
+
+		return maxBlue;
 	}
 
-	public void TPmove(Point point, int turn) {
-		TPboard[point.x][point.y] = turn;
-		if (oldpointTP(point, turn)) {
-			if (point.x + 1 < boardWidth) {
-				if (TPboard[point.x + 1][point.y] != 0)
-					TPboard[point.x + 1][point.y] = turn;
-			}
-			if (point.x - 1 >= 0) {
-				if (TPboard[point.x - 1][point.y] != 0)
-					TPboard[point.x - 1][point.y] = turn;
-			}
-			if (point.y + 1 < boardHeight) {
-				if (TPboard[point.x][point.y + 1] != 0)
-					TPboard[point.x][point.y + 1] = turn;
-			}
-			if (point.y - 1 >= 0) {
-				if (TPboard[point.x][point.y - 1] != 0)
-					TPboard[point.x][point.y - 1] = turn;
-			}
-		}
+	public Part2Solution solve() {
+
+		// TODO: depth-limited search
+		// 		for now, we're just searching the entire tree since it's small
+				
+		// BLUE gets first move
+		
+		// TODO: add 2nd action, for now, can only commando paro drop
+		
+		// can commando paro drop in any of the squares
+	
+		Part2Solution initialSolution = new Part2Solution(board);
+		
+		Part2Solution solution = moveBlue(initialSolution);
+		
+//		solution.setFinalResults(numNodesExpanded, -1, -1); // TODO need avg num nodes/move & avg time/move
+		return solution;
 	}
-
-	private boolean oldpointTP(Point point, int turn) {
-		int k = 0;
-		if (point.x + 1 < boardWidth) {
-			if (TPboard[point.x + 1][point.y] == turn)
-				k++;
-		}
-		if (point.x - 1 >= 0) {
-			if (TPboard[point.x - 1][point.y] == turn)
-				k++;
-		}
-		if (point.y + 1 < boardHeight) {
-			if (TPboard[point.x][point.y + 1] == turn)
-				k++;
-		}
-		if (point.y - 1 >= 0) {
-			if (TPboard[point.x][point.y - 1] == turn)
-				k++;
-		}
-		if (k > 0) {
-			return true;
-		} else
-			return false;
-	}
-
-	private boolean oldpointP(Point point, int turn) {
-		int k = 0;
-		if (point.x + 1 < boardWidth) {
-			if (Pboard[point.x + 1][point.y] == turn)
-				k++;
-		}
-		if (point.x - 1 >= 0) {
-			if (Pboard[point.x - 1][point.y] == turn)
-				k++;
-		}
-		if (point.y + 1 < boardHeight) {
-			if (Pboard[point.x][point.y + 1] == turn)
-				k++;
-		}
-		if (point.y - 1 >= 0) {
-			if (Pboard[point.x][point.y - 1] == turn)
-				k++;
-		}
-		if (k > 0) {
-			return true;
-		} else
-			return false;
-	}
-
-	// Find the total value player1 owned
-	public int checkTPvalue1() {
-		int sum = 0;
-		for (int i = 0; i < boardWidth; i++) {
-			for (int j = 0; j < boardHeight; j++) {
-				if (TPboard[i][j] == 1)
-					sum += Sboard[i][j];
-			}
-		}
-		return sum;
-	}
-
-	public int checkTPvalue2() {
-		int sum = 0;
-		for (int i = 0; i < boardWidth; i++) {
-			for (int j = 0; j < boardHeight; j++) {
-				if (TPboard[i][j] == 2)
-					sum += Sboard[i][j];
-			}
-		}
-		return sum;
-	}
-
-	public List<Point> getAvailableStatesTP() {
-		List<Point> availablePoints = new ArrayList<>();
-		for (int i = 0; i < boardWidth; ++i) {
-			for (int j = 0; j < boardHeight; ++j) {
-				if (TPboard[i][j] == 0) {
-					availablePoints.add(new Point(i, j));
-				}
-			}
-		}
-		return availablePoints;
-	}
-
-	public List<Point> getAvailableStatesP() {
-		List<Point> availablePoints = new ArrayList<>();
-		for (int i = 0; i < boardWidth; ++i) {
-			for (int j = 0; j < boardHeight; ++j) {
-				if (Pboard[i][j] == 0) {
-					availablePoints.add(new Point(i, j));
-				}
-			}
-		}
-		return availablePoints;
-	}
-
-	Point nextmove = new Point(0, 0);
-
-	public boolean ifEnd() {
-		List<Point> point = getAvailableStatesP();
-		return point.isEmpty();
-	}
-
-	public int minimax_max(int depth, int turn) {
-
-		int score = 0;
-		if (turn == 1) {
-			score = checkTPvalue1();
-		} else if (turn == 2)
-			score = checkTPvalue2();
-
-		List<Point> pointsAvailable = getAvailableStatesTP();
-		if (pointsAvailable.isEmpty())
-			return score;
-
-		if (depth == 4)
-			return score;
-
-		int max = -1;
-
-		int[][] restore = new int[boardWidth][boardHeight];
-		for (int a = 0; a < boardWidth; a++) {
-			for (int b = 0; b < boardHeight; b++) {
-				restore[a][b] = TPboard[a][b];
-			}
-		}
-		if (turn == 1) {
-
-			for (int i = 0; i < pointsAvailable.size(); i++) {
-				Point point = pointsAvailable.get(i);
-
-				for (int a = 0; a < boardWidth; a++) {
-					for (int b = 0; b < boardHeight; b++) {
-						TPboard[a][b] = restore[a][b];
-					}
-				}
-
-				TPmove(point, 1);
-
-				int currentScore = minimax_min(depth + 1, 2);
-				if (currentScore > max) {
-					max = currentScore;
-					nextmove = point;
-				}
-			}
-			if (depth == 0) {
-				Pmove(nextmove, 1);
-				System.out.println("PPPPPPP");
-				for (int o = 0; o < boardWidth; o++) {
-					for (int j = 0; j < boardHeight; j++) {
-						System.out.print(Pboard[o][j] + " ");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-			}
-		}
-
-		if (turn == 2) {
-			for (int i = 0; i < pointsAvailable.size(); i++) {
-				Point point = pointsAvailable.get(i);
-				for (int a = 0; a < boardWidth; a++) {
-					for (int b = 0; b < boardHeight; b++) {
-						TPboard[a][b] = restore[a][b];
-					}
-				}
-				TPmove(point, 2);
-
-				int currentScore = minimax_min(depth + 1, 1);
-				if (currentScore > max) {
-					max = currentScore;
-					nextmove = point;
-				}
-			}
-			if (depth == 0) {
-				Pmove(nextmove, 2);
-				System.out.println("PPPPPPP");
-				for (int o = 0; o < boardWidth; o++) {
-					for (int j = 0; j < boardHeight; j++) {
-						System.out.print(Pboard[o][j] + " ");
-					}
-					System.out.println("");
-				}
-				System.out.println("");
-
-			}
-		}
-
-		return max;
-	}
-
-	public int minimax_min(int depth, int turn) {
-		int score = 0;
-		if (turn == 2) {
-			score = checkTPvalue1();
-		} else if (turn == 1)
-			score = checkTPvalue2();
-
-		List<Point> pointsAvailable = getAvailableStatesTP();
-		if (pointsAvailable.isEmpty())
-			return score;
-		// if (depth==3) return score;
-		int min = Integer.MAX_VALUE;
-
-		int[][] restore = new int[boardWidth][boardHeight];
-		for (int a = 0; a < boardWidth; a++) {
-			for (int b = 0; b < boardHeight; b++) {
-				restore[a][b] = TPboard[a][b];
-			}
-		}
-		if (turn == 1) {
-			for (int i = 0; i < pointsAvailable.size(); i++) {
-				Point point = pointsAvailable.get(i);
-				for (int a = 0; a < boardWidth; a++) {
-					for (int b = 0; b < boardHeight; b++) {
-						TPboard[a][b] = restore[a][b];
-					}
-				}
-				TPmove(point, 1);
-				// System.out.println("Player1 turn");
-				// for (int o=0;o<boardWidth;o++){
-				// for (int j=0;j<boardHeight;j++){
-				// System.out.print(TPboard[o][j]+" ");
-				// }
-				// System.out.println("");
-				// }
-				// System.out.println("");
-
-				int currentScore = minimax_max(depth + 1, 2);
-				if (currentScore < min) {
-					min = currentScore;
-				}
-			}
-		}
-		if (turn == 2) {
-			for (int i = 0; i < pointsAvailable.size(); i++) {
-				Point point = pointsAvailable.get(i);
-				for (int a = 0; a < boardWidth; a++) {
-					for (int b = 0; b < boardHeight; b++) {
-						TPboard[a][b] = restore[a][b];
-					}
-				}
-				TPmove(point, 2);
-				// System.out.println("Player2 turn");
-				// for (int o=0;o<boardWidth;o++){
-				// for (int j=0;j<boardHeight;j++){
-				// System.out.print(TPboard[o][j]+" ");
-				// }
-				// System.out.println("");
-				// }
-				// System.out.println("");
-
-				int currentScore = minimax_max(depth + 1, 1);
-				if (currentScore < min) {
-					min = currentScore;
-				}
-			}
-		}
-		return min;
-
-	}
-
-	public int[][] solve() {
-		while (!ifEnd()) {
-			minimax_max(0, 2);
-			for (int a = 0; a < boardWidth; a++) {
-				for (int c = 0; c < boardHeight; c++) {
-					TPboard[a][c] = Pboard[a][c];
-				}
-			}
-			minimax_max(0, 1);
-			for (int a = 0; a < boardWidth; a++) {
-				for (int c = 0; c < boardHeight; c++) {
-					TPboard[a][c] = Pboard[a][c];
-				}
-			}
-			/*
-			 * for (int o=0;o<6;o++){ for (int j=0;j<6;j++){
-			 * System.out.print(Pboard[o][j]+" "); } System.out.println(""); }
-			 * System.out.println("");
-			 */
-		}
-		System.out.println("DONE!");
-		return Pboard;
-	}
+	
 }
