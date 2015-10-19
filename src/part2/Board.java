@@ -8,43 +8,52 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-
-	static int boardWidth = 6;
-	static int boardHeight = 6;
+	
 	/* the board to keep track of the player's occupation in the board */
-	static int[][] Pboard = new int[boardWidth][boardHeight];
+	int[][] Pboard;
 	/*
 	 * the board to calculate the possible movement of the player's occupation
 	 * in the board
 	 */
-	static int[][] TPboard = new int[boardWidth][boardHeight];
+	int[][] TPboard;
 	/* the board to calculate the score of the player in the board */
-	static int[][] Sboard = Getboard("part2-files/Sevastopol.txt");
+	int[][] Sboard;
+	
+	int boardWidth;
+	int boardHeight;
+	
+	public Board(String filename) {
+		Sboard = readBoard("part2-files/" + filename);
 
-	public static int[][] Getboard(String filename) {
-		String s1 = "";
-		String str;
+		boardWidth = Sboard.length;
+		boardHeight = Sboard[0].length;
+		
+		Pboard = new int[boardWidth][boardHeight];
+		TPboard = new int[boardWidth][boardHeight];
+	}
+
+	public int[][] readBoard(String filename) {
+		// ugly data structure just used temporarily for reading in the board
+		List<String[]> crudeBoard = new ArrayList<String[]>();
 		BufferedReader br;
 		try {
 			br = new BufferedReader(new FileReader(filename));
-
+			String str;
 			while ((str = br.readLine()) != null) {
-				s1 += str;
+				crudeBoard.add(str.split("\t"));
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
 			System.out.println("File not Found");
 		} catch (IOException e) {
 			System.out.println("File not Found");
-		}
+		}		
+			
+		int[][] dataBoard = new int[crudeBoard.size()][crudeBoard.get(0).length];
 
-		String[] data = s1.split("	");
-		int[][] dataBoard = new int[boardWidth][boardHeight];
-		int k = 0;
-		for (int i = 0; i < boardWidth; i++) {
-			for (int j = 0; j < boardHeight; j++) {
-				dataBoard[i][j] = Integer.parseInt(data[k]);
-				k++;
+		for (int i = 0; i < crudeBoard.size(); i++) {
+			for (int j = 0; j < crudeBoard.get(0).length; j++) {
+				dataBoard[i][j] = Integer.parseInt(crudeBoard.get(i)[j]);
 			}
 		}
 		return dataBoard;
@@ -146,8 +155,8 @@ public class Board {
 	// Find the total value player1 owned
 	public int checkTPvalue1() {
 		int sum = 0;
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 6; j++) {
+		for (int i = 0; i < boardWidth; i++) {
+			for (int j = 0; j < boardHeight; j++) {
 				if (TPboard[i][j] == 1)
 					sum += Sboard[i][j];
 			}
@@ -157,8 +166,8 @@ public class Board {
 
 	public int checkTPvalue2() {
 		int sum = 0;
-		for (int i = 0; i < 6; i++) {
-			for (int j = 0; j < 6; j++) {
+		for (int i = 0; i < boardWidth; i++) {
+			for (int j = 0; j < boardHeight; j++) {
 				if (TPboard[i][j] == 2)
 					sum += Sboard[i][j];
 			}
@@ -166,7 +175,7 @@ public class Board {
 		return sum;
 	}
 
-	public static List<Point> getAvailableStatesTP() {
+	public List<Point> getAvailableStatesTP() {
 		List<Point> availablePoints = new ArrayList<>();
 		for (int i = 0; i < boardWidth; ++i) {
 			for (int j = 0; j < boardHeight; ++j) {
@@ -178,10 +187,10 @@ public class Board {
 		return availablePoints;
 	}
 
-	public static List<Point> getAvailableStatesP() {
+	public List<Point> getAvailableStatesP() {
 		List<Point> availablePoints = new ArrayList<>();
-		for (int i = 0; i < 6; ++i) {
-			for (int j = 0; j < 6; ++j) {
+		for (int i = 0; i < boardWidth; ++i) {
+			for (int j = 0; j < boardHeight; ++j) {
 				if (Pboard[i][j] == 0) {
 					availablePoints.add(new Point(i, j));
 				}
@@ -192,7 +201,7 @@ public class Board {
 
 	Point nextmove = new Point(0, 0);
 
-	public static boolean ifEnd() {
+	public boolean ifEnd() {
 		List<Point> point = getAvailableStatesP();
 		return point.isEmpty();
 	}
@@ -331,8 +340,8 @@ public class Board {
 		if (turn == 2) {
 			for (int i = 0; i < pointsAvailable.size(); i++) {
 				Point point = pointsAvailable.get(i);
-				for (int a = 0; a < 6; a++) {
-					for (int b = 0; b < 6; b++) {
+				for (int a = 0; a < boardWidth; a++) {
+					for (int b = 0; b < boardHeight; b++) {
 						TPboard[a][b] = restore[a][b];
 					}
 				}
@@ -359,14 +368,14 @@ public class Board {
 	public int[][] solve() {
 		while (!ifEnd()) {
 			minimax_max(0, 2);
-			for (int a = 0; a < 6; a++) {
-				for (int c = 0; c < 6; c++) {
+			for (int a = 0; a < boardWidth; a++) {
+				for (int c = 0; c < boardHeight; c++) {
 					TPboard[a][c] = Pboard[a][c];
 				}
 			}
 			minimax_max(0, 1);
-			for (int a = 0; a < 6; a++) {
-				for (int c = 0; c < 6; c++) {
+			for (int a = 0; a < boardWidth; a++) {
+				for (int c = 0; c < boardHeight; c++) {
 					TPboard[a][c] = Pboard[a][c];
 				}
 			}
