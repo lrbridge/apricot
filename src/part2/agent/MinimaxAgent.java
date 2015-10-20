@@ -37,10 +37,10 @@ public class MinimaxAgent implements Agent {
 
         MinimaxPossibleSolution solution;
         if(agentLetter.equals("B")) {
-            solution = minimaxBlue(initialSolution);
+            solution = moveBlue(initialSolution);
         }
         else {
-            solution = minimaxGreen(initialSolution);
+            solution = moveGreen(initialSolution);
         }
         Move bestMove = solution.getMove();
         System.out.println("BEST MOVE:" + bestMove);
@@ -51,7 +51,7 @@ public class MinimaxAgent implements Agent {
     /**
      * Picks the move for Blue which will maximize Blue's score (given Green is playing rationally)
      */
-    private MinimaxPossibleSolution minimaxBlue(MinimaxPossibleSolution possibleSolution) {
+    private MinimaxPossibleSolution moveBlue(MinimaxPossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
@@ -65,7 +65,7 @@ public class MinimaxAgent implements Agent {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             System.out.println("... B plays " + possibleMove.row + " " + possibleMove.col);
             newPossibility.makeMove("B", possibleMove); // apply this move
-            newPossibility = minimaxGreen(newPossibility); // then DFS
+            newPossibility = moveGreen(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
 
@@ -90,7 +90,7 @@ public class MinimaxAgent implements Agent {
     /**
      * Picks the move for Green which will maximize Green's score (given Blue is playing rationally)
      */
-    private MinimaxPossibleSolution minimaxGreen(MinimaxPossibleSolution possibleSolution) {
+    private MinimaxPossibleSolution moveGreen(MinimaxPossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
@@ -104,7 +104,7 @@ public class MinimaxAgent implements Agent {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove("G", possibleMove); // apply this move
             System.out.println("... G plays " + possibleMove.row + " " + possibleMove.col);
-            newPossibility = minimaxBlue(newPossibility); // then DFS
+            newPossibility = moveBlue(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
 

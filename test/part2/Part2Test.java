@@ -168,6 +168,31 @@ public class Part2Test {
                 greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
     }
 
+    @Test
+    public void nineSquareMinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"G", "B", "B"},
+                {"B", "B", "G"},
+                {"G", "G", "B"}
+        };
+
+        int blueScore = 34;
+        int blueNumNodesExpanded = 1000449;
+        double blueAvgNumNodesExpandedPerMove = 200089.0;
+
+        int greenScore = 26;
+        int greenNumNodesExpanded = 111624;
+        double greenAvgNumNodesExpandedPerMove = 27906.0;
+
+        Part2Solution solution = new Part2("ninesquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
 //	@Test
 //	public void test() {
 //		int[][] actualSolution = new Part2().solve("Sevastopol.txt");
