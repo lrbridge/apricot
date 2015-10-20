@@ -1,5 +1,7 @@
-package part2;
+package part2.agent;
 
+import part2.Board;
+import part2.Move;
 import part2.Move.MOVE_TYPE;
 
 import java.util.ArrayList;

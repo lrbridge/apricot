@@ -1,5 +1,7 @@
 package part2;
 
+import part2.agent.Agent;
+
 public class Part2Solution {
 
 //	The final state of the board (who owns each square) and the total scores for each player;

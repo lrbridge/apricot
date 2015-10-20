@@ -1,6 +1,7 @@
 package part2;
 
 import org.junit.Test;
+import part2.agent.MinimaxAgent;
 
 import static org.junit.Assert.*;
 

@@ -1,4 +1,7 @@
-package part2;
+package part2.agent;
+
+import part2.Board;
+import part2.Move;
 
 import java.util.List;
 
@@ -21,23 +24,34 @@ public class MinimaxAgent implements Agent {
         this.stateSoFar = new MinimaxPossibleSolution(board);
     }
 
+    /**
+     * Does a minimax search to find the best move at this time.
+     *
+     * This is a recursive function, which calls minimax() until it finds a solution.
+     *
+     * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
+     */
     @Override
     public Move pickBestMove(String agentLetter) {
         MinimaxPossibleSolution initialSolution = stateSoFar.clone();
 
         MinimaxPossibleSolution solution;
         if(agentLetter.equals("B")) {
-            solution = moveBlue(initialSolution);
+            solution = minimaxBlue(initialSolution);
         }
         else {
-            solution = moveGreen(initialSolution);
+            solution = minimaxGreen(initialSolution);
         }
         Move bestMove = solution.getMove();
         System.out.println("BEST MOVE:" + bestMove);
         return bestMove;
     }
 
-    private MinimaxPossibleSolution moveBlue(MinimaxPossibleSolution possibleSolution) {
+
+    /**
+     * Picks the move for Blue which will maximize Blue's score (given Green is playing rationally)
+     */
+    private MinimaxPossibleSolution minimaxBlue(MinimaxPossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
@@ -51,7 +65,7 @@ public class MinimaxAgent implements Agent {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             System.out.println("... B plays " + possibleMove.row + " " + possibleMove.col);
             newPossibility.makeMove("B", possibleMove); // apply this move
-            newPossibility = moveGreen(newPossibility); // then DFS
+            newPossibility = minimaxGreen(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
 
@@ -73,7 +87,10 @@ public class MinimaxAgent implements Agent {
         return maxBlue;
     }
 
-    private MinimaxPossibleSolution moveGreen(MinimaxPossibleSolution possibleSolution) {
+    /**
+     * Picks the move for Green which will maximize Green's score (given Blue is playing rationally)
+     */
+    private MinimaxPossibleSolution minimaxGreen(MinimaxPossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
@@ -87,7 +104,7 @@ public class MinimaxAgent implements Agent {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove("G", possibleMove); // apply this move
             System.out.println("... G plays " + possibleMove.row + " " + possibleMove.col);
-            newPossibility = moveBlue(newPossibility); // then DFS
+            newPossibility = minimaxBlue(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
 

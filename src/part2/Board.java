@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Board {
 
+    /** The basic board with all the scores.  This should not be changed during game play **/
     private Integer[][] board;
 
     public Board(String filename) {

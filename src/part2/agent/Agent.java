@@ -1,4 +1,7 @@
-package part2;
+package part2.agent;
+
+import part2.Board;
+import part2.Move;
 
 public interface Agent {
 
