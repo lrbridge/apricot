@@ -1,62 +1,101 @@
 package part2;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
 
+import static org.junit.Assert.*;
+
 public class Part2Test {
-	
-	@Test
-	public void testOneSquare() {
-		Part2Solution solution = new Part2("onesquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
-		
-		String[][] expectedStateOfBoard = {
-			{"B"}
-		};
-		
-		System.out.println(solution);
-				
-		assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
-		for(int i=0; i<solution.getStateOfBoard().length; i++) {
-			assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
-		}
-		
-		assertEquals(solution.getBlueScore(), 1);
-		assertEquals(solution.getBlueNumNodesExpanded(), 1);
-		assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == 1.0);
 
-		assertEquals(solution.getGreenScore(), 0);
-		assertEquals(solution.getGreenNumNodesExpanded(), 0);
-		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 0.0);
-	}
-	
-	@Test
-	public void testTiny() {
-		Part2Solution solution = new Part2("tiny.txt", new MinimaxAgent(), new MinimaxAgent()).play();
-		
-		String[][] expectedStateOfBoard = {
-			{"G","B"},
-			{"G","B"}
-		};
-		
-		System.out.println(solution);
-				
-		assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
-		for(int i=0; i<solution.getStateOfBoard().length; i++) {
-			assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
-		}
-		
-		assertEquals(solution.getBlueScore(), 2);
-		assertEquals(solution.getBlueNumNodesExpanded(), 68); // 64, then 4
-		assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == 34.0);
+    private void testPart2(Part2Solution solution, String[][] expectedStateOfBoard,
+                           int blueScore, int blueNumNodesExpanded, double blueAvgNumNodesExpandedPerMove,
+                           int greenScore, int greenNumNodesExpanded, double greenAvgNumNodesExpandedPerMove) {
 
-		assertEquals(solution.getGreenScore(), 2);
-		assertEquals(solution.getGreenNumNodesExpanded(), 16); // 16, then 0
-		assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == 8.0);
-	}
-	
+        System.out.println(solution);
+
+        assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
+        for (int i = 0; i < solution.getStateOfBoard().length; i++) {
+            assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
+        }
+
+        assertEquals(solution.getBlueScore(), blueScore);
+        assertEquals(solution.getBlueNumNodesExpanded(), blueNumNodesExpanded);
+        assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == blueAvgNumNodesExpandedPerMove);
+
+        assertEquals(solution.getGreenScore(), greenScore);
+        assertEquals(solution.getGreenNumNodesExpanded(), greenNumNodesExpanded);
+        assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void oneSquareMinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"B"}
+        };
+
+        int blueScore = 1;
+        int blueNumNodesExpanded = 1;
+        double blueAvgNumNodesExpandedPerMove = 1.0;
+
+        int greenScore = 0;
+        int greenNumNodesExpanded = 0;
+        double greenAvgNumNodesExpandedPerMove = 0.0;
+
+        Part2Solution solution = new Part2("onesquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void tinyMinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"G", "B"},
+                {"G", "B"}
+        };
+
+        int blueScore = 2;
+        int blueNumNodesExpanded = 68; // 64, then 4
+        double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
+
+        int greenScore = 2;
+        int greenNumNodesExpanded = 16; // 16, then 0
+        double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
+
+        Part2Solution solution = new Part2("tiny.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void twoSquareMinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"G", "B"}
+        };
+
+        int blueScore = 2;
+        int blueNumNodesExpanded = 4;
+        double blueAvgNumNodesExpandedPerMove = 4;
+
+        int greenScore = 1;
+        int greenNumNodesExpanded = 0;
+        double greenAvgNumNodesExpandedPerMove = 0.0;
+
+        Part2Solution solution = new Part2("twosquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
 //	@Test
 //	public void test() {
 //		int[][] actualSolution = new Part2().solve("Sevastopol.txt");

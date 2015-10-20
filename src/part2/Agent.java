@@ -2,11 +2,11 @@ package part2;
 
 public interface Agent {
 
-	Move pickBestMove();
+    Move pickBestMove();
 
-	void setBoard(Board board);
+    void setBoard(Board board);
 
-	int getNumNodesExpanded();
+    int getNumNodesExpanded();
 
-	void updateBoard(String agentLetter, Move move);
+    void updateBoard(String agentLetter, Move move);
 }
