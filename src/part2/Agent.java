@@ -2,7 +2,7 @@ package part2;
 
 public interface Agent {
 
-    Move pickBestMove();
+    Move pickBestMove(String agentLetter);
 
     void setBoard(Board board);
 

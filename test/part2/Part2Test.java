@@ -50,30 +50,6 @@ public class Part2Test {
     }
 
     @Test
-    public void tinyMinimaxVsMinimax() {
-
-        String[][] expectedStateOfBoard = {
-                {"G", "B"},
-                {"G", "B"}
-        };
-
-        int blueScore = 2;
-        int blueNumNodesExpanded = 68; // 64, then 4
-        double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
-
-        int greenScore = 2;
-        int greenNumNodesExpanded = 16; // 16, then 0
-        double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
-
-        Part2Solution solution = new Part2("tiny.txt", new MinimaxAgent(), new MinimaxAgent()).play();
-
-        testPart2(solution,
-                expectedStateOfBoard,
-                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
-                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
-    }
-
-    @Test
     public void twoSquareMinimaxVsMinimax() {
 
         String[][] expectedStateOfBoard = {
@@ -85,10 +61,105 @@ public class Part2Test {
         double blueAvgNumNodesExpandedPerMove = 4;
 
         int greenScore = 1;
-        int greenNumNodesExpanded = 0;
-        double greenAvgNumNodesExpandedPerMove = 0.0;
+        int greenNumNodesExpanded = 1;
+        double greenAvgNumNodesExpandedPerMove = 1.0;
 
         Part2Solution solution = new Part2("twosquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void twoSquareViceVersaMinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"B", "G"}
+        };
+
+        int blueScore = 5;
+        int blueNumNodesExpanded = 4;
+        double blueAvgNumNodesExpandedPerMove = 4;
+
+        int greenScore = 3;
+        int greenNumNodesExpanded = 1;
+        double greenAvgNumNodesExpandedPerMove = 1.0;
+
+        Part2Solution solution = new Part2("twosquareviceversa.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void fourSquareV1MinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"B", "G"},
+                {"B", "G"}
+        };
+
+        int blueScore = 2;
+        int blueNumNodesExpanded = 68; // 64, then 4
+        double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
+
+        int greenScore = 2;
+        int greenNumNodesExpanded = 16; // 16, then 0
+        double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
+
+        Part2Solution solution = new Part2("foursquareV1.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void fourSquareV2MinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"G", "B"},
+                {"G", "B"}
+        };
+
+        int blueScore = 14;
+        int blueNumNodesExpanded = 68; // 64, then 4
+        double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
+
+        int greenScore = 8;
+        int greenNumNodesExpanded = 16; // 16, then 0
+        double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
+
+        Part2Solution solution = new Part2("foursquareV2.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
+    @Test
+    public void fourSquareV3MinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"G", "B"},
+                {"B", "G"}
+        };
+
+        int blueScore = 18;
+        int blueNumNodesExpanded = 68; // 64, then 4
+        double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
+
+        int greenScore = 13;
+        int greenNumNodesExpanded = 16; // 16, then 0
+        double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
+
+        Part2Solution solution = new Part2("foursquareV3.txt", new MinimaxAgent(), new MinimaxAgent()).play();
 
         testPart2(solution,
                 expectedStateOfBoard,

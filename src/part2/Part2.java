@@ -31,13 +31,13 @@ public class Part2 {
 //		while(count < 4) {
 
             if (isBlueTurn) {
-                Move move = blue.pickBestMove();
+                Move move = blue.pickBestMove("B");
                 actualState.applyMove("B", move);
                 blue.updateBoard("B", move);
                 green.updateBoard("B", move);
                 isBlueTurn = false;
             } else {
-                Move move = green.pickBestMove();
+                Move move = green.pickBestMove("G");
                 actualState.applyMove("G", move);
                 blue.updateBoard("G", move);
                 green.updateBoard("G", move);

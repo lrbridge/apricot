@@ -21,7 +21,7 @@ public class MinimaxPossibleSolution {
         this.playerLocations = new String[pointValues.getWidth()][pointValues.getHeight()];
     }
 
-    private MinimaxPossibleSolution(Board pointValues, String[][] playerLocations) {
+    private MinimaxPossibleSolution(Board pointValues, String[][] playerLocations, int blueScore, int greenScore) {
         this(pointValues);
 
         for (int i = 0; i < playerLocations.length; i++) {
@@ -29,6 +29,9 @@ public class MinimaxPossibleSolution {
                 this.playerLocations[i][j] = playerLocations[i][j];
             }
         }
+
+        this.blueScore = blueScore;
+        this.greenScore = greenScore;
     }
 
     public boolean isDone() {
@@ -53,12 +56,10 @@ public class MinimaxPossibleSolution {
     }
 
     public MinimaxPossibleSolution clone() {
-        return new MinimaxPossibleSolution(pointValues, playerLocations);
+        return new MinimaxPossibleSolution(pointValues, playerLocations, blueScore, greenScore);
     }
 
     public MinimaxPossibleSolution commandoParaDrop(String agentLetter, int row, int col) {
-        this.latestMove = new Move(MOVE_TYPE.COMMANDO_PARA_DROP, row, col);
-
         this.playerLocations[row][col] = agentLetter;
 
         if (agentLetter.equals("B")) {
@@ -68,10 +69,6 @@ public class MinimaxPossibleSolution {
         }
 
         return this;
-    }
-
-    public Move getMove() {
-        return latestMove;
     }
 
     public List<Move> getPossibleMoves() {
@@ -101,6 +98,14 @@ public class MinimaxPossibleSolution {
 
     public int getGreenScore() {
         return greenScore;
+    }
+
+    public void setMove(Move move) {
+        this.latestMove = move;
+    }
+
+    public Move getMove() {
+        return latestMove;
     }
 
 }
