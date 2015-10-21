@@ -7,26 +7,6 @@ import static org.junit.Assert.*;
 
 public class Part2Test {
 
-    private void testPart2(Part2Solution solution, String[][] expectedStateOfBoard,
-                           int blueScore, int blueNumNodesExpanded, double blueAvgNumNodesExpandedPerMove,
-                           int greenScore, int greenNumNodesExpanded, double greenAvgNumNodesExpandedPerMove) {
-
-        System.out.println(solution);
-
-        assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
-        for (int i = 0; i < solution.getStateOfBoard().length; i++) {
-            assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
-        }
-
-        assertEquals(solution.getBlueScore(), blueScore);
-        assertEquals(solution.getBlueNumNodesExpanded(), blueNumNodesExpanded);
-        assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == blueAvgNumNodesExpandedPerMove);
-
-        assertEquals(solution.getGreenScore(), greenScore);
-        assertEquals(solution.getGreenNumNodesExpanded(), greenNumNodesExpanded);
-        assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == greenAvgNumNodesExpandedPerMove);
-    }
-
     @Test
     public void oneSquareMinimaxVsMinimax() {
 
@@ -168,6 +148,30 @@ public class Part2Test {
                 greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
     }
 
+    @Test
+    public void fourSquareV4MinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"B", "B"},
+                {"G", "G"}
+        };
+
+        int blueScore = 6;
+        int blueNumNodesExpanded = 68; // 64, then 4
+        double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
+
+        int greenScore = 4;
+        int greenNumNodesExpanded = 16; // 16, then 0
+        double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
+
+        Part2Solution solution = new Part2("foursquareV4.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
     //@Test
     public void nineSquareMinimaxVsMinimax() {
 
@@ -210,5 +214,23 @@ public class Part2Test {
 //		}
 //	}
 
+    private void testPart2(Part2Solution solution, String[][] expectedStateOfBoard,
+                           int blueScore, int blueNumNodesExpanded, double blueAvgNumNodesExpandedPerMove,
+                           int greenScore, int greenNumNodesExpanded, double greenAvgNumNodesExpandedPerMove) {
 
+        System.out.println(solution);
+
+        assertEquals(solution.getStateOfBoard().length, expectedStateOfBoard.length);
+        for (int i = 0; i < solution.getStateOfBoard().length; i++) {
+            assertArrayEquals(solution.getStateOfBoard()[i], expectedStateOfBoard[i]);
+        }
+
+        assertEquals(solution.getBlueScore(), blueScore);
+        assertEquals(solution.getBlueNumNodesExpanded(), blueNumNodesExpanded);
+        assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == blueAvgNumNodesExpandedPerMove);
+
+        assertEquals(solution.getGreenScore(), greenScore);
+        assertEquals(solution.getGreenNumNodesExpanded(), greenNumNodesExpanded);
+        assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == greenAvgNumNodesExpandedPerMove);
+    }
 }
