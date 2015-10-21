@@ -37,6 +37,13 @@ public class Part2Solution {
         return blue.getNumNodesExpanded() / actualState.getNumMovesBlue();
     }
 
+    public long getBlueAvgMillisecondsPerMove() {
+        if (actualState.getNumMovesBlue() < 1) {
+            return 0L;
+        }
+        return blue.getMillisecondsProcessing() / actualState.getNumMovesBlue();
+    }
+
     public int getGreenScore() {
         return this.actualState.getGreenScore();
     }
@@ -50,6 +57,13 @@ public class Part2Solution {
             return 0.0;
         }
         return green.getNumNodesExpanded() / actualState.getNumMovesGreen();
+    }
+
+    public long getGreenAvgMillisecondsPerMove() {
+        if (actualState.getNumMovesGreen() < 1) {
+            return 0L;
+        }
+        return green.getMillisecondsProcessing() / actualState.getNumMovesGreen();
     }
 
     // TODO blue & green avg time per move
@@ -66,9 +80,11 @@ public class Part2Solution {
         str.append("Blue: " + getBlueScore() + "\n");
         str.append("  nodes expanded: " + getBlueNumNodesExpanded() + "\n");
         str.append("  avg nodes / move: " + getBlueAvgNumNodesExpandedPerMove() + "\n");
+        str.append("  avg milliseconds / move: " + getBlueAvgMillisecondsPerMove() + "\n");
         str.append("Green: " + getGreenScore() + "\n");
         str.append("  nodes expanded: " + getGreenNumNodesExpanded() + "\n");
         str.append("  avg nodes / move: " + getGreenAvgNumNodesExpandedPerMove() + "\n");
+        str.append("  avg milliseconds / move: " + getGreenAvgMillisecondsPerMove() + "\n");
         str.append("---------------\n");
         return str.toString();
     }

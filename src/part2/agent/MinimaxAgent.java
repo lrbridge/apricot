@@ -11,7 +11,7 @@ public class MinimaxAgent implements Agent {
     private MinimaxPossibleSolution stateSoFar;
 
     private int numNodesExpanded = 0;
-//	private int timeMs; TODO
+	private long millisecondsProcessing = 0L;
 
     @Override
     public void updateBoard(String agentLetter, Move move) {
@@ -33,6 +33,8 @@ public class MinimaxAgent implements Agent {
      */
     @Override
     public Move pickBestMove(String agentLetter) {
+        long startTime = System.currentTimeMillis();
+
         MinimaxPossibleSolution initialSolution = stateSoFar.clone();
 
         MinimaxPossibleSolution solution;
@@ -43,6 +45,11 @@ public class MinimaxAgent implements Agent {
             solution = moveGreen(initialSolution);
         }
         Move bestMove = solution.getMove();
+
+        long endTime = System.currentTimeMillis();
+
+        millisecondsProcessing += (endTime - startTime);
+
         System.out.println("BEST MOVE:" + bestMove);
         return bestMove;
     }
@@ -129,6 +136,10 @@ public class MinimaxAgent implements Agent {
 
     public int getNumNodesExpanded() {
         return numNodesExpanded;
+    }
+
+    public long getMillisecondsProcessing() {
+        return millisecondsProcessing;
     }
 
 }

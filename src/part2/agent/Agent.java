@@ -12,4 +12,6 @@ public interface Agent {
     int getNumNodesExpanded();
 
     void updateBoard(String agentLetter, Move move);
+
+    long getMillisecondsProcessing();
 }

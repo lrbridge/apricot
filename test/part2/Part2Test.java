@@ -168,7 +168,7 @@ public class Part2Test {
                 greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
     }
 
-    @Test
+    //@Test
     public void nineSquareMinimaxVsMinimax() {
 
         String[][] expectedStateOfBoard = {
