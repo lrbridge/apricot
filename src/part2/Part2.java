@@ -48,20 +48,23 @@ public class Part2 {
 
         while (!isEnd()) {
 
+            Move selectedMove;
+
             if (isBlueTurn) {
-                Move move = blue.pickBestMove();
-                actualState.applyMove(Color.BLUE, move);
-                blue.updateBoard(Color.BLUE, move);
-                green.updateBoard(Color.BLUE, move);
+                selectedMove = blue.pickBestMove();
                 isBlueTurn = false;
 
             } else {
-                Move move = green.pickBestMove();
-                actualState.applyMove(Color.GREEN, move);
-                blue.updateBoard(Color.GREEN, move);
-                green.updateBoard(Color.GREEN, move);
+                selectedMove = green.pickBestMove();
                 isBlueTurn = true;
             }
+
+            // actually make the move officially
+            actualState.applyMove(selectedMove);
+
+            // update the agents' internal states for their searches
+            blue.updateAgentInternalBoard(selectedMove);
+            green.updateAgentInternalBoard(selectedMove);
 
         }
 

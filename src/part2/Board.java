@@ -18,7 +18,8 @@ public class Board {
 
     private Integer[][] readBoard(String filename) {
         // ugly data structure just used temporarily for reading in the board
-        List<String[]> crudeBoard = new ArrayList<String[]>();
+        List<String[]> crudeBoard = new ArrayList<>();
+
         BufferedReader br;
         try {
             br = new BufferedReader(new FileReader(filename));
@@ -27,10 +28,8 @@ public class Board {
                 crudeBoard.add(str.split("\t"));
             }
             br.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not Found");
-        } catch (IOException e) {
-            System.out.println("File not Found");
+        } catch (Exception e) {
+            System.out.println("exception");
         }
 
         Integer[][] dataBoard = new Integer[crudeBoard.size()][crudeBoard.get(0).length];

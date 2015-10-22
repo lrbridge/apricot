@@ -10,7 +10,7 @@ public interface Agent {
 
     int getNumNodesExpanded();
 
-    void updateBoard(Color color, Move move);
+    void updateAgentInternalBoard(Move move);
 
     long getMillisecondsProcessing();
 }

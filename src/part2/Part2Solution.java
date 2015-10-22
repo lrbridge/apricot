@@ -2,11 +2,17 @@ package part2;
 
 import part2.agent.Agent;
 
+/**
+ * Encapsulates final results for testing and printing to the console.
+ *
+ * Includes:
+ *      The final state of the board (who owns each square).
+ *      Total scores (each player)
+ *      The total number of game tree nodes expanded in the course of the game (each player)
+ *      The average number of nodes expanded per move (each player)
+ *      The average amount of time to make a move (each player)
+ */
 public class Part2Solution {
-
-//	The final state of the board (who owns each square) and the total scores for each player;
-//			The total number of game tree nodes expanded by each player in the course of the game;
-//			The average number of nodes expanded per move and the average amount of time to make a move.
 
     private ActualState actualState;
     private Agent blue;
@@ -65,8 +71,6 @@ public class Part2Solution {
         }
         return green.getMillisecondsProcessing() / actualState.getNumMovesGreen();
     }
-
-    // TODO blue & green avg time per move
 
     @Override
     public String toString() {

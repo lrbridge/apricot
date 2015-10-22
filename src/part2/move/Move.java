@@ -6,6 +6,7 @@ import part2.Color;
 
 public interface Move {
 
-    BlueGreenPair execute(String[][] playerLocations, Color color, Board pointValues, int blueScore, int greenScore);
+    BlueGreenPair execute(String[][] playerLocations, Board pointValues, BlueGreenPair scores);
 
+    Color getPlayerToMove();
 }

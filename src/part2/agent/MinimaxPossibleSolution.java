@@ -16,8 +16,7 @@ public class MinimaxPossibleSolution {
 
     private Move latestMove;
 
-    private int blueScore = 0;
-    private int greenScore = 0;
+    private BlueGreenPair scores = new BlueGreenPair(0, 0);
 
     public MinimaxPossibleSolution(Board pointValues) {
         this.pointValues = pointValues;
@@ -25,7 +24,7 @@ public class MinimaxPossibleSolution {
         this.playerLocations = new String[pointValues.getWidth()][pointValues.getHeight()];
     }
 
-    private MinimaxPossibleSolution(Board pointValues, String[][] playerLocations, int blueScore, int greenScore) {
+    private MinimaxPossibleSolution(Board pointValues, String[][] playerLocations, BlueGreenPair scores) {
         this(pointValues);
 
         for (int i = 0; i < playerLocations.length; i++) {
@@ -34,8 +33,7 @@ public class MinimaxPossibleSolution {
             }
         }
 
-        this.blueScore = blueScore;
-        this.greenScore = greenScore;
+        this.scores = new BlueGreenPair(scores.blue, scores.green);
     }
 
     public boolean isDone() {
@@ -60,17 +58,17 @@ public class MinimaxPossibleSolution {
     }
 
     public MinimaxPossibleSolution clone() {
-        return new MinimaxPossibleSolution(pointValues, playerLocations, blueScore, greenScore);
+        return new MinimaxPossibleSolution(pointValues, playerLocations, scores);
     }
 
-    public List<Move> getPossibleMoves() {
+    public List<Move> getPossibleMoves(Color playerToMove) {
 
         ArrayList<Move> possibleMoves = new ArrayList<>();
 
         for (int i = 0; i < playerLocations.length; i++) {
             for (int j = 0; j < playerLocations[0].length; j++) {
                 if (playerLocations[i][j] == null) {
-                    possibleMoves.add(new CommandoParaDrop(i, j));
+                    possibleMoves.add(new CommandoParaDrop(playerToMove, i, j));
                 }
             }
         }
@@ -78,19 +76,16 @@ public class MinimaxPossibleSolution {
         return possibleMoves;
     }
 
-    public void makeMove(Color color, Move move) {
-        BlueGreenPair newScores = move.execute(playerLocations, color, pointValues, blueScore, greenScore);
-
-        blueScore = newScores.blue;
-        greenScore = newScores.green;
+    public void makeMove(Move move) {
+        scores = move.execute(playerLocations, pointValues, scores);
     }
 
     public int getBlueScore() {
-        return blueScore;
+        return scores.blue;
     }
 
     public int getGreenScore() {
-        return greenScore;
+        return scores.green;
     }
 
     public void setMove(Move move) {

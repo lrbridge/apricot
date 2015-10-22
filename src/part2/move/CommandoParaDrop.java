@@ -6,22 +6,21 @@ import part2.Color;
 
 public class CommandoParaDrop extends BaseMove {
 
-    public CommandoParaDrop(int row, int col) {
-        super(row, col);
+    public CommandoParaDrop(Color playerToMove, int row, int col) {
+        super(playerToMove, row, col);
     }
 
     @Override
-    public BlueGreenPair execute(String[][] playerLocations, Color color, Board pointValues, int blueScore, int greenScore) {
+    public BlueGreenPair execute(String[][] playerLocations, Board pointValues, BlueGreenPair scores) {
 
-        if (color.equals(Color.BLUE)) {
-            blueScore += pointValues.get(row, col);
+        if (playerToMove.equals(Color.BLUE)) {
+            scores.blue += pointValues.get(row, col);
             playerLocations[row][col] = "B";
         } else {
-            greenScore += pointValues.get(row, col);
+            scores.green += pointValues.get(row, col);
             playerLocations[row][col] = "G";
         }
 
-        return new BlueGreenPair(blueScore, greenScore);
+        return new BlueGreenPair(scores.blue, scores.green);
     }
-
 }

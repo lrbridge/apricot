@@ -8,34 +8,25 @@ import java.util.List;
 
 public class MinimaxAgent extends BaseAgent {
 
-    private Board board;
     private MinimaxPossibleSolution stateSoFar;
 
-    private int numNodesExpanded = 0;
-	private long millisecondsProcessing = 0L;
-
     public MinimaxAgent(Color playerColor, Board board) {
-        super(playerColor);
-        this.board = board;
+        super(playerColor, board);
         this.stateSoFar = new MinimaxPossibleSolution(board);
     }
 
     @Override
-    public void updateBoard(Color color, Move move) {
-        stateSoFar.makeMove(color, move);
+    public void updateAgentInternalBoard(Move move) {
+        stateSoFar.makeMove(move);
     }
 
     /**
      * Does a minimax search to find the best move at this time.
      *
-     * This is a recursive function, which calls minimax() until it finds a solution.
-     *
      * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
      */
     @Override
-    public Move pickBestMove() {
-        long startTime = System.currentTimeMillis();
-
+    protected Move searchForBestMove() {
         MinimaxPossibleSolution initialSolution = stateSoFar.clone();
 
         MinimaxPossibleSolution solution;
@@ -46,14 +37,8 @@ public class MinimaxAgent extends BaseAgent {
         else {
             solution = moveGreen(initialSolution);
         }
-        Move bestMove = solution.getMove();
 
-        long endTime = System.currentTimeMillis();
-
-        millisecondsProcessing += (endTime - startTime);
-
-        System.out.println("BEST MOVE:" + bestMove);
-        return bestMove;
+        return solution.getMove();
     }
 
 
@@ -68,12 +53,12 @@ public class MinimaxAgent extends BaseAgent {
 
         MinimaxPossibleSolution maxBlue = null;
 
-        List<Move> possibleMoves = possibleSolution.getPossibleMoves();
+        List<Move> possibleMoves = possibleSolution.getPossibleMoves(Color.BLUE);
 
         for (Move possibleMove : possibleMoves) {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             System.out.println("... B plays " + possibleMove);
-            newPossibility.makeMove(Color.BLUE, possibleMove); // apply this move
+            newPossibility.makeMove(possibleMove); // apply this move
             newPossibility = moveGreen(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
@@ -107,11 +92,11 @@ public class MinimaxAgent extends BaseAgent {
 
         MinimaxPossibleSolution maxGreen = null;
 
-        List<Move> possibleMoves = possibleSolution.getPossibleMoves();
+        List<Move> possibleMoves = possibleSolution.getPossibleMoves(Color.GREEN);
 
         for (Move possibleMove : possibleMoves) {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
-            newPossibility.makeMove(Color.GREEN, possibleMove); // apply this move
+            newPossibility.makeMove(possibleMove); // apply this move
             System.out.println("... G plays " + possibleMove);
             newPossibility = moveBlue(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
@@ -134,14 +119,6 @@ public class MinimaxAgent extends BaseAgent {
 
         return maxGreen;
 
-    }
-
-    public int getNumNodesExpanded() {
-        return numNodesExpanded;
-    }
-
-    public long getMillisecondsProcessing() {
-        return millisecondsProcessing;
     }
 
 }

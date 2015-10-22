@@ -7,8 +7,7 @@ public class ActualState {
     private Board board;
     private String[][] playerLocations;
 
-    private int blueScore = 0;
-    private int greenScore = 0;
+    private BlueGreenPair scores = new BlueGreenPair(0, 0);
 
     private int numMovesBlue = 0;
     private int numMovesGreen = 0;
@@ -19,11 +18,11 @@ public class ActualState {
     }
 
     public int getBlueScore() {
-        return blueScore;
+        return scores.blue;
     }
 
     public int getGreenScore() {
-        return greenScore;
+        return scores.green;
     }
 
     public int getNumMovesBlue() {
@@ -38,13 +37,10 @@ public class ActualState {
         return playerLocations;
     }
 
-    void applyMove(Color player, Move move) {
-        BlueGreenPair newScores = move.execute(playerLocations, player, board, blueScore, greenScore);
+    void applyMove(Move move) {
+        scores = move.execute(playerLocations, board, scores);
 
-        blueScore = newScores.blue;
-        greenScore = newScores.green;
-
-        if (player.equals(Color.BLUE)) {
+        if (move.getPlayerToMove().equals(Color.BLUE)) {
             numMovesBlue++;
         } else {
             numMovesGreen++;
