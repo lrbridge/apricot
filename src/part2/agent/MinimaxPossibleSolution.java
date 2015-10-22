@@ -4,6 +4,7 @@ import part2.BlueGreenPair;
 import part2.Board;
 import part2.Color;
 import part2.move.CommandoParaDrop;
+import part2.move.M1DeathBlitz;
 import part2.move.Move;
 
 import java.util.ArrayList;
@@ -46,7 +47,6 @@ public class MinimaxPossibleSolution {
         }
 
         StringBuilder str = new StringBuilder();
-        str.append("Done....");
         for (String[] x : playerLocations) {
             for (String y : x) {
                 str.append(y + " ");
@@ -54,6 +54,7 @@ public class MinimaxPossibleSolution {
             str.append("\n");
         }
         System.out.println(str.toString());
+        System.out.println("scores... B:" + scores.blue + " vs. G:" + scores.green);
         return true;
     }
 
@@ -67,13 +68,49 @@ public class MinimaxPossibleSolution {
 
         for (int i = 0; i < playerLocations.length; i++) {
             for (int j = 0; j < playerLocations[0].length; j++) {
+
                 if (playerLocations[i][j] == null) {
-                    possibleMoves.add(new CommandoParaDrop(playerToMove, i, j));
+
+                    Move move;
+
+                    if(isPossibleToBlitzTo(playerToMove, i, j)) {
+                        move = new M1DeathBlitz(playerToMove, i, j);
+                    }
+                    else {
+                        move = new CommandoParaDrop(playerToMove, i, j);
+                    }
+
+//                    System.out.print("adding possible move: " + move);
+                    possibleMoves.add(move);
                 }
             }
         }
-
+        System.out.println("\n");
         return possibleMoves;
+    }
+
+    private boolean isPossibleToBlitzTo(Color playerToMove, int row, int col) {
+        // blitzing is mandatory if the empty piece is next to an adjacent piece the player already owns
+        return isNeighborMatchingColor(playerToMove, row + 1, col) ||
+                isNeighborMatchingColor(playerToMove, row - 1, col) ||
+                isNeighborMatchingColor(playerToMove, row, col + 1) ||
+                isNeighborMatchingColor(playerToMove, row, col - 1);
+    }
+
+    // TODO could refactor duplication by making playerlocations an object with this method (w/death blitz)
+    private boolean isNeighborMatchingColor(Color playerToMove, int row, int col) {
+        if(row < 0 || row >= playerLocations.length || col < 0 || col >= playerLocations[0].length) {
+            return false; // if the neighbor is off the board
+        }
+        if(playerLocations[row][col] == null) {
+            return false; // if neighbor is empty square, it's not me
+        }
+
+        String letterToMatch = "G";
+        if(playerToMove.equals(Color.BLUE)) {
+            letterToMatch = "B";
+        }
+        return playerLocations[row][col].equals(letterToMatch);
     }
 
     public void makeMove(Move move) {

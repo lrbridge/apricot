@@ -12,15 +12,7 @@ public class CommandoParaDrop extends BaseMove {
 
     @Override
     public BlueGreenPair execute(String[][] playerLocations, Board pointValues, BlueGreenPair scores) {
-
-        if (playerToMove.equals(Color.BLUE)) {
-            scores.blue += pointValues.get(row, col);
-            playerLocations[row][col] = "B";
-        } else {
-            scores.green += pointValues.get(row, col);
-            playerLocations[row][col] = "G";
-        }
-
-        return new BlueGreenPair(scores.blue, scores.green);
+        return createPieceInSquare(playerLocations, pointValues, scores);
     }
+
 }

@@ -81,7 +81,7 @@ public class Part2Test {
 
         String[][] expectedStateOfBoard = {
                 {"B", "G"},
-                {"B", "G"}
+                {"G", "B"}
         };
 
         int blueScore = 2;
@@ -105,14 +105,14 @@ public class Part2Test {
 
         String[][] expectedStateOfBoard = {
                 {"G", "B"},
-                {"G", "B"}
+                {"B", "G"}
         };
 
-        int blueScore = 14;
+        int blueScore = 16;
         int blueNumNodesExpanded = 68; // 64, then 4
         double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
 
-        int greenScore = 8;
+        int greenScore = 6;
         int greenNumNodesExpanded = 16; // 16, then 0
         double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
 
@@ -152,15 +152,15 @@ public class Part2Test {
     public void fourSquareV4MinimaxVsMinimax() {
 
         String[][] expectedStateOfBoard = {
-                {"B", "B"},
-                {"G", "G"}
+                {"B", "G"},
+                {"G", "B"}
         };
 
-        int blueScore = 6;
+        int blueScore = 7;
         int blueNumNodesExpanded = 68; // 64, then 4
         double blueAvgNumNodesExpandedPerMove = 34.0; // 64 / 2
 
-        int greenScore = 4;
+        int greenScore = 3;
         int greenNumNodesExpanded = 16; // 16, then 0
         double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
 

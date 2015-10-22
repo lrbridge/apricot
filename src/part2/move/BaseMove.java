@@ -1,5 +1,7 @@
 package part2.move;
 
+import part2.BlueGreenPair;
+import part2.Board;
 import part2.Color;
 
 public abstract class BaseMove implements Move {
@@ -27,5 +29,16 @@ public abstract class BaseMove implements Move {
                 ", row=" + row +
                 ", col=" + col +
                 '}';
+    }
+
+    protected BlueGreenPair createPieceInSquare(String[][] playerLocations, Board pointValues, BlueGreenPair scores) {
+        if (playerToMove.equals(Color.BLUE)) {
+            scores.blue += pointValues.get(row, col);
+            playerLocations[row][col] = "B";
+        } else {
+            scores.green += pointValues.get(row, col);
+            playerLocations[row][col] = "G";
+        }
+        return new BlueGreenPair(scores.blue, scores.green);
     }
 }
