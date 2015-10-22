@@ -1,15 +1,11 @@
-package part2;
+package part2.move;
 
-public class Move {
+public abstract class BaseMove implements Move {
 
-    public enum MOVE_TYPE {COMMANDO_PARA_DROP, M1_DEATH_BLITZ}
-
-    public MOVE_TYPE type;
     public int row;
     public int col;
 
-    public Move(MOVE_TYPE type, int row, int col) {
-        this.type = type;
+    public BaseMove(int row, int col) {
         this.row = row;
         this.col = col;
     }
@@ -17,7 +13,7 @@ public class Move {
     @Override
     public String toString() {
         return "Move{" +
-                "type=" + type +
+                "type=" + this.getClass().getCanonicalName() +
                 ", row=" + row +
                 ", col=" + col +
                 '}';

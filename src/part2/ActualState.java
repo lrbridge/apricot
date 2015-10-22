@@ -1,6 +1,6 @@
 package part2;
 
-import part2.Move.MOVE_TYPE;
+import part2.move.Move;
 
 public class ActualState {
 
@@ -39,23 +39,16 @@ public class ActualState {
     }
 
     void applyMove(String player, Move move) {
+        BlueGreenPair newScores = move.execute(playerLocations, player, board, blueScore, greenScore);
 
-        if (move.type.equals(MOVE_TYPE.COMMANDO_PARA_DROP)) {
+        blueScore = newScores.blue;
+        greenScore = newScores.green;
 
-            playerLocations[move.row][move.col] = player;
-
-            if (player == "B") {
-                blueScore += board.get(move.row, move.col);
-                numMovesBlue++;
-            } else {
-                greenScore += board.get(move.row, move.col);
-                numMovesGreen++;
-            }
-
+        if (player == "B") {
+            numMovesBlue++;
+        } else {
+            numMovesGreen++;
         }
-//		else { // TODO m1 death blitz
-//			
-//		}
     }
 
 }

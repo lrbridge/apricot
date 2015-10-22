@@ -1,8 +1,9 @@
 package part2.agent;
 
+import part2.BlueGreenPair;
 import part2.Board;
-import part2.Move;
-import part2.Move.MOVE_TYPE;
+import part2.move.CommandoParaDrop;
+import part2.move.Move;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,26 +62,14 @@ public class MinimaxPossibleSolution {
         return new MinimaxPossibleSolution(pointValues, playerLocations, blueScore, greenScore);
     }
 
-    public MinimaxPossibleSolution commandoParaDrop(String agentLetter, int row, int col) {
-        this.playerLocations[row][col] = agentLetter;
-
-        if (agentLetter.equals("B")) {
-            this.blueScore += this.pointValues.get(row, col);
-        } else {
-            this.greenScore += this.pointValues.get(row, col);
-        }
-
-        return this;
-    }
-
     public List<Move> getPossibleMoves() {
 
-        ArrayList<Move> possibleMoves = new ArrayList<Move>();
+        ArrayList<Move> possibleMoves = new ArrayList<>();
 
         for (int i = 0; i < playerLocations.length; i++) {
             for (int j = 0; j < playerLocations[0].length; j++) {
                 if (playerLocations[i][j] == null) {
-                    possibleMoves.add(new Move(MOVE_TYPE.COMMANDO_PARA_DROP, i, j));
+                    possibleMoves.add(new CommandoParaDrop(i, j));
                 }
             }
         }
@@ -89,9 +78,10 @@ public class MinimaxPossibleSolution {
     }
 
     public void makeMove(String agentLetter, Move move) {
-        if (move.type.equals(MOVE_TYPE.COMMANDO_PARA_DROP)) {
-            commandoParaDrop(agentLetter, move.row, move.col);
-        }
+        BlueGreenPair newScores = move.execute(playerLocations, agentLetter, pointValues, blueScore, greenScore);
+
+        blueScore = newScores.blue;
+        greenScore = newScores.green;
     }
 
     public int getBlueScore() {

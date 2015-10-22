@@ -2,6 +2,7 @@ package part2;
 
 
 import part2.agent.Agent;
+import part2.move.Move;
 
 public class Part2 {
 

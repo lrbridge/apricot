@@ -1,7 +1,7 @@
 package part2.agent;
 
 import part2.Board;
-import part2.Move;
+import part2.move.Move;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class MinimaxAgent implements Agent {
 
         for (Move possibleMove : possibleMoves) {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
-            System.out.println("... B plays " + possibleMove.row + " " + possibleMove.col);
+            System.out.println("... B plays " + possibleMove);
             newPossibility.makeMove("B", possibleMove); // apply this move
             newPossibility = moveGreen(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
@@ -110,7 +110,7 @@ public class MinimaxAgent implements Agent {
         for (Move possibleMove : possibleMoves) {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove("G", possibleMove); // apply this move
-            System.out.println("... G plays " + possibleMove.row + " " + possibleMove.col);
+            System.out.println("... G plays " + possibleMove);
             newPossibility = moveBlue(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
