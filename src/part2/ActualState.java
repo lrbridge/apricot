@@ -38,13 +38,13 @@ public class ActualState {
         return playerLocations;
     }
 
-    void applyMove(String player, Move move) {
+    void applyMove(Color player, Move move) {
         BlueGreenPair newScores = move.execute(playerLocations, player, board, blueScore, greenScore);
 
         blueScore = newScores.blue;
         greenScore = newScores.green;
 
-        if (player == "B") {
+        if (player.equals(Color.BLUE)) {
             numMovesBlue++;
         } else {
             numMovesGreen++;

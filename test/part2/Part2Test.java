@@ -22,7 +22,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 0;
         double greenAvgNumNodesExpandedPerMove = 0.0;
 
-        Part2Solution solution = new Part2("onesquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("onesquare.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -45,7 +45,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 1;
         double greenAvgNumNodesExpandedPerMove = 1.0;
 
-        Part2Solution solution = new Part2("twosquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("twosquare.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -68,7 +68,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 1;
         double greenAvgNumNodesExpandedPerMove = 1.0;
 
-        Part2Solution solution = new Part2("twosquareviceversa.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("twosquareviceversa.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -92,7 +92,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 16; // 16, then 0
         double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
 
-        Part2Solution solution = new Part2("foursquareV1.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("foursquareV1.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -116,7 +116,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 16; // 16, then 0
         double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
 
-        Part2Solution solution = new Part2("foursquareV2.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("foursquareV2.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -140,7 +140,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 16; // 16, then 0
         double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
 
-        Part2Solution solution = new Part2("foursquareV3.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("foursquareV3.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -164,7 +164,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 16; // 16, then 0
         double greenAvgNumNodesExpandedPerMove = 8.0; // 16 / 2
 
-        Part2Solution solution = new Part2("foursquareV4.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("foursquareV4.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,
@@ -189,7 +189,7 @@ public class Part2Test {
         int greenNumNodesExpanded = 111624;
         double greenAvgNumNodesExpandedPerMove = 27906.0;
 
-        Part2Solution solution = new Part2("ninesquare.txt", new MinimaxAgent(), new MinimaxAgent()).play();
+        Part2Solution solution = new Part2("ninesquare.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
 
         testPart2(solution,
                 expectedStateOfBoard,

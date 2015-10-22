@@ -2,6 +2,7 @@ package part2;
 
 
 import part2.agent.Agent;
+import part2.agent.MinimaxAgent;
 import part2.move.Move;
 
 public class Part2 {
@@ -20,15 +21,17 @@ public class Part2 {
     // Whose turn it is currently; it starts with Blue
     private boolean isBlueTurn = true;
 
-    public Part2(String filename, Agent blue, Agent green) {
+    public Part2(String filename, PlayerType bluePlayerType, PlayerType greenPlayerType) {
         this.board = new Board(filename);
         this.actualState = new ActualState(this.board);
 
-        this.blue = blue;
-        this.blue.setBoard(board); // give the blue agent the board values
+        this.blue = getAgent(bluePlayerType, Color.BLUE, board);
+        this.green = getAgent(greenPlayerType, Color.GREEN, board);
+    }
 
-        this.green = green;
-        this.green.setBoard(board); // give the green agent the board values
+    private Agent getAgent(PlayerType playerType, Color playerColor, Board board) {
+        if(playerType.equals(PlayerType.MINIMAX)) {}
+        return new MinimaxAgent(playerColor, board);
     }
 
     /**
@@ -46,16 +49,17 @@ public class Part2 {
         while (!isEnd()) {
 
             if (isBlueTurn) {
-                Move move = blue.pickBestMove("B");
-                actualState.applyMove("B", move);
-                blue.updateBoard("B", move);
-                green.updateBoard("B", move);
+                Move move = blue.pickBestMove();
+                actualState.applyMove(Color.BLUE, move);
+                blue.updateBoard(Color.BLUE, move);
+                green.updateBoard(Color.BLUE, move);
                 isBlueTurn = false;
+
             } else {
-                Move move = green.pickBestMove("G");
-                actualState.applyMove("G", move);
-                blue.updateBoard("G", move);
-                green.updateBoard("G", move);
+                Move move = green.pickBestMove();
+                actualState.applyMove(Color.GREEN, move);
+                blue.updateBoard(Color.GREEN, move);
+                green.updateBoard(Color.GREEN, move);
                 isBlueTurn = true;
             }
 
@@ -65,7 +69,7 @@ public class Part2 {
         return new Part2Solution(actualState, blue, green);
     }
 
-    public boolean isEnd() {
+    private boolean isEnd() {
         for (int i = 0; i < actualState.getStateOfBoard().length; ++i) {
             for (int j = 0; j < actualState.getStateOfBoard()[0].length; ++j) {
                 if (actualState.getStateOfBoard()[i][j] == null) {

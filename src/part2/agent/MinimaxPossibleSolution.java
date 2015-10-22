@@ -2,6 +2,7 @@ package part2.agent;
 
 import part2.BlueGreenPair;
 import part2.Board;
+import part2.Color;
 import part2.move.CommandoParaDrop;
 import part2.move.Move;
 
@@ -77,8 +78,8 @@ public class MinimaxPossibleSolution {
         return possibleMoves;
     }
 
-    public void makeMove(String agentLetter, Move move) {
-        BlueGreenPair newScores = move.execute(playerLocations, agentLetter, pointValues, blueScore, greenScore);
+    public void makeMove(Color color, Move move) {
+        BlueGreenPair newScores = move.execute(playerLocations, color, pointValues, blueScore, greenScore);
 
         blueScore = newScores.blue;
         greenScore = newScores.green;

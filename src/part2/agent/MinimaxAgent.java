@@ -1,11 +1,12 @@
 package part2.agent;
 
 import part2.Board;
+import part2.Color;
 import part2.move.Move;
 
 import java.util.List;
 
-public class MinimaxAgent implements Agent {
+public class MinimaxAgent extends BaseAgent {
 
     private Board board;
     private MinimaxPossibleSolution stateSoFar;
@@ -13,15 +14,15 @@ public class MinimaxAgent implements Agent {
     private int numNodesExpanded = 0;
 	private long millisecondsProcessing = 0L;
 
-    @Override
-    public void updateBoard(String agentLetter, Move move) {
-        stateSoFar.makeMove(agentLetter, move);
+    public MinimaxAgent(Color playerColor, Board board) {
+        super(playerColor);
+        this.board = board;
+        this.stateSoFar = new MinimaxPossibleSolution(board);
     }
 
     @Override
-    public void setBoard(Board board) {
-        this.board = board;
-        this.stateSoFar = new MinimaxPossibleSolution(board);
+    public void updateBoard(Color color, Move move) {
+        stateSoFar.makeMove(color, move);
     }
 
     /**
@@ -32,13 +33,14 @@ public class MinimaxAgent implements Agent {
      * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
      */
     @Override
-    public Move pickBestMove(String agentLetter) {
+    public Move pickBestMove() {
         long startTime = System.currentTimeMillis();
 
         MinimaxPossibleSolution initialSolution = stateSoFar.clone();
 
         MinimaxPossibleSolution solution;
-        if(agentLetter.equals("B")) {
+
+        if(this.playerColor.equals(Color.BLUE)) {
             solution = moveBlue(initialSolution);
         }
         else {
@@ -71,7 +73,7 @@ public class MinimaxAgent implements Agent {
         for (Move possibleMove : possibleMoves) {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             System.out.println("... B plays " + possibleMove);
-            newPossibility.makeMove("B", possibleMove); // apply this move
+            newPossibility.makeMove(Color.BLUE, possibleMove); // apply this move
             newPossibility = moveGreen(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
             numNodesExpanded++;
@@ -109,7 +111,7 @@ public class MinimaxAgent implements Agent {
 
         for (Move possibleMove : possibleMoves) {
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
-            newPossibility.makeMove("G", possibleMove); // apply this move
+            newPossibility.makeMove(Color.GREEN, possibleMove); // apply this move
             System.out.println("... G plays " + possibleMove);
             newPossibility = moveBlue(newPossibility); // then DFS
             newPossibility.setMove(possibleMove);
