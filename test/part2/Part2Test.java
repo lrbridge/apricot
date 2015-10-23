@@ -172,20 +172,44 @@ public class Part2Test {
                 greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
     }
 
+    @Test
+    public void sixSquareMinimaxVsMinimax() {
+
+        String[][] expectedStateOfBoard = {
+                {"G", "B", "G"},
+                {"B", "G", "B"}
+        };
+
+        int blueScore = 26;
+        int blueNumNodesExpanded = 2024;
+        double blueAvgNumNodesExpandedPerMove = 674.0;
+
+        int greenScore = 16;
+        int greenNumNodesExpanded = 341;
+        double greenAvgNumNodesExpandedPerMove = 113.0;
+
+        Part2Solution solution = new Part2("sixsquare.txt", PlayerType.MINIMAX, PlayerType.MINIMAX).play();
+
+        testPart2(solution,
+                expectedStateOfBoard,
+                blueScore, blueNumNodesExpanded, blueAvgNumNodesExpandedPerMove,
+                greenScore, greenNumNodesExpanded, greenAvgNumNodesExpandedPerMove);
+    }
+
     //@Test
     public void nineSquareMinimaxVsMinimax() {
 
         String[][] expectedStateOfBoard = {
-                {"G", "B", "B"},
-                {"B", "B", "G"},
-                {"G", "G", "B"}
+                {"G", "B", "G"},
+                {"B", "G", "B"},
+                {"B", "B", "G"}
         };
 
-        int blueScore = 34;
+        int blueScore = 37;
         int blueNumNodesExpanded = 1000449;
         double blueAvgNumNodesExpandedPerMove = 200089.0;
 
-        int greenScore = 26;
+        int greenScore = 23;
         int greenNumNodesExpanded = 111624;
         double greenAvgNumNodesExpandedPerMove = 27906.0;
 
