@@ -2,6 +2,7 @@ package part2;
 
 
 import part2.agent.Agent;
+import part2.agent.AlphaBetaAgent;
 import part2.agent.MinimaxAgent;
 import part2.move.Move;
 
@@ -30,8 +31,12 @@ public class Part2 {
     }
 
     private Agent getAgent(PlayerType playerType, Color playerColor, Board board) {
-        if(playerType.equals(PlayerType.MINIMAX)) {}
-        return new MinimaxAgent(playerColor, board);
+        if(playerType.equals(PlayerType.MINIMAX)) {
+            return new MinimaxAgent(playerColor, board);
+        }
+        else {
+            return new AlphaBetaAgent(playerColor, board);
+        }
     }
 
     /**

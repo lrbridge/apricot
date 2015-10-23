@@ -6,13 +6,13 @@ import part2.move.Move;
 
 import java.util.List;
 
-public class MinimaxAgent extends BaseAgent {
+public class AlphaBetaAgent extends BaseAgent {
 
     private MinimaxPossibleSolution stateSoFar;
 
     private int maxDepth = 3; // search only to max depth of 3 in minimax tree
 
-    public MinimaxAgent(Color playerColor, Board board) {
+    public AlphaBetaAgent(Color playerColor, Board board) {
         super(playerColor, board);
         this.stateSoFar = new MinimaxPossibleSolution(board);
     }
@@ -29,13 +29,17 @@ public class MinimaxAgent extends BaseAgent {
      */
     @Override
     protected Move searchForBestMove() {
+
+        int alpha = Integer.MIN_VALUE;  // alpha is best alternative to Blue player, (highest BLUE - GREEN difference)
+        int beta = Integer.MAX_VALUE;   // beta is best alternative to Green player, (lowest BLUE - GREEN difference)
+
         MinimaxPossibleSolution initialSolution = stateSoFar.clone();
 
         MinimaxPossibleSolution solution;
 
         int depth = 0;
 
-        solution = searchForMove(this.playerColor, initialSolution);
+        solution = searchForMove(this.playerColor, initialSolution, alpha, beta);
 
         return solution.getMove();
     }
@@ -43,7 +47,7 @@ public class MinimaxAgent extends BaseAgent {
     /**
      * Picks the move for the player which will maximize the player's score (given the other player is playing rationally)
      */
-    private MinimaxPossibleSolution searchForMove(Color playerToMove, MinimaxPossibleSolution possibleSolution) {
+    private MinimaxPossibleSolution searchForMove(Color playerToMove, MinimaxPossibleSolution possibleSolution, int alpha, int beta) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
@@ -58,15 +62,36 @@ public class MinimaxAgent extends BaseAgent {
             System.out.println("... " + playerToMove + " plays " + possibleMove);
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
-            newPossibility = searchForMove(playerToMove.next(), newPossibility); // then DFS, other color's turn
+            newPossibility = searchForMove(playerToMove.next(), newPossibility, alpha, beta); // then DFS, other color's turn
 
             newPossibility.setLatestConsideredMove(possibleMove);
             numNodesExpanded++;
 
             bestSoFar = updateBestSoFarIfBetter(playerToMove, bestSoFar, newPossibility);
+
+            int v = bestSoFar.getDifferenceBlueMinusGreen();
+
+            if(playerToMove.equals(Color.BLUE)) {
+                if(v >= beta) {
+                    return bestSoFar;
+                }
+                if(v > alpha) {
+                    alpha = v;
+                }
+            }
+            else {
+                if(v <= alpha) {
+                    return bestSoFar;
+                }
+                if(v < beta) {
+                    beta = v;
+                }
+            }
         }
 
         return bestSoFar;
     }
-
 }
+
+//int alpha = Integer.MIN_VALUE;  // alpha is best alternative to Blue player, (highest BLUE - GREEN difference)
+//int beta = Integer.MAX_VALUE;   // beta is best alternative to Green player, (lowest BLUE - GREEN difference)

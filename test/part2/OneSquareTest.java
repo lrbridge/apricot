@@ -33,4 +33,17 @@ public class OneSquareTest {
         Part2TestHelpers.testMinimaxVsMinimax(filename, results);
     }
 
+    @Test
+    public void oneSquareAlphabetaVsAlphabeta() {
+        // with only one square, same as minimax
+
+        results.blueNumNodesExpanded = 1;
+        results.blueAvgNumNodesExpandedPerMove = 1.0;
+
+        results.greenNumNodesExpanded = 0;
+        results.greenAvgNumNodesExpandedPerMove = 0.0;
+
+        Part2TestHelpers.testAlphabetaVsAlphabeta(filename, results);
+    }
+
 }

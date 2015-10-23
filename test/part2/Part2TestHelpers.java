@@ -11,6 +11,11 @@ public class Part2TestHelpers {
         testPart2(solution, results);
     }
 
+    public static void testAlphabetaVsAlphabeta(String filename, Part2ExpectedResults results) {
+        Part2Solution solution = new Part2(filename, PlayerType.ALPHABETA, PlayerType.ALPHABETA).play();
+        testPart2(solution, results);
+    }
+
     private static void testPart2(Part2Solution solution, Part2ExpectedResults results) {
 
         System.out.println(solution);
@@ -28,5 +33,4 @@ public class Part2TestHelpers {
         assertEquals(solution.getGreenNumNodesExpanded(), results.greenNumNodesExpanded);
         assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == results.greenAvgNumNodesExpandedPerMove);
     }
-
 }

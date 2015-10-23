@@ -133,4 +133,7 @@ public class MinimaxPossibleSolution {
         return latestMove;
     }
 
+    public int getDifferenceBlueMinusGreen() {
+        return scores.blue - scores.green;
+    }
 }

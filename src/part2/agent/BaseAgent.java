@@ -49,4 +49,35 @@ public abstract class BaseAgent implements Agent {
 
     protected abstract Move searchForBestMove();
 
+    protected MinimaxPossibleSolution updateBestSoFarIfBetter(Color playerToMove, MinimaxPossibleSolution bestSoFar, MinimaxPossibleSolution newPossibility) {
+        if (bestSoFar == null) {
+            bestSoFar = newPossibility;
+        } else {
+
+            int maxDifference = bestSoFar.getDifferenceBlueMinusGreen();
+            int currentDifference = newPossibility.getDifferenceBlueMinusGreen();
+
+            if(playerToMove.equals(Color.BLUE)) {
+//                maxDifference = maxSoFar.getBlueScore() - maxSoFar.getGreenScore();
+//                currentDifference = newPossibility.getBlueScore() - newPossibility.getGreenScore();
+                if (maxDifference < currentDifference) {
+                    bestSoFar = newPossibility;
+                }
+            }
+            else { // GREEN
+//                maxDifference = maxSoFar.getGreenScore() - maxSoFar.getBlueScore();
+//                currentDifference = newPossibility.getGreenScore() - newPossibility.getBlueScore();
+                if (maxDifference > currentDifference) {
+                    bestSoFar = newPossibility;
+                }
+            }
+
+//            if (maxDifference < currentDifference) {
+//                maxSoFar = newPossibility;
+//            }
+
+        }
+        return bestSoFar;
+    }
+
 }
