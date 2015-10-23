@@ -40,7 +40,7 @@ public class Part2Solution {
         if (actualState.getNumMovesBlue() < 1) {
             return 0.0;
         }
-        return blue.getNumNodesExpanded() / actualState.getNumMovesBlue();
+        return blue.getNumNodesExpanded() * 1.0 / actualState.getNumMovesBlue(); // force decimal
     }
 
     public long getBlueAvgMillisecondsPerMove() {
@@ -62,7 +62,7 @@ public class Part2Solution {
         if (actualState.getNumMovesGreen() < 1) {
             return 0.0;
         }
-        return green.getNumNodesExpanded() / actualState.getNumMovesGreen();
+        return green.getNumNodesExpanded() * 1.0 / actualState.getNumMovesGreen(); // force decimal
     }
 
     public long getGreenAvgMillisecondsPerMove() {

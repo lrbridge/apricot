@@ -36,6 +36,7 @@ public class MinimaxAgent extends BaseAgent {
         int depth = 0;
 
         solution = searchForMove(this.playerColor, initialSolution);
+        System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
 
         return solution.getMove();
     }

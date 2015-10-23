@@ -40,7 +40,7 @@ public class AlphaBetaAgent extends BaseAgent {
         int depth = 0;
 
         solution = searchForMove(this.playerColor, initialSolution, alpha, beta);
-
+System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
         return solution.getMove();
     }
 
@@ -70,9 +70,10 @@ public class AlphaBetaAgent extends BaseAgent {
             bestSoFar = updateBestSoFarIfBetter(playerToMove, bestSoFar, newPossibility);
 
             int v = bestSoFar.getDifferenceBlueMinusGreen();
-
+System.out.println(v + " " + alpha + " " + beta);
             if(playerToMove.equals(Color.BLUE)) {
                 if(v >= beta) {
+                    System.out.println("RETURNING, v>=beta");
                     return bestSoFar;
                 }
                 if(v > alpha) {
@@ -81,6 +82,7 @@ public class AlphaBetaAgent extends BaseAgent {
             }
             else {
                 if(v <= alpha) {
+                    System.out.println("RETURNING, v<=alpha");
                     return bestSoFar;
                 }
                 if(v < beta) {
