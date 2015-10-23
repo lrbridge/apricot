@@ -27,10 +27,10 @@ public class Part2TestHelpers {
 
         assertEquals(solution.getBlueScore(), results.blueScore);
         assertEquals(solution.getBlueNumNodesExpanded(), results.blueNumNodesExpanded);
-        assertTrue(solution.getBlueAvgNumNodesExpandedPerMove() == results.blueAvgNumNodesExpandedPerMove);
+        assertEquals(solution.getBlueAvgNumNodesExpandedPerMove(), results.blueAvgNumNodesExpandedPerMove, 0.001);
 
         assertEquals(solution.getGreenScore(), results.greenScore);
         assertEquals(solution.getGreenNumNodesExpanded(), results.greenNumNodesExpanded);
-        assertTrue(solution.getGreenAvgNumNodesExpandedPerMove() == results.greenAvgNumNodesExpandedPerMove);
+        assertEquals(solution.getGreenAvgNumNodesExpandedPerMove(), results.greenAvgNumNodesExpandedPerMove, 0.001);
     }
 }

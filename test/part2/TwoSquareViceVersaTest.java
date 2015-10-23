@@ -31,4 +31,6 @@ public class TwoSquareViceVersaTest {
 
         Part2TestHelpers.testMinimaxVsMinimax(filename, results);
     }
+
+    // with only 2 squares, all same as minimax...
 }
