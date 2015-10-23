@@ -8,18 +8,10 @@ import java.util.List;
 
 public class MinimaxAgent extends BaseAgent {
 
-    private MinimaxPossibleSolution stateSoFar;
-
     private int maxDepth = 3; // search only to max depth of 3 in minimax tree
 
     public MinimaxAgent(Color playerColor, Board board) {
         super(playerColor, board);
-        this.stateSoFar = new MinimaxPossibleSolution(board);
-    }
-
-    @Override
-    public void updateAgentInternalBoard(Move move) {
-        stateSoFar.makeMove(move);
     }
 
     /**
@@ -28,14 +20,12 @@ public class MinimaxAgent extends BaseAgent {
      * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
      */
     @Override
-    protected Move searchForBestMove() {
-        MinimaxPossibleSolution initialSolution = stateSoFar.clone();
-
-        MinimaxPossibleSolution solution;
+    protected Move searchForBestMove(MinimaxPossibleSolution initialSolution) {
 
         int depth = 0;
 
-        solution = searchForMove(this.playerColor, initialSolution);
+        MinimaxPossibleSolution solution = searchForMove(this.playerColor, initialSolution);
+
         System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
 
         return solution.getMove();

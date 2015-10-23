@@ -8,18 +8,10 @@ import java.util.List;
 
 public class AlphaBetaAgent extends BaseAgent {
 
-    private MinimaxPossibleSolution stateSoFar;
-
     private int maxDepth = 3; // search only to max depth of 3 in minimax tree
 
     public AlphaBetaAgent(Color playerColor, Board board) {
         super(playerColor, board);
-        this.stateSoFar = new MinimaxPossibleSolution(board);
-    }
-
-    @Override
-    public void updateAgentInternalBoard(Move move) {
-        stateSoFar.makeMove(move);
     }
 
     /**
@@ -28,19 +20,17 @@ public class AlphaBetaAgent extends BaseAgent {
      * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
      */
     @Override
-    protected Move searchForBestMove() {
+    protected Move searchForBestMove(MinimaxPossibleSolution initialSolution) {
 
         int alpha = Integer.MIN_VALUE;  // alpha is best alternative to Blue player, (highest BLUE - GREEN difference)
         int beta = Integer.MAX_VALUE;   // beta is best alternative to Green player, (lowest BLUE - GREEN difference)
 
-        MinimaxPossibleSolution initialSolution = stateSoFar.clone();
-
-        MinimaxPossibleSolution solution;
-
         int depth = 0;
 
-        solution = searchForMove(this.playerColor, initialSolution, alpha, beta);
+        MinimaxPossibleSolution solution = searchForMove(this.playerColor, initialSolution, alpha, beta);
+
 System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
+
         return solution.getMove();
     }
 
@@ -93,7 +83,5 @@ System.out.println(v + " " + alpha + " " + beta);
 
         return bestSoFar;
     }
-}
 
-//int alpha = Integer.MIN_VALUE;  // alpha is best alternative to Blue player, (highest BLUE - GREEN difference)
-//int beta = Integer.MAX_VALUE;   // beta is best alternative to Green player, (lowest BLUE - GREEN difference)
+}
