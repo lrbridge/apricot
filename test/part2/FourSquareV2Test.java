@@ -34,4 +34,16 @@ public class FourSquareV2Test {
         Part2TestHelpers.testMinimaxVsMinimax(filename, results);
     }
 
+    @Test
+    public void fourSquareV2AlphabetaVsAlphabeta() {
+
+        results.blueNumNodesExpanded = 44; // 40, then 4
+        results.blueAvgNumNodesExpandedPerMove = 22.0; // 44 / 2
+
+        results.greenNumNodesExpanded = 14; // 13, then 1
+        results.greenAvgNumNodesExpandedPerMove = 7.0; // 14 / 2
+
+        Part2TestHelpers.testAlphabetaVsAlphabeta(filename, results);
+    }
+
 }
