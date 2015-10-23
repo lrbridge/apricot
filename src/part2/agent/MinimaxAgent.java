@@ -35,33 +35,15 @@ public class MinimaxAgent extends BaseAgent {
 
         int depth = 0;
 
-        if(this.playerColor.equals(Color.BLUE)) {
-            solution = moveBlue(initialSolution);
-        }
-        else {
-            solution = moveGreen(initialSolution);
-        }
+        solution = searchForMove(this.playerColor, initialSolution);
 
         return solution.getMove();
     }
 
     /**
-     * Picks the move for Blue which will maximize Blue's score (given Green is playing rationally)
+     * Picks the move for the player which will maximize the player's score (given the other player is playing rationally)
      */
-    private MinimaxPossibleSolution moveBlue(MinimaxPossibleSolution possibleSolution) {
-        boolean isBlueMove = true; // move blue
-        return searchForMove(isBlueMove, possibleSolution);
-    }
-
-    /**
-     * Picks the move for Green which will maximize Green's score (given Blue is playing rationally)
-     */
-    private MinimaxPossibleSolution moveGreen(MinimaxPossibleSolution possibleSolution) {
-        boolean isBlueMove = false; // move green
-        return searchForMove(isBlueMove, possibleSolution);
-    }
-
-    private MinimaxPossibleSolution searchForMove(boolean isBlueMove, MinimaxPossibleSolution possibleSolution) {
+    private MinimaxPossibleSolution searchForMove(Color playerToMove, MinimaxPossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
@@ -69,21 +51,16 @@ public class MinimaxAgent extends BaseAgent {
 
         MinimaxPossibleSolution maxSoFar = null;
 
-        Color colorToMove = Color.BLUE;
-        if(!isBlueMove) {
-            colorToMove = Color.GREEN;
-        }
-
-        List<Move> possibleMoves = possibleSolution.getPossibleMoves(colorToMove);
+        List<Move> possibleMoves = possibleSolution.getPossibleMoves(playerToMove);
 
         for (Move possibleMove : possibleMoves) {
 
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
 
-            System.out.println("... " + colorToMove + " plays " + possibleMove);
+            System.out.println("... " + playerToMove + " plays " + possibleMove);
 
-            newPossibility = searchForMove(!isBlueMove, newPossibility); // then DFS, other color's turn
+            newPossibility = searchForMove(playerToMove.next(), newPossibility); // then DFS, other color's turn
 
             newPossibility.setLatestConsideredMove(possibleMove);
             numNodesExpanded++;
@@ -94,11 +71,11 @@ public class MinimaxAgent extends BaseAgent {
 
                 int maxDifference, currentDifference;
 
-                if(isBlueMove) {
+                if(playerToMove.equals(Color.BLUE)) {
                     maxDifference = maxSoFar.getBlueScore() - maxSoFar.getGreenScore();
                     currentDifference = newPossibility.getBlueScore() - newPossibility.getGreenScore();
                 }
-                else {
+                else { // GREEN
                     maxDifference = maxSoFar.getGreenScore() - maxSoFar.getBlueScore();
                     currentDifference = newPossibility.getGreenScore() - newPossibility.getBlueScore();
                 }
