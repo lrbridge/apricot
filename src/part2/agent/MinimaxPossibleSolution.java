@@ -125,7 +125,7 @@ public class MinimaxPossibleSolution {
         return scores.green;
     }
 
-    public void setMove(Move move) {
+    public void setLatestConsideredMove(Move move) {
         this.latestMove = move;
     }
 

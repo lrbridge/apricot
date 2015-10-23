@@ -10,6 +10,8 @@ public class MinimaxAgent extends BaseAgent {
 
     private MinimaxPossibleSolution stateSoFar;
 
+    private int maxDepth = 3; // search only to max depth of 3 in minimax tree
+
     public MinimaxAgent(Color playerColor, Board board) {
         super(playerColor, board);
         this.stateSoFar = new MinimaxPossibleSolution(board);
@@ -31,6 +33,8 @@ public class MinimaxAgent extends BaseAgent {
 
         MinimaxPossibleSolution solution;
 
+        int depth = 0;
+
         if(this.playerColor.equals(Color.BLUE)) {
             solution = moveBlue(initialSolution);
         }
@@ -41,84 +45,74 @@ public class MinimaxAgent extends BaseAgent {
         return solution.getMove();
     }
 
-
     /**
      * Picks the move for Blue which will maximize Blue's score (given Green is playing rationally)
      */
     private MinimaxPossibleSolution moveBlue(MinimaxPossibleSolution possibleSolution) {
-
-        if (possibleSolution.isDone()) {
-            return possibleSolution;
-        }
-
-        MinimaxPossibleSolution maxBlue = null;
-
-        List<Move> possibleMoves = possibleSolution.getPossibleMoves(Color.BLUE);
-
-        for (Move possibleMove : possibleMoves) {
-            MinimaxPossibleSolution newPossibility = possibleSolution.clone();
-            System.out.println("... B plays " + possibleMove);
-            newPossibility.makeMove(possibleMove); // apply this move
-            newPossibility = moveGreen(newPossibility); // then DFS
-            newPossibility.setMove(possibleMove);
-            numNodesExpanded++;
-
-            if (maxBlue == null) {
-                maxBlue = newPossibility;
-            } else {
-
-                int maxMoveBlueWinsBy = maxBlue.getBlueScore() - maxBlue.getGreenScore();
-                int possibleMoveBlueWinsBy = newPossibility.getBlueScore() - newPossibility.getGreenScore();
-
-                if (maxMoveBlueWinsBy < possibleMoveBlueWinsBy) {
-                    maxBlue = newPossibility;
-                }
-
-            }
-
-        }
-
-        return maxBlue;
+        boolean isBlueMove = true; // move blue
+        return searchForMove(isBlueMove, possibleSolution);
     }
 
     /**
      * Picks the move for Green which will maximize Green's score (given Blue is playing rationally)
      */
     private MinimaxPossibleSolution moveGreen(MinimaxPossibleSolution possibleSolution) {
+        boolean isBlueMove = false; // move green
+        return searchForMove(isBlueMove, possibleSolution);
+    }
+
+    private MinimaxPossibleSolution searchForMove(boolean isBlueMove, MinimaxPossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
         }
 
-        MinimaxPossibleSolution maxGreen = null;
+        MinimaxPossibleSolution maxSoFar = null;
 
-        List<Move> possibleMoves = possibleSolution.getPossibleMoves(Color.GREEN);
+        Color colorToMove = Color.BLUE;
+        if(!isBlueMove) {
+            colorToMove = Color.GREEN;
+        }
+
+        List<Move> possibleMoves = possibleSolution.getPossibleMoves(colorToMove);
 
         for (Move possibleMove : possibleMoves) {
+
             MinimaxPossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
-            System.out.println("... G plays " + possibleMove);
-            newPossibility = moveBlue(newPossibility); // then DFS
-            newPossibility.setMove(possibleMove);
+
+            System.out.println("... " + colorToMove + " plays " + possibleMove);
+
+            newPossibility = searchForMove(!isBlueMove, newPossibility); // then DFS, other color's turn
+
+            newPossibility.setLatestConsideredMove(possibleMove);
             numNodesExpanded++;
 
-            if (maxGreen == null) {
-                maxGreen = newPossibility;
+            if (maxSoFar == null) {
+                maxSoFar = newPossibility;
             } else {
 
-                int maxMoveGreenWinsBy = maxGreen.getGreenScore() - maxGreen.getBlueScore();
-                int possibleMoveGreenWinsBy = newPossibility.getGreenScore() - newPossibility.getBlueScore();
+                int maxDifference, currentDifference;
 
-                if (maxMoveGreenWinsBy < possibleMoveGreenWinsBy) {
-                    maxGreen = newPossibility;
+                if(isBlueMove) {
+                    maxDifference = maxSoFar.getBlueScore() - maxSoFar.getGreenScore();
+                    currentDifference = newPossibility.getBlueScore() - newPossibility.getGreenScore();
+                }
+                else {
+                    maxDifference = maxSoFar.getGreenScore() - maxSoFar.getBlueScore();
+                    currentDifference = newPossibility.getGreenScore() - newPossibility.getBlueScore();
+                }
+
+                if (maxDifference < currentDifference) {
+                    maxSoFar = newPossibility;
                 }
 
             }
 
         }
 
-        return maxGreen;
-
+        return maxSoFar;
     }
+
 
 }
