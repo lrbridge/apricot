@@ -1,7 +1,9 @@
-package part2;
+package part2.small;
 
 import org.junit.Before;
 import org.junit.Test;
+import part2.Part2ExpectedResults;
+import part2.Part2TestHelpers;
 
 public class NineSquareTest {
 

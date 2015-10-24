@@ -2,14 +2,14 @@ package part2;
 
 public class Part2ExpectedResults {
 
-    String[][] expectedStateOfBoard;
+    public String[][] expectedStateOfBoard;
 
-    int blueScore;
-    int greenScore;
+    public int blueScore;
+    public int greenScore;
 
-    int blueNumNodesExpanded;
-    int greenNumNodesExpanded;
+    public int blueNumNodesExpanded;
+    public int greenNumNodesExpanded;
 
-    double blueAvgNumNodesExpandedPerMove;
-    double greenAvgNumNodesExpandedPerMove;
+    public double blueAvgNumNodesExpandedPerMove;
+    public double greenAvgNumNodesExpandedPerMove;
 }
