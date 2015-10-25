@@ -22,6 +22,16 @@ public abstract class BaseMove implements Move {
     }
 
     @Override
+    public int getRow() {
+        return row;
+    }
+
+    @Override
+    public int getCol() {
+        return col;
+    }
+
+    @Override
     public String toString() {
         return "Move{" +
                 "type=" + this.getClass().getCanonicalName() +

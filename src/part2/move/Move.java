@@ -9,4 +9,7 @@ public interface Move {
     BlueGreenPair execute(String[][] playerLocations, Board pointValues, BlueGreenPair scores);
 
     Color getPlayerToMove();
+
+    int getRow();
+    int getCol();
 }

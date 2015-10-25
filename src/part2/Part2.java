@@ -62,6 +62,8 @@ public class Part2 {
                 isBlueTurn = true;
             }
 
+            //System.out.println(selectedMove.getPlayerToMove() + " plays " + selectedMove.getRow() + ", " + selectedMove.getCol());
+
             // actually make the move officially
             actualState.applyMove(selectedMove);
 

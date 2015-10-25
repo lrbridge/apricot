@@ -9,7 +9,7 @@ import java.util.List;
 public class MinimaxAgent extends BaseAgent {
 
     public MinimaxAgent(Color playerColor, Board board) {
-        super(playerColor, board, 3); // max depth of 3
+        super(playerColor, board, 4); // max depth of 4 - 3 is nearly instantaneous but at 4 it takes a little time
     }
 
     /**
@@ -45,7 +45,6 @@ public class MinimaxAgent extends BaseAgent {
 
         for (Move possibleMove : possibleMoves) {
 
-            //System.out.println("... " + playerToMove + " plays " + possibleMove);
             PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
             newPossibility = searchForMove(playerToMove.next(), newPossibility, depth); // then DFS, other color's turn
@@ -55,7 +54,6 @@ public class MinimaxAgent extends BaseAgent {
 
             bestSoFar = updateBestSoFarIfBetter(playerToMove, bestSoFar, newPossibility);
         }
-
         return bestSoFar;
     }
 }

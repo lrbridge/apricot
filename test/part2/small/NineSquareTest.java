@@ -7,7 +7,7 @@ import part2.Part2TestHelpers;
 
 public class NineSquareTest {
 
-    //@Test
+    @Test
     public void nineSquareMinimaxVsMinimax() {
         String[][] expectedStateOfBoard = {
                 {"G", "B", "G"},

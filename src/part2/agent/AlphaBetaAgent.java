@@ -9,7 +9,7 @@ import java.util.List;
 public class AlphaBetaAgent extends BaseAgent {
 
     public AlphaBetaAgent(Color playerColor, Board board) {
-        super(playerColor, board, 3); // max depth of 3
+        super(playerColor, board, 5); // max depth of 5 - 6 took forever
     }
 
     /**
@@ -48,7 +48,6 @@ public class AlphaBetaAgent extends BaseAgent {
 
         for (Move possibleMove : possibleMoves) {
 
-            //System.out.println("... " + playerToMove + " plays " + possibleMove);
             PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
             newPossibility = searchForMove(playerToMove.next(), newPossibility, alpha, beta, depth); // then DFS, other color's turn

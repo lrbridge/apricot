@@ -45,16 +45,6 @@ public class PossibleSolution {
                 }
             }
         }
-
-//        StringBuilder str = new StringBuilder();
-//        for (String[] x : playerLocations) {
-//            for (String y : x) {
-//                str.append(y + " ");
-//            }
-//            str.append("\n");
-//        }
-//        System.out.println(str.toString());
-//        System.out.println("scores... B:" + scores.blue + " vs. G:" + scores.green);
         return true;
     }
 

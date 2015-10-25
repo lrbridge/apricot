@@ -54,8 +54,6 @@ public abstract class BaseAgent implements Agent {
 
         millisecondsProcessing += (endTime - startTime);
 
-        //System.out.println("BEST MOVE:" + bestMove);
-
         return bestMove;
     }
 
@@ -95,7 +93,7 @@ public abstract class BaseAgent implements Agent {
     protected PossibleSolution evaluationFunction(PossibleSolution possibleSolution) {
         // just return solution with blue and green current scores as is
         // ... it will be evaluated as blue score - green score
-        //System.out.println("CUTOFF, " + possibleSolution.getBlueScore() + " " + possibleSolution.getGreenScore());
+//        System.out.println("CUTOFF, " + possibleSolution.getBlueScore() + " " + possibleSolution.getGreenScore());
         return possibleSolution;
     }
 
