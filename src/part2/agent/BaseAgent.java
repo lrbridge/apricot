@@ -4,15 +4,13 @@ import part2.Board;
 import part2.Color;
 import part2.move.Move;
 
-import java.util.List;
-
 public abstract class BaseAgent implements Agent {
 
     protected Board board;
 
     protected Color playerColor;
 
-    protected MinimaxPossibleSolution stateSoFar;
+    protected PossibleSolution stateSoFar;
 
     protected int numNodesExpanded = 0;
     protected long millisecondsProcessing = 0L;
@@ -20,7 +18,7 @@ public abstract class BaseAgent implements Agent {
     BaseAgent(Color playerColor, Board board) {
         this.board = board;
         this.playerColor = playerColor;
-        this.stateSoFar = new MinimaxPossibleSolution(board);
+        this.stateSoFar = new PossibleSolution(board);
     }
 
     @Override
@@ -46,7 +44,7 @@ public abstract class BaseAgent implements Agent {
 
         long startTime = System.currentTimeMillis();
 
-        MinimaxPossibleSolution initialSolution = stateSoFar.clone();
+        PossibleSolution initialSolution = stateSoFar.clone();
         Move bestMove = this.searchForBestMove(initialSolution);
 
         long endTime = System.currentTimeMillis();
@@ -58,9 +56,9 @@ public abstract class BaseAgent implements Agent {
         return bestMove;
     }
 
-    protected abstract Move searchForBestMove(MinimaxPossibleSolution solution);
+    protected abstract Move searchForBestMove(PossibleSolution solution);
 
-    protected MinimaxPossibleSolution updateBestSoFarIfBetter(Color playerToMove, MinimaxPossibleSolution bestSoFar, MinimaxPossibleSolution newPossibility) {
+    protected PossibleSolution updateBestSoFarIfBetter(Color playerToMove, PossibleSolution bestSoFar, PossibleSolution newPossibility) {
         if (bestSoFar == null) {
             bestSoFar = newPossibility;
         } else {

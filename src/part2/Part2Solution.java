@@ -75,17 +75,20 @@ public class Part2Solution {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
+        str.append("Final state of board:\n");
         for (String[] x : getStateOfBoard()) {
             for (String y : x) {
-                str.append(y + " ");
+                str.append("  " + y);
             }
             str.append("\n");
         }
-        str.append("Blue: " + getBlueScore() + "\n");
+        str.append("Blue: " + "\n");
+        str.append("  score: " + getBlueScore() + "\n");
         str.append("  nodes expanded: " + getBlueNumNodesExpanded() + "\n");
         str.append("  avg nodes / move: " + getBlueAvgNumNodesExpandedPerMove() + "\n");
         str.append("  avg milliseconds / move: " + getBlueAvgMillisecondsPerMove() + "\n");
-        str.append("Green: " + getGreenScore() + "\n");
+        str.append("Green: " + "\n");
+        str.append("  score: " + getGreenScore() + "\n");
         str.append("  nodes expanded: " + getGreenNumNodesExpanded() + "\n");
         str.append("  avg nodes / move: " + getGreenAvgNumNodesExpandedPerMove() + "\n");
         str.append("  avg milliseconds / move: " + getGreenAvgMillisecondsPerMove() + "\n");

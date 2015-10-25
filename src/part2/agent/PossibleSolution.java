@@ -10,7 +10,7 @@ import part2.move.Move;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MinimaxPossibleSolution {
+public class PossibleSolution {
 
     private Board pointValues;
     private String[][] playerLocations;
@@ -19,13 +19,13 @@ public class MinimaxPossibleSolution {
 
     private BlueGreenPair scores = new BlueGreenPair(0, 0);
 
-    public MinimaxPossibleSolution(Board pointValues) {
+    public PossibleSolution(Board pointValues) {
         this.pointValues = pointValues;
 
         this.playerLocations = new String[pointValues.getWidth()][pointValues.getHeight()];
     }
 
-    private MinimaxPossibleSolution(Board pointValues, String[][] playerLocations, BlueGreenPair scores) {
+    private PossibleSolution(Board pointValues, String[][] playerLocations, BlueGreenPair scores) {
         this(pointValues);
 
         for (int i = 0; i < playerLocations.length; i++) {
@@ -58,8 +58,8 @@ public class MinimaxPossibleSolution {
         return true;
     }
 
-    public MinimaxPossibleSolution clone() {
-        return new MinimaxPossibleSolution(pointValues, playerLocations, scores);
+    public PossibleSolution clone() {
+        return new PossibleSolution(pointValues, playerLocations, scores);
     }
 
     public List<Move> getPossibleMoves(Color playerToMove) {

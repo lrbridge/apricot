@@ -20,11 +20,11 @@ public class MinimaxAgent extends BaseAgent {
      * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
      */
     @Override
-    protected Move searchForBestMove(MinimaxPossibleSolution initialSolution) {
+    protected Move searchForBestMove(PossibleSolution initialSolution) {
 
         int depth = 0;
 
-        MinimaxPossibleSolution solution = searchForMove(this.playerColor, initialSolution);
+        PossibleSolution solution = searchForMove(this.playerColor, initialSolution);
 
         System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
 
@@ -34,20 +34,20 @@ public class MinimaxAgent extends BaseAgent {
     /**
      * Picks the move for the player which will maximize the player's score (given the other player is playing rationally)
      */
-    private MinimaxPossibleSolution searchForMove(Color playerToMove, MinimaxPossibleSolution possibleSolution) {
+    private PossibleSolution searchForMove(Color playerToMove, PossibleSolution possibleSolution) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
         }
 
-        MinimaxPossibleSolution bestSoFar = null;
+        PossibleSolution bestSoFar = null;
 
         List<Move> possibleMoves = possibleSolution.getPossibleMoves(playerToMove);
 
         for (Move possibleMove : possibleMoves) {
 
             System.out.println("... " + playerToMove + " plays " + possibleMove);
-            MinimaxPossibleSolution newPossibility = possibleSolution.clone();
+            PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
             newPossibility = searchForMove(playerToMove.next(), newPossibility); // then DFS, other color's turn
 

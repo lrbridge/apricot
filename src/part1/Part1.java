@@ -78,9 +78,9 @@ public class Part1 {
 
         for (String value : variableValueSelection.getOrderedDomainValues(variable, variableValueSelection)) {
 
-            // clone all the recursing changing state so we don't have to bother removing nodes when roll up tree
+            // clone all the recursively changing state so we don't have to bother removing nodes when roll up tree
             Assignment newAssignment = assignment.clone();
-            VariableValueSelection newAssignmentType = variableValueSelection.clone();
+            VariableValueSelection newVariableValueSelection = variableValueSelection.clone();
             SearchPath newSearchPath = searchPath.clone();
 
             // assign the variable to the value
@@ -91,13 +91,13 @@ public class Part1 {
 
             if (isConsistent(newAssignment)) {
 
-                // Perform inferences by propagating assignment changes through TODO
-                boolean isStillConsistent = newAssignmentType.propagateAssignment(variable, value, newAssignment);
+                // Perform inferences by propagating assignment changes (forward checking)
+                boolean isStillConsistent = newVariableValueSelection.propagateAssignment(variable, value, newAssignment);
 
                 if (isStillConsistent) {
 
                     // if it's still consistent after inferences, recurse deeper
-                    isSolution = backtrack(newAssignment, newAssignmentType, newSearchPath);
+                    isSolution = backtrack(newAssignment, newVariableValueSelection, newSearchPath);
 
                 }
 
