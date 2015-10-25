@@ -8,10 +8,8 @@ import java.util.List;
 
 public class AlphaBetaAgent extends BaseAgent {
 
-    private int maxDepth = 3; // search only to max depth of 3 in minimax tree
-
     public AlphaBetaAgent(Color playerColor, Board board) {
-        super(playerColor, board);
+        super(playerColor, board, 3); // max depth of 3
     }
 
     /**
@@ -27,7 +25,7 @@ public class AlphaBetaAgent extends BaseAgent {
 
         int depth = 0;
 
-        PossibleSolution solution = searchForMove(this.playerColor, initialSolution, alpha, beta);
+        PossibleSolution solution = searchForMove(this.playerColor, initialSolution, alpha, beta, depth);
 
 System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
 
@@ -37,11 +35,17 @@ System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
     /**
      * Picks the move for the player which will maximize the player's score (given the other player is playing rationally)
      */
-    private PossibleSolution searchForMove(Color playerToMove, PossibleSolution possibleSolution, int alpha, int beta) {
+    private PossibleSolution searchForMove(Color playerToMove, PossibleSolution possibleSolution, int alpha, int beta, int depth) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
         }
+
+        if(isCutoff(depth)) {
+            return evaluationFunction(possibleSolution);
+        }
+
+        depth++;
 
         PossibleSolution bestSoFar = null;
 
@@ -52,7 +56,7 @@ System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
             System.out.println("... " + playerToMove + " plays " + possibleMove);
             PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
-            newPossibility = searchForMove(playerToMove.next(), newPossibility, alpha, beta); // then DFS, other color's turn
+            newPossibility = searchForMove(playerToMove.next(), newPossibility, alpha, beta, depth); // then DFS, other color's turn
 
             newPossibility.setLatestConsideredMove(possibleMove);
             numNodesExpanded++;
@@ -83,5 +87,4 @@ System.out.println(v + " " + alpha + " " + beta);
 
         return bestSoFar;
     }
-
 }

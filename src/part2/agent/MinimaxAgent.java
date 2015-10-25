@@ -8,10 +8,8 @@ import java.util.List;
 
 public class MinimaxAgent extends BaseAgent {
 
-    private int maxDepth = 3; // search only to max depth of 3 in minimax tree
-
     public MinimaxAgent(Color playerColor, Board board) {
-        super(playerColor, board);
+        super(playerColor, board, 3); // max depth of 3
     }
 
     /**
@@ -24,7 +22,7 @@ public class MinimaxAgent extends BaseAgent {
 
         int depth = 0;
 
-        PossibleSolution solution = searchForMove(this.playerColor, initialSolution);
+        PossibleSolution solution = searchForMove(this.playerColor, initialSolution, depth);
 
         System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
 
@@ -34,11 +32,17 @@ public class MinimaxAgent extends BaseAgent {
     /**
      * Picks the move for the player which will maximize the player's score (given the other player is playing rationally)
      */
-    private PossibleSolution searchForMove(Color playerToMove, PossibleSolution possibleSolution) {
+    private PossibleSolution searchForMove(Color playerToMove, PossibleSolution possibleSolution, int depth) {
 
         if (possibleSolution.isDone()) {
             return possibleSolution;
         }
+
+        if(isCutoff(depth)) {
+            return evaluationFunction(possibleSolution);
+        }
+
+        depth++;
 
         PossibleSolution bestSoFar = null;
 
@@ -49,7 +53,7 @@ public class MinimaxAgent extends BaseAgent {
             System.out.println("... " + playerToMove + " plays " + possibleMove);
             PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
-            newPossibility = searchForMove(playerToMove.next(), newPossibility); // then DFS, other color's turn
+            newPossibility = searchForMove(playerToMove.next(), newPossibility, depth); // then DFS, other color's turn
 
             newPossibility.setLatestConsideredMove(possibleMove);
             numNodesExpanded++;
@@ -59,5 +63,4 @@ public class MinimaxAgent extends BaseAgent {
 
         return bestSoFar;
     }
-
 }

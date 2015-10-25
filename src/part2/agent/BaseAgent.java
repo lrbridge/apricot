@@ -15,10 +15,13 @@ public abstract class BaseAgent implements Agent {
     protected int numNodesExpanded = 0;
     protected long millisecondsProcessing = 0L;
 
-    BaseAgent(Color playerColor, Board board) {
+    private int maxDepth;
+
+    BaseAgent(Color playerColor, Board board, int maxDepth) {
         this.board = board;
         this.playerColor = playerColor;
         this.stateSoFar = new PossibleSolution(board);
+        this.maxDepth = maxDepth;
     }
 
     @Override
@@ -61,32 +64,40 @@ public abstract class BaseAgent implements Agent {
     protected PossibleSolution updateBestSoFarIfBetter(Color playerToMove, PossibleSolution bestSoFar, PossibleSolution newPossibility) {
         if (bestSoFar == null) {
             bestSoFar = newPossibility;
-        } else {
+        }
+        else {
 
             int maxDifference = bestSoFar.getDifferenceBlueMinusGreen();
             int currentDifference = newPossibility.getDifferenceBlueMinusGreen();
 
             if(playerToMove.equals(Color.BLUE)) {
-//                maxDifference = maxSoFar.getBlueScore() - maxSoFar.getGreenScore();
-//                currentDifference = newPossibility.getBlueScore() - newPossibility.getGreenScore();
                 if (maxDifference < currentDifference) {
                     bestSoFar = newPossibility;
                 }
             }
             else { // GREEN
-//                maxDifference = maxSoFar.getGreenScore() - maxSoFar.getBlueScore();
-//                currentDifference = newPossibility.getGreenScore() - newPossibility.getBlueScore();
                 if (maxDifference > currentDifference) {
                     bestSoFar = newPossibility;
                 }
             }
 
-//            if (maxDifference < currentDifference) {
-//                maxSoFar = newPossibility;
-//            }
-
         }
         return bestSoFar;
     }
+
+    protected boolean isCutoff(int depth) {
+        if(depth >= maxDepth) {
+            return true;
+        }
+        return false;
+    }
+
+    protected PossibleSolution evaluationFunction(PossibleSolution possibleSolution) {
+        // just return solution with blue and green current scores as is
+        // ... it will be evaluated as blue score - green score
+        System.out.println("CUTOFF, " + possibleSolution.getBlueScore() + " " + possibleSolution.getGreenScore());
+        return possibleSolution;
+    }
+
 
 }

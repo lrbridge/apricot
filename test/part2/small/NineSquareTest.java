@@ -29,7 +29,7 @@ public class NineSquareTest {
         Part2TestHelpers.testMinimaxVsMinimax("ninesquare.txt", results);
     }
 
-    //@Test
+    @Test
     public void nineSquareAlphabetaVsAlphabeta() {
         String[][] expectedStateOfBoard = {
                 {"G", "B", "G"},
@@ -51,7 +51,7 @@ public class NineSquareTest {
         Part2TestHelpers.testAlphabetaVsAlphabeta("ninesquare.txt", results);
     }
 
-    //@Test
+    @Test
     public void nineSquareV2AlphabetaVsAlphabeta() {
         String[][] expectedStateOfBoard = {
                 {"B", "G", "B"},
@@ -73,7 +73,7 @@ public class NineSquareTest {
         Part2TestHelpers.testAlphabetaVsAlphabeta("ninesquareV2.txt", results);
     }
 
-    //@Test
+    @Test
     public void nineSquareV3AlphabetaVsAlphabeta() {
         String[][] expectedStateOfBoard = {
                 {"B", "G", "B"},
