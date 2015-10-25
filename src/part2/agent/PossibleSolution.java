@@ -97,7 +97,6 @@ public class PossibleSolution {
                 isNeighborMatchingColor(playerToMove, row, col - 1);
     }
 
-    // TODO could refactor duplication by making playerlocations an object with this method (w/death blitz)
     private boolean isNeighborMatchingColor(Color playerToMove, int row, int col) {
         if(row < 0 || row >= playerLocations.length || col < 0 || col >= playerLocations[0].length) {
             return false; // if the neighbor is off the board
