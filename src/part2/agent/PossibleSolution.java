@@ -54,26 +54,25 @@ public class PossibleSolution {
 
     public List<Move> getPossibleMoves(Color playerToMove) {
 
-        ArrayList<Move> possibleMoves = new ArrayList<>();
+        ArrayList<Move> blitzMoves = new ArrayList<>();
+        ArrayList<Move> paraDropMoves = new ArrayList<>();
 
         for (int i = 0; i < playerLocations.length; i++) {
             for (int j = 0; j < playerLocations[0].length; j++) {
 
                 if (playerLocations[i][j] == null) {
 
-                    Move move;
-
                     if(isPossibleToBlitzTo(playerToMove, i, j)) {
-                        move = new M1DeathBlitz(playerToMove, i, j);
+                        blitzMoves.add(new M1DeathBlitz(playerToMove, i, j));
                     }
                     else {
-                        move = new CommandoParaDrop(playerToMove, i, j);
+                        paraDropMoves.add(new CommandoParaDrop(playerToMove, i, j));
                     }
-                    possibleMoves.add(move);
                 }
             }
         }
-        return possibleMoves;
+        blitzMoves.addAll(paraDropMoves);
+        return blitzMoves;
     }
 
     private boolean isPossibleToBlitzTo(Color playerToMove, int row, int col) {
