@@ -13,9 +13,7 @@ public class AlphaBetaAgent extends BaseAgent {
     }
 
     /**
-     * Does a minimax search to find the best move at this time.
-     *
-     * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
+     * Does a minimax search to find the best move at this time, with alpha-beta pruning.
      */
     @Override
     protected Move searchForBestMove(PossibleSolution initialSolution) {
@@ -26,9 +24,6 @@ public class AlphaBetaAgent extends BaseAgent {
         int depth = 0;
 
         PossibleSolution solution = searchForMove(this.playerColor, initialSolution, alpha, beta, depth);
-
-System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
-
         return solution.getMove();
     }
 
@@ -53,7 +48,7 @@ System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
 
         for (Move possibleMove : possibleMoves) {
 
-            System.out.println("... " + playerToMove + " plays " + possibleMove);
+            //System.out.println("... " + playerToMove + " plays " + possibleMove);
             PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
             newPossibility = searchForMove(playerToMove.next(), newPossibility, alpha, beta, depth); // then DFS, other color's turn
@@ -64,10 +59,9 @@ System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
             bestSoFar = updateBestSoFarIfBetter(playerToMove, bestSoFar, newPossibility);
 
             int v = bestSoFar.getDifferenceBlueMinusGreen();
-System.out.println(v + " " + alpha + " " + beta);
+
             if(playerToMove.equals(Color.BLUE)) {
                 if(v >= beta) {
-                    System.out.println("RETURNING, v>=beta");
                     return bestSoFar;
                 }
                 if(v > alpha) {
@@ -76,7 +70,6 @@ System.out.println(v + " " + alpha + " " + beta);
             }
             else {
                 if(v <= alpha) {
-                    System.out.println("RETURNING, v<=alpha");
                     return bestSoFar;
                 }
                 if(v < beta) {

@@ -1,36 +1,38 @@
 package part2.submission;
 
 import org.junit.Test;
-import part2.*;
+import part2.Part2;
+import part2.Part2Solution;
+import part2.PlayerType;
 
-public class SmolenskTest {
+public class NarvikTest {
 
-    private String filename = "Smolensk.txt";
+    private String filename = "Narvik.txt";
 
     @Test
-    public void smolenskMinimaxVsMinimax() {
-        System.out.println("Smolensk - Minimax vs. Minimax");
+    public void narvikMinimaxVsMinimax() {
+        System.out.println("Narvik - Minimax vs. Minimax");
         Part2Solution solution = new Part2(filename, PlayerType.MINIMAX, PlayerType.MINIMAX).play();
         System.out.println(solution);
     }
 
     @Test
-    public void smolenskAlphabetaVsAlphabeta() {
-        System.out.println("Smolensk - Alpha-beta vs. Alpha-beta");
+    public void narvikAlphabetaVsAlphabeta() {
+        System.out.println("Narvik - Alpha-beta vs. Alpha-beta");
         Part2Solution solution = new Part2(filename, PlayerType.ALPHABETA, PlayerType.ALPHABETA).play();
         System.out.println(solution);
     }
 
     @Test
-    public void smolenskMinimaxVsAlphabeta() {
-        System.out.println("Smolensk - Minimax vs. Alpha-beta");
+    public void narvikMinimaxVsAlphabeta() {
+        System.out.println("Narvik - Minimax vs. Alpha-beta");
         Part2Solution solution = new Part2(filename, PlayerType.MINIMAX, PlayerType.ALPHABETA).play();
         System.out.println(solution);
     }
 
     @Test
-    public void smolenskAlphabetaVsMinimax() {
-        System.out.println("Smolensk - Alpha-beta vs. Minimax");
+    public void narvikAlphabetaVsMinimax() {
+        System.out.println("Narvik - Alpha-beta vs. Minimax");
         Part2Solution solution = new Part2(filename, PlayerType.ALPHABETA, PlayerType.MINIMAX).play();
         System.out.println(solution);
     }

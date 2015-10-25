@@ -46,15 +46,15 @@ public class PossibleSolution {
             }
         }
 
-        StringBuilder str = new StringBuilder();
-        for (String[] x : playerLocations) {
-            for (String y : x) {
-                str.append(y + " ");
-            }
-            str.append("\n");
-        }
-        System.out.println(str.toString());
-        System.out.println("scores... B:" + scores.blue + " vs. G:" + scores.green);
+//        StringBuilder str = new StringBuilder();
+//        for (String[] x : playerLocations) {
+//            for (String y : x) {
+//                str.append(y + " ");
+//            }
+//            str.append("\n");
+//        }
+//        System.out.println(str.toString());
+//        System.out.println("scores... B:" + scores.blue + " vs. G:" + scores.green);
         return true;
     }
 
@@ -79,13 +79,10 @@ public class PossibleSolution {
                     else {
                         move = new CommandoParaDrop(playerToMove, i, j);
                     }
-
-//                    System.out.print("adding possible move: " + move);
                     possibleMoves.add(move);
                 }
             }
         }
-        System.out.println("\n");
         return possibleMoves;
     }
 

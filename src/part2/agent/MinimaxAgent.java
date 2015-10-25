@@ -14,8 +14,6 @@ public class MinimaxAgent extends BaseAgent {
 
     /**
      * Does a minimax search to find the best move at this time.
-     *
-     * TODO: we need to cut this off with an evaluation function.  Right now it explores the entire tree.
      */
     @Override
     protected Move searchForBestMove(PossibleSolution initialSolution) {
@@ -23,9 +21,6 @@ public class MinimaxAgent extends BaseAgent {
         int depth = 0;
 
         PossibleSolution solution = searchForMove(this.playerColor, initialSolution, depth);
-
-        System.out.println("MOVE NUM noDEs" + this.numNodesExpanded);
-
         return solution.getMove();
     }
 
@@ -50,7 +45,7 @@ public class MinimaxAgent extends BaseAgent {
 
         for (Move possibleMove : possibleMoves) {
 
-            System.out.println("... " + playerToMove + " plays " + possibleMove);
+            //System.out.println("... " + playerToMove + " plays " + possibleMove);
             PossibleSolution newPossibility = possibleSolution.clone();
             newPossibility.makeMove(possibleMove); // apply this move
             newPossibility = searchForMove(playerToMove.next(), newPossibility, depth); // then DFS, other color's turn

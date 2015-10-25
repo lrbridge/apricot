@@ -49,8 +49,6 @@ public class Part2 {
      */
     public Part2Solution play() {
 
-        System.out.println("PLAY!");
-
         while (!isEnd()) {
 
             Move selectedMove;
