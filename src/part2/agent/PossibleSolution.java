@@ -71,6 +71,8 @@ public class PossibleSolution {
                 }
             }
         }
+        // Order possible moves with all M1DeathBlitz first, follwed by all CommandoParaDrops
+        //    ... this prunes tons of expanded nodes (orders of magnitude more) on the 6x6 tests, Alpha-beta improved dramatically
         blitzMoves.addAll(paraDropMoves);
         return blitzMoves;
     }
